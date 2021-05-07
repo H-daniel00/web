@@ -5,7 +5,7 @@ from django.core.validators import ValidationError
 from rest_framework import filters
 from rest_framework import viewsets, generics, status
 from rest_framework.response import Response
-from rest_framework.decorators import detail_route
+from rest_framework.decorators import detail_route, list_route
 from django.contrib.admin.models import ADDITION, CHANGE
 
 from common.drf.views import StandardResultsSetPagination
@@ -14,7 +14,7 @@ from estudio.models import Estudio
 from estudio.models import Medicacion
 from medicamento.models import Medicamento
 from caja.models import MovimientoCaja
-from estudio.serializers import EstudioSerializer, EstudioCreateUpdateSerializer, EstudioRetrieveSerializer
+from estudio.serializers import EstudioSerializer, EstudioCreateUpdateSerializer, EstudioRetrieveSerializer, EstudioAsociadoConMovimientoSerializer
 from estudio.serializers import MedicacionSerializer, MedicacionCreateUpdateSerializer
 from .imprimir import generar_informe
 from datetime import date
@@ -224,6 +224,19 @@ class EstudioViewSet(viewsets.ModelViewSet):
         estudio.save()
         add_log_entry(estudio, self.request.user, CHANGE, 'ACTUALIZA IMPORTES')
         return Response({'success': True})
+
+    @list_route(methods=['GET'])
+    def get_estudios_con_asociados(self, request):
+        try:
+            estudios = self.filter_queryset(self.queryset)
+            estudios = EstudioAsociadoConMovimientoSerializer(estudios, many = True).data
+            response = JsonResponse({'results': estudios}, status=status.HTTP_200_OK)
+        except ValidationError as ex:
+            response = JsonResponse({'error': str(ex)}, status=status.HTTP_400_BAD_REQUEST)
+        except Exception as ex:
+            response = JsonResponse({'error': str(ex)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+        
+        return response
 
     def destroy(self, request, pk=None):
         try:
