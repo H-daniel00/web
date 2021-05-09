@@ -364,3 +364,46 @@ class RetreiveEstudiosTest(TestCase):
         estudio = Estudio.objects.filter(presentacion__isnull=True, es_pago_contra_factura=0).first()
         estudio_serializer = EstudioSerializer(estudio)
         assert estudio_serializer.data['estado'] == 'NO COBRADO'
+
+class RetreiveEstudiosConAsociadoTest(TestCase):
+    fixtures = ['comprobantes.json', 'pacientes.json', 'medicos.json', 'practicas.json', 'obras_sociales.json',
+                'anestesistas.json', 'presentaciones.json', 'estudios.json', "medicamentos.json", "caja.json"]
+
+    def setUp(self):
+        self.user = User.objects.create_user(username='walter', password='xx11', is_superuser=True)
+        self.client = Client(HTTP_POST='localhost')
+        self.client.login(username='walter', password='xx11')
+
+    def test_retreive_con_asociado_funciona_sin_filtrar(self):
+        response = self.client.get('/api/estudio/get_estudios_con_asociados/', content_type='application/json')
+        request = json.loads(response.content)
+
+        assert response.status_code == status.HTTP_200_OK
+        assert request['count'] == Estudio.objects.count()
+
+        for estudio in request['results']:
+            if estudio['id'] == 1 or estudio['id'] == 3: # en los fixtures el estudio 1 y 3 tienen estan asociados
+                assert estudio['movimientos_asociados'] == True
+            else:
+                assert estudio['movimientos_asociados'] == False
+
+    def test_retreive_con_asociado_funciona_con_filtros(self):
+        obra_social = 'Obra Social de los Trabajadores de la Planta Nuclear de Springfield'
+        practica = 1
+
+        response = self.client.get(f'/api/estudio/get_estudios_con_asociados/?obra_social={obra_social}&practica={practica}', content_type='application/json')
+        request = json.loads(response.content)
+        estudios = Estudio.objects.filter(practica=practica)
+        estudios = estudios.filter(obra_social__nombre=obra_social)
+
+        assert response.status_code == status.HTTP_200_OK
+        assert estudios.count() == request['count']
+        assert len(request['results']) == estudios.count()
+
+        for estudio in request['results']:
+            if estudio['id'] == 1 or estudio['id'] == 3: # en los fixtures el estudio 1 y 3 tienen estan asociados
+                assert estudio['movimientos_asociados'] == True
+            else:
+                assert estudio['movimientos_asociados'] == False
+            assert estudio['obra_social']['nombre'] == obra_social
+            assert estudio['practica']['id'] == practica
