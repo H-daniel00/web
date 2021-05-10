@@ -1,4 +1,5 @@
 from rest_framework import serializers
+
 from estudio.models import Estudio, Medicacion
 from presentacion.models import Presentacion
 from obra_social.models import ArancelObraSocial
@@ -9,6 +10,8 @@ from anestesista.serializers import AnestesistaSerializer
 from practica.serializers import PracticaSerializer
 from medicamento.serializers import MedicamentoSerializer
 from comprobante.serializers import ComprobanteSmallSerializer
+from caja.models import MovimientoCaja
+
 from decimal import Decimal
 
 class EstadoField(serializers.Field):
@@ -57,6 +60,16 @@ class EstudioRetrieveSerializer(EstudioSerializer):
                   'fecha_cobro', 'importe_estudio', 'importe_medicacion', 'pension', 'diferencia_paciente', 'arancel_anestesia',
                   'es_pago_contra_factura', 'pago_contra_factura')
 
+
+class EstudioAsociadoConMovimientoSerializer(EstudioRetrieveSerializer):
+    movimientos_asociados = serializers.SerializerMethodField()
+
+    class Meta:
+        model = Estudio
+        fields = EstudioRetrieveSerializer.Meta.fields + ('movimientos_asociados',)
+
+    def get_movimientos_asociados(self, value):
+        return MovimientoCaja.objects.filter(estudio=value).exists()
 
 class EstudioCreateUpdateSerializer(serializers.ModelSerializer):
     class Meta:
