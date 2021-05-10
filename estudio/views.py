@@ -7,7 +7,7 @@ from rest_framework import viewsets, generics, status
 from rest_framework.response import Response
 from rest_framework.decorators import detail_route, list_route
 from django.contrib.admin.models import ADDITION, CHANGE
-from django.core.paginator import Paginator, EmptyPage
+from django.core.paginator import Paginator, InvalidPage
 
 from common.drf.views import StandardResultsSetPagination
 from common.utils import add_log_entry
@@ -235,14 +235,14 @@ class EstudioViewSet(viewsets.ModelViewSet):
             page_number = request.GET.get('page', 1)
             estudios = paginator.page(page_number).object_list
             estudios = EstudioAsociadoConMovimientoSerializer(estudios, many = True).data
-            response = JsonResponse({'results': estudios, 'count': cant}, status=status.HTTP_200_OK)
-        except EmptyPage as ex: # pagina fuera de rango
+            response = JsonResponse({'results': estudios, 'count': paginator.count}, status=status.HTTP_200_OK)
+        except InvalidPage as ex: # pagina fuera de rango
             response = JsonResponse({'error': str(ex)}, status=status.HTTP_400_BAD_REQUEST)
         except ValidationError as ex:
             response = JsonResponse({'error': str(ex)}, status=status.HTTP_400_BAD_REQUEST)
         except Exception as ex:
             response = JsonResponse({'error': str(ex)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
-        
+
         return response
 
     def destroy(self, request, pk=None):

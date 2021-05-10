@@ -69,7 +69,7 @@ class EstudioAsociadoConMovimientoSerializer(EstudioRetrieveSerializer):
         fields = EstudioRetrieveSerializer.Meta.fields + ('movimientos_asociados',)
 
     def get_movimientos_asociados(self, value):
-        return MovimientoCaja.objects.filter(estudio=value).count() != 0
+        return MovimientoCaja.objects.filter(estudio=value).exists()
 
 class EstudioCreateUpdateSerializer(serializers.ModelSerializer):
     class Meta:

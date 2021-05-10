@@ -382,7 +382,7 @@ class RetreiveEstudiosConAsociadoTest(TestCase):
         assert request['count'] == Estudio.objects.count()
 
         for estudio in request['results']:
-            if estudio['id'] == 1 or estudio['id'] == 3: # en los fixtures el estudio 1 y 3 tienen estan asociados
+            if estudio['id'] in (1, 3): # en los fixtures el estudio 1 y 3 tienen estan asociados
                 assert estudio['movimientos_asociados'] == True
             else:
                 assert estudio['movimientos_asociados'] == False
@@ -401,7 +401,7 @@ class RetreiveEstudiosConAsociadoTest(TestCase):
         assert len(request['results']) == estudios.count()
 
         for estudio in request['results']:
-            if estudio['id'] == 1 or estudio['id'] == 3: # en los fixtures el estudio 1 y 3 tienen estan asociados
+            if estudio['id'] in (1, 3): # en los fixtures el estudio 1 y 3 tienen estan asociados
                 assert estudio['movimientos_asociados'] == True
             else:
                 assert estudio['movimientos_asociados'] == False
