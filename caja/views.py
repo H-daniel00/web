@@ -20,44 +20,43 @@ from rest_framework.serializers import ValidationError
 from rest_framework.filters import BaseFilterBackend
 from rest_framework.decorators import list_route
 
-class CajaConceptoFilterBackend(BaseFilterBackend):
+class CajaMovimientoFilterBackend(BaseFilterBackend):
     def filter_queryset(self, request, queryset, view):
         concepto = request.query_params.get('concepto')
+        fecha_desde = request.query_params.get('fecha_desde')
+        fecha_hasta = request.query_params.get('fecha_hasta')
+        tipo = request.query_params.get('tipo_movimiento')
+
         if concepto:
             q = reduce(and_, [Q(concepto__icontains=palabra) for palabra in concepto.split()])
             queryset = queryset.filter(q)
-        return queryset
 
-class CajaMedicoFilterBackend(BaseFilterBackend):
-    def filter_queryset(self, request, queryset, view):
-        medico = request.query_params.get('medico')
-        if medico:
-            queryset = queryset.filter(medico__id=medico)
-        return queryset
-
-
-class CajaFechaFilterBackend(BaseFilterBackend):
-    def filter_queryset(self, request, queryset, view):
-        fecha_desde = request.query_params.get('fecha_desde')
-        fecha_hasta = request.query_params.get('fecha_hasta')
         if fecha_desde:
             queryset = queryset.filter(fecha__gte=fecha_desde)
+
         if fecha_hasta:
             queryset = queryset.filter(fecha__lte=fecha_hasta)
-        return queryset
 
-class CajaTipoMovimientoFilterBackend(BaseFilterBackend):
-    def filter_queryset(self, request, queryset, view):
-        tipo = request.query_params.get('tipo_movimiento')
         if tipo:
-            queryset = queryset.filter(tipo__descripcion__contains=tipo)
+            queryset = queryset.filter(tipo__descripcion__icontains=tipo)
+
         return queryset
 
-class CajaIncluirEstudioFilterBackend(BaseFilterBackend):
+class CajaEstudioFilterBackend(BaseFilterBackend):
     def filter_queryset(self, request, queryset, view):
         estudio = request.query_params.get('incluir_estudio')
+        medico = request.query_params.get('medico')
+        paciente = request.query_params.get('paciente')
+
         if estudio:
             queryset = queryset.exclude(estudio__isnull=strtobool(estudio))
+
+        if medico:
+            queryset = queryset.filter(Q(medico__id=medico) | Q(estudio__medico__id=medico))
+
+        if paciente:
+            queryset = queryset.filter(estudio__paciente__id=paciente)
+
         return queryset
 
 class MovimientoCajaViewSet(viewsets.ModelViewSet):
@@ -65,9 +64,7 @@ class MovimientoCajaViewSet(viewsets.ModelViewSet):
     queryset = MovimientoCaja.objects.all().order_by('-id')
     serializer_class = MovimientoCajaFullSerializer
     pagination_class = StandardResultsSetPagination
-    filter_backends = (CajaConceptoFilterBackend, CajaMedicoFilterBackend,
-        CajaFechaFilterBackend, CajaTipoMovimientoFilterBackend,
-        CajaIncluirEstudioFilterBackend)
+    filter_backends = (CajaMovimientoFilterBackend, CajaEstudioFilterBackend)
 
     def create(self, request):
         try:

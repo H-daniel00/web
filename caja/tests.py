@@ -3,6 +3,7 @@ import json
 from django.test import TestCase
 from django.test import Client
 from django.contrib.auth.models import User
+from django.db.models import Q
 from rest_framework import status
 from caja.models import MovimientoCaja, TipoMovimientoCaja
 from caja.serializers import MovimientoCajaImprimirSerializer
@@ -258,14 +259,15 @@ class ListadoCajaTest(TestCase):
                 assert word in movimiento['concepto']
 
     def test_filtro_medico_funciona(self):
-        parametro_busqueda = '1'
-        response = self.client.get('/api/caja/?medico={0}'.format(parametro_busqueda))
-        results = json.loads(response.content).get('results')
-    
-        for result in results:
-            assert result['medico']['id'] == int(parametro_busqueda)
+        for medico_id in (1, 2): # Con los fixtures que hay con esto se prueban los dos casos
+            response = self.client.get('/api/caja/?medico={0}'.format(medico_id))
+            results = json.loads(response.content).get('results')
+        
+            for result in results:
+                assert result['medico']['id'] == medico_id or result['estudio']['medico']['id'] == medico_id
 
-        assert MovimientoCaja.objects.count() - MovimientoCaja.objects.exclude(medico__id=parametro_busqueda).count() == len(results)
+            cant_movimientos = MovimientoCaja.objects.filter(Q(medico__id=medico_id) | Q(estudio__medico__id=medico_id))
+            assert cant_movimientos.count() == len(results)
 
     def test_filtro_fecha_funciona(self):
         fecha_inicial = '2019-02-01'
@@ -307,6 +309,16 @@ class ListadoCajaTest(TestCase):
             assert result['estudio'] is None
 
         assert MovimientoCaja.objects.count() - MovimientoCaja.objects.filter(estudio__isnull=strtobool(parametro_busqueda)).count() == len(results)
+    
+    def test_filtro_paciente_funciona(self):
+        paciente_id = 1
+        response = self.client.get('/api/caja/?paciente={0}'.format(paciente_id))
+        results = json.loads(response.content).get('results')
+
+        assert len(results) > 0
+
+        for result in results:
+            assert paciente_id == result['estudio']['paciente']['id']
 
 
 class ImprimirCajaTest(TestCase):
