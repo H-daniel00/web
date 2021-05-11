@@ -7,10 +7,13 @@ import django.db.models.deletion
 from caja.models import MovimientoCaja, MontoAcumulado, TipoMovimientoCaja, ID_CONSULTORIO_1, ID_CONSULTORIO_2, ID_GENERAL
 
 def crear_primeros_movimientos(apps, schema_editor):
-    ultimo_mov = MovimientoCaja.objects.last()
-    for tipo_id in (ID_GENERAL, ID_CONSULTORIO_1, ID_CONSULTORIO_2):
-        tipo = TipoMovimientoCaja.objects.get(pk=tipo_id)
-        MontoAcumulado.objects.create(tipo=tipo, monto_acumulado=0, movimiento=ultimo_mov)
+    try:
+        ultimo_mov = MovimientoCaja.objects.last()
+        for tipo_id in (ID_GENERAL, ID_CONSULTORIO_1, ID_CONSULTORIO_2):
+            tipo = TipoMovimientoCaja.objects.get(pk=tipo_id)
+            MontoAcumulado.objects.create(tipo=tipo, monto_acumulado=0, movimiento=ultimo_mov)
+    except Exception:
+        pass
 
 class Migration(migrations.Migration):
 
