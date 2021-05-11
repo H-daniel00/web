@@ -261,7 +261,6 @@ class CrearMovimientosTest(TestCase):
                     for tipo in (ID_CONSULTORIO_1, ID_CONSULTORIO_2, ID_GENERAL)]
 
         response = self.client.post('/api/caja/', data=json.dumps(datos), content_type='application/json')
-        print(response.content)
         assert response.status_code == status.HTTP_201_CREATED
 
         montos_actualizados = [MontoAcumulado.obtener_ultimo(tipo=TipoMovimientoCaja.objects.get(pk=tipo)).monto_acumulado
@@ -358,6 +357,15 @@ class ListadoCajaTest(TestCase):
         for result in results:
             assert paciente_id == result['estudio']['paciente']['id']
 
+    def test_montos_acumulados_funciona(self):
+        response = self.client.get('/api/caja/montos_acumulados/')
+        assert response.status_code == status.HTTP_200_OK
+
+        montos = json.loads(response.content)
+
+        assert Decimal(montos['Consultorio 1']) == MontoAcumulado.obtener_ultimo(TipoMovimientoCaja.objects.get(pk=ID_CONSULTORIO_1)).monto_acumulado
+        assert Decimal(montos['Consultorio 2']) == MontoAcumulado.obtener_ultimo(TipoMovimientoCaja.objects.get(pk=ID_CONSULTORIO_2)).monto_acumulado
+        assert Decimal(montos['General']) == MontoAcumulado.obtener_ultimo(TipoMovimientoCaja.objects.get(pk=ID_GENERAL)).monto_acumulado
 
 class ImprimirCajaTest(TestCase):
     fixtures = ['caja.json', 'medicos.json', 'pacientes.json', 'practicas.json', 'obras_sociales.json',
