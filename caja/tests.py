@@ -401,20 +401,21 @@ class UpdateCajaTest(TestCase):
         'user': 'walter'
         }
 
-        self.campos_fijos = ['fecha', 'hora', 'estudio', 'monto', 'fecha', 'user']
+        self.campos_fijos = ['hora', 'estudio', 'monto', 'fecha', 'user', 'monto_acumulado']
+        self.campos_update = ['concepto', 'medico', 'tipo']
 
     def test_movimientos_update_solo_un_field_funciona(self):
         for key in self.campos_fijos:
             del self.body[key]
 
-        for key in ['concepto', 'medico', 'tipo']:
-            body_backup = self.body.copy
+        for key in self.campos_update:
+            body_backup = self.body.copy()
 
-            for elim in['concepto', 'medico', 'tipo']:
+            for elim in self.campos_update:
                 if key != elim:
                     del body_backup[elim]
 
-            response = self.client.update(self.url, body_backup)
+            response = self.client.patch(self.url, body_backup)
 
             assert response.status_code == status.HTTP_200_OK
 
@@ -423,11 +424,12 @@ class UpdateCajaTest(TestCase):
             assert getattr(self.movimiento, key, None) == getattr(movimientoUpdate, key, None)
 
         movimientoUpdate = MovimientoCaja.objects.get(pk=self.movimiento.id)
+
     def test_movimientos_update_funciona(self):
         for key in self.campos_fijos:
             del self.body[key]
 
-        response = self.client.update(self.url, self.body)
+        response = self.client.patch(self.url, self.body)
 
         assert response.status_code == status.HTTP_200_OK
 
@@ -436,17 +438,22 @@ class UpdateCajaTest(TestCase):
         for key in self.campos_fijos:
             assert getattr(self.movimiento, key, None) == getattr(movimientoUpdate, key, None)
 
-        assert self.movimiento.concepto != movimientoUpdate.concepto
-        assert self.body['concepto'] == movimientoUpdate.concepto
+        for key in self.campos_update:
+            campoUpdate = getattr(movimientoUpdate, key, None)
+            assert getattr(self.movimiento, key, None) != campoUpdate
+            assert self.body[key] == campoUpdate
 
-        assert self.movimiento.medico != movimientoUpdate.medico
-        assert self.body['medico'] == movimientoUpdate.medico
+        # assert self.movimiento.concepto != movimientoUpdate.concepto
+        # assert self.body['concepto'] == movimientoUpdate.concepto
 
-        assert self.movimiento.tipo != movimientoUpdate.tipo
-        assert self.body['tipo'] == movimientoUpdate.tipo
+        # assert self.movimiento.medico != movimientoUpdate.medico
+        # assert self.body['medico'] == movimientoUpdate.medico
+
+        # assert self.movimiento.tipo != movimientoUpdate.tipo
+        # assert self.body['tipo'] == movimientoUpdate.tipo
 
     def test_movimientos_update_no_cambia_todos_los_campos(self):
-        response = self.client.update(self.url, self.body)
+        response = self.client.patch(self.url, self.body)
 
         assert response.status_code == status.HTTP_200_OK
 
@@ -460,12 +467,16 @@ class UpdateCajaTest(TestCase):
         # assert self.movimiento.monto == movimientoUpdate.monto
         # assert self.movimiento.monto_acumulado == movimientoUpdate.monto_acumulado
         # assert self.movimiento.user == movimientoUpdate.user
-
-        assert self.movimiento.concepto != movimientoUpdate.concepto
-        assert self.body['concepto'] == movimientoUpdate.concepto
-
-        assert self.movimiento.medico != movimientoUpdate.medico
-        assert self.body['medico'] == movimientoUpdate.medico
-
-        assert self.movimiento.tipo != movimientoUpdate.tipo
-        assert self.body['tipo'] == movimientoUpdate.tipo
+        for key in self.campos_update:
+            campoUpdate = getattr(movimientoUpdate, key, None)
+            assert getattr(self.movimiento, key, None) != campoUpdate
+            assert self.body[key] == campoUpdate
+# 
+        # assert self.movimiento.concepto != movimientoUpdate.concepto
+        # assert self.body['concepto'] == movimientoUpdate.concepto
+# 
+        # assert self.movimiento.medico != movimientoUpdate.medico
+        # assert self.body['medico'] == movimientoUpdate.medico
+# 
+        # assert self.movimiento.tipo != movimientoUpdate.tipo
+        # assert self.body['tipo'] == movimientoUpdate.tipo
