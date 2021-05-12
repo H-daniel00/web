@@ -234,7 +234,7 @@ class CrearMovimientosTest(TestCase):
         assert self.cantidad_movimientos == MovimientoCaja.objects.count()
 
 class ListadoCajaTest(TestCase):
-    fixtures = ['caja.json', 'medicos.json', 'pacientes.json', 'medicos.json', 'practicas.json', 'obras_sociales.json',
+    fixtures = ['caja.json', 'pacientes.json', 'medicos.json', 'practicas.json', 'obras_sociales.json',
         'anestesistas.json', 'presentaciones.json', 'comprobantes.json', 'estudios.json', 'medicamentos.json']
 
     def setUp(self):
@@ -383,3 +383,89 @@ class ImprimirCajaTest(TestCase):
         movimiento_serializer = MovimientoCajaImprimirSerializer(movimiento).data
 
         assert movimiento_serializer['medico'] == str(medico)
+
+class UpdateCajaTest(TestCase):
+    fixtures = ['caja.json', 'pacientes.json', 'medicos.json', 'practicas.json', 'obras_sociales.json',
+        'anestesistas.json', 'presentaciones.json', 'comprobantes.json', 'estudios.json', 'medicamentos.json']
+
+    def setUp(self):
+        self.user = User.objects.create_user(username='walter', password='xx11', is_superuser=True)
+        self.client = Client(HTTP_POST='localhost')
+        self.client.login(username='walter', password='xx11')
+
+        self.movimiento = MovimientoCaja.objects.first()
+        self.url = '/api/caja/{self.movimiento}/'
+
+        self.body = {'concepto': 'Concepto Nuevo', 'fecha': date.today(), 'hora':datetime.now().time(),
+        'tipo': 2, 'estudio': 1, 'medico': 1, 'monto': Decimal(0), 'monto_acumulado': Decimal(0),
+        'user': 'walter'
+        }
+
+        self.campos_fijos = ['fecha', 'hora', 'estudio', 'monto', 'fecha', 'user']
+
+    def test_movimientos_update_solo_un_field_funciona(self):
+        for key in self.campos_fijos:
+            del self.body[key]
+
+        for key in ['concepto', 'medico', 'tipo']:
+            body_backup = self.body.copy
+
+            for elim in['concepto', 'medico', 'tipo']:
+                if key != elim:
+                    del body_backup[elim]
+
+            response = self.client.update(self.url, body_backup)
+
+            assert response.status_code == status.HTTP_200_OK
+
+            movimientoUpdate = MovimientoCaja.objects.get(pk=self.movimiento.id)
+
+            assert getattr(self.movimiento, key, None) == getattr(movimientoUpdate, key, None)
+
+        movimientoUpdate = MovimientoCaja.objects.get(pk=self.movimiento.id)
+    def test_movimientos_update_funciona(self):
+        for key in self.campos_fijos:
+            del self.body[key]
+
+        response = self.client.update(self.url, self.body)
+
+        assert response.status_code == status.HTTP_200_OK
+
+        movimientoUpdate = MovimientoCaja.objects.get(pk=self.movimiento.id)
+
+        for key in self.campos_fijos:
+            assert getattr(self.movimiento, key, None) == getattr(movimientoUpdate, key, None)
+
+        assert self.movimiento.concepto != movimientoUpdate.concepto
+        assert self.body['concepto'] == movimientoUpdate.concepto
+
+        assert self.movimiento.medico != movimientoUpdate.medico
+        assert self.body['medico'] == movimientoUpdate.medico
+
+        assert self.movimiento.tipo != movimientoUpdate.tipo
+        assert self.body['tipo'] == movimientoUpdate.tipo
+
+    def test_movimientos_update_no_cambia_todos_los_campos(self):
+        response = self.client.update(self.url, self.body)
+
+        assert response.status_code == status.HTTP_200_OK
+
+        movimientoUpdate = MovimientoCaja.objects.get(pk=self.movimiento)
+
+        for key in self.campos_fijos:
+            assert getattr(self.movimiento, key, None) == getattr(movimientoUpdate, key, None)
+        # assert self.movimiento.fecha == movimientoUpdate.fecha
+        # assert self.movimiento.hora == movimientoUpdate.hora
+        # assert self.movimiento.estudio == movimientoUpdate.estudio
+        # assert self.movimiento.monto == movimientoUpdate.monto
+        # assert self.movimiento.monto_acumulado == movimientoUpdate.monto_acumulado
+        # assert self.movimiento.user == movimientoUpdate.user
+
+        assert self.movimiento.concepto != movimientoUpdate.concepto
+        assert self.body['concepto'] == movimientoUpdate.concepto
+
+        assert self.movimiento.medico != movimientoUpdate.medico
+        assert self.body['medico'] == movimientoUpdate.medico
+
+        assert self.movimiento.tipo != movimientoUpdate.tipo
+        assert self.body['tipo'] == movimientoUpdate.tipo
