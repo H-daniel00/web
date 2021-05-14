@@ -394,13 +394,14 @@ class UpdateCajaTest(TestCase):
         self.client.login(username='walter', password='xx11')
 
         self.movimiento = MovimientoCaja.objects.first()
-        self.url = '/api/caja/{self.movimiento}/'
+        self.url = '/api/caja/{0}/update_movimientos/'.format(self.movimiento.id)
 
-        self.body = {'concepto': 'Concepto Nuevo', 'fecha': date.today(), 'hora':datetime.now().time(),
-        'tipo': 2, 'estudio': 1, 'medico': 1, 'monto': Decimal(0), 'monto_acumulado': Decimal(0),
+        self.body = {'concepto': 'Concepto Nuevo', 'fecha': str(date.today()), 'hora': str(datetime.now().time()),
+        'tipo': 2, 'estudio': 1, 'medico': 1, 'monto': "0.00", 'monto_acumulado': "0.00",
         'user': 'walter'
         }
 
+        self.campos_id = ['tipo', 'estudio', 'medico']
         self.campos_fijos = ['hora', 'estudio', 'monto', 'fecha', 'user', 'monto_acumulado']
         self.campos_update = ['concepto', 'medico', 'tipo']
 
@@ -415,68 +416,71 @@ class UpdateCajaTest(TestCase):
                 if key != elim:
                     del body_backup[elim]
 
-            response = self.client.patch(self.url, body_backup)
+            response = self.client.patch(self.url, data=json.dumps(body_backup), content_type='application/json')
 
             assert response.status_code == status.HTTP_200_OK
 
-            movimientoUpdate = MovimientoCaja.objects.get(pk=self.movimiento.id)
+            movimiento_update = MovimientoCaja.objects.get(pk=self.movimiento.id)
 
-            assert getattr(self.movimiento, key, None) == getattr(movimientoUpdate, key, None)
+            assert getattr(self.movimiento, key, None) != getattr(movimiento_update, key, None)
 
-        movimientoUpdate = MovimientoCaja.objects.get(pk=self.movimiento.id)
+        movimiento_update = MovimientoCaja.objects.get(pk=self.movimiento.id)
 
     def test_movimientos_update_funciona(self):
         for key in self.campos_fijos:
             del self.body[key]
 
-        response = self.client.patch(self.url, self.body)
+        response = self.client.patch(self.url, data=json.dumps(self.body), content_type='application/json')
 
         assert response.status_code == status.HTTP_200_OK
 
-        movimientoUpdate = MovimientoCaja.objects.get(pk=self.movimiento.id)
+        movimiento_update = MovimientoCaja.objects.get(pk=self.movimiento.id)
 
         for key in self.campos_fijos:
-            assert getattr(self.movimiento, key, None) == getattr(movimientoUpdate, key, None)
+            assert getattr(self.movimiento, key, None) == getattr(movimiento_update, key, None)
 
         for key in self.campos_update:
-            campoUpdate = getattr(movimientoUpdate, key, None)
+            campoUpdate = getattr(movimiento_update, key, None)
+
             assert getattr(self.movimiento, key, None) != campoUpdate
-            assert self.body[key] == campoUpdate
-
-        # assert self.movimiento.concepto != movimientoUpdate.concepto
-        # assert self.body['concepto'] == movimientoUpdate.concepto
-
-        # assert self.movimiento.medico != movimientoUpdate.medico
-        # assert self.body['medico'] == movimientoUpdate.medico
-
-        # assert self.movimiento.tipo != movimientoUpdate.tipo
-        # assert self.body['tipo'] == movimientoUpdate.tipo
+            if key in self.campos_id:
+                assert self.body[key] == campoUpdate.id
+            else:
+                assert self.body[key] == campoUpdate
 
     def test_movimientos_update_no_cambia_todos_los_campos(self):
-        response = self.client.patch(self.url, self.body)
+        response = self.client.patch(self.url, data=json.dumps(self.body), content_type='application/json')
 
         assert response.status_code == status.HTTP_200_OK
 
-        movimientoUpdate = MovimientoCaja.objects.get(pk=self.movimiento)
+        movimiento_update = MovimientoCaja.objects.get(pk=self.movimiento.id)
 
         for key in self.campos_fijos:
-            assert getattr(self.movimiento, key, None) == getattr(movimientoUpdate, key, None)
-        # assert self.movimiento.fecha == movimientoUpdate.fecha
-        # assert self.movimiento.hora == movimientoUpdate.hora
-        # assert self.movimiento.estudio == movimientoUpdate.estudio
-        # assert self.movimiento.monto == movimientoUpdate.monto
-        # assert self.movimiento.monto_acumulado == movimientoUpdate.monto_acumulado
-        # assert self.movimiento.user == movimientoUpdate.user
+            assert getattr(self.movimiento, key, None) == getattr(movimiento_update, key, None)
+
         for key in self.campos_update:
-            campoUpdate = getattr(movimientoUpdate, key, None)
+            campoUpdate = getattr(movimiento_update, key, None)
             assert getattr(self.movimiento, key, None) != campoUpdate
-            assert self.body[key] == campoUpdate
-# 
-        # assert self.movimiento.concepto != movimientoUpdate.concepto
-        # assert self.body['concepto'] == movimientoUpdate.concepto
-# 
-        # assert self.movimiento.medico != movimientoUpdate.medico
-        # assert self.body['medico'] == movimientoUpdate.medico
-# 
-        # assert self.movimiento.tipo != movimientoUpdate.tipo
-        # assert self.body['tipo'] == movimientoUpdate.tipo
+            if key in self.campos_id:
+                assert self.body[key] == campoUpdate.id
+            else:
+                assert self.body[key] == campoUpdate
+
+    def test_movimientos_update_desasosea_medico(self):
+        response = self.client.patch(self.url, data=json.dumps(self.body), content_type='application/json')
+
+        assert response.status_code == status.HTTP_200_OK
+
+        self.movimiento = MovimientoCaja.objects.get(pk=self.movimiento.id)
+
+        assert self.body['medico'] == self.movimiento.medico.id
+
+        body = {'medico': ""}
+        response = self.client.patch(self.url, data=json.dumps(body), content_type='application/json')
+
+        assert response.status_code == status.HTTP_200_OK
+
+        movimiento_update = MovimientoCaja.objects.get(pk=self.movimiento.id)
+
+        assert movimiento_update.medico != self.movimiento.medico
+        assert movimiento_update.medico == None
