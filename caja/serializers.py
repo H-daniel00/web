@@ -150,6 +150,55 @@ class MovimientoCajaCreateSerializer(serializers.ModelSerializer):
 
         return movimientos
 
+class MovimientoCajaUpdateSerializer(serializers.ModelSerializer):
+    tipo = serializers.IntegerField(required=False)
+    medico = serializers.IntegerField(required=False)
+    concepto = serializers.CharField(required=False) 
+
+    class Meta:
+        model = MovimientoCaja
+        fields = ('tipo', 'medico', 'concepto')
+
+    def to_internal_value(self, data):
+        datos = {}
+        for key in data:
+            if key in self.fields:
+                datos[key] = data[key]
+        return datos
+
+    def validate_medico(self, value):
+        try:
+            if value:
+                value = Medico.objects.get(pk=value)
+            else:
+                value = None
+        except Medico.DoesNotExist:
+            raise ValidationError('El medico seleccionado no existe')
+        return value
+
+    def validate_tipo(self, value):
+        if not value:
+            raise ValidationError("El tipo de movimiento es obligatorio")
+        try:
+            value = TipoMovimientoCaja.objects.get(pk=value)
+        except TipoMovimientoCaja.DoesNotExist:
+            raise ValidationError('Tipo de movimiento invalido')
+        return value
+
+    def validate(self, attrs):
+        if 'medico' in attrs:
+            attrs['medico'] = self.validate_medico(attrs['medico'])
+        if 'tipo' in attrs:
+            attrs['tipo'] = self.validate_tipo(attrs['tipo'])
+        return attrs
+
+    def update(self, instance, validated_data):
+        for key in validated_data:
+            setattr(instance, key, validated_data[key])
+
+        instance.save()
+        return instance
+
 class MovimientoCajaImprimirSerializer(serializers.ModelSerializer):
     hora = serializers.SerializerMethodField()
     usuario = serializers.SerializerMethodField()
