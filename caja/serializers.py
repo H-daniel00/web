@@ -5,7 +5,7 @@ from django.contrib.auth.models import User
 
 from estudio.models import Estudio
 from medico.models import Medico
-from .models import MovimientoCaja, TipoMovimientoCaja, MontoAcumulado
+from .models import MovimientoCaja, TipoMovimientoCaja, MontoAcumulado, ID_GENERAL
 from practica.serializers import PracticaSerializer
 from obra_social.serializers import ObraSocialSerializer
 from paciente.serializers import PacienteSerializer
@@ -145,8 +145,9 @@ class MovimientoCajaCreateSerializer(serializers.ModelSerializer):
             movimiento = MovimientoCaja.objects.create(estudio = estudio, user = user, tipo = tipo,
             medico = medico, monto = monto, concepto = concepto, monto_acumulado = monto_acumulado)
 
-            ultimo_monto = MontoAcumulado.obtener_ultimo(tipo)
-            MontoAcumulado.objects.create(monto_acumulado=ultimo_monto.monto_acumulado + monto, tipo=tipo, movimiento=movimiento)
+            tipo_monto_acumulado = MontoAcumulado.objects.filter(tipo=tipo).first() or MontoAcumulado.objects.get(tipo__id=ID_GENERAL)
+            tipo_monto_acumulado.monto_acumulado += monto
+            tipo_monto_acumulado.save()
 
             add_log_entry(movimiento, user, ADDITION, 'CREA')
             movimientos += [movimiento]

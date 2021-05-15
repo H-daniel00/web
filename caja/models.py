@@ -45,14 +45,6 @@ class MovimientoCaja(models.Model):
 class MontoAcumulado(models.Model):
     monto_acumulado = models.DecimalField(max_digits=14, decimal_places=2, default=0)
     tipo = models.ForeignKey(TipoMovimientoCaja)
-    movimiento = models.ForeignKey(MovimientoCaja)
-
-    def obtener_ultimo(tipo):
-        if tipo.id in (ID_CONSULTORIO_1, ID_CONSULTORIO_2):
-            monto = MontoAcumulado.objects.filter(tipo=tipo).last()
-        else:
-            monto = MontoAcumulado.objects.exclude(Q(tipo__id=ID_CONSULTORIO_1) | Q(tipo__id=ID_CONSULTORIO_2)).last()
-        return monto
 
     class Meta:
         db_table = 'tblMontoAcumulado'

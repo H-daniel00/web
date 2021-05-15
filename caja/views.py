@@ -108,13 +108,10 @@ class MovimientoCajaViewSet(viewsets.ModelViewSet):
     @list_route(methods=['GET'])
     def montos_acumulados(self, request):
         try:
-            tipos = [TipoMovimientoCaja.objects.get(pk=tipo) for tipo in
-                        (ID_CONSULTORIO_1, ID_CONSULTORIO_2, ID_GENERAL)]
-
             montos = {
-                'Consultorio 1': MontoAcumulado.obtener_ultimo(tipos[0]).monto_acumulado,
-                'Consultorio 2': MontoAcumulado.obtener_ultimo(tipos[1]).monto_acumulado,
-                'General': MontoAcumulado.obtener_ultimo(tipos[2]).monto_acumulado,
+                'Consultorio 1': MontoAcumulado.objects.get(tipo__id=ID_CONSULTORIO_1).monto_acumulado,
+                'Consultorio 2': MontoAcumulado.objects.get(tipo__id=ID_CONSULTORIO_2).monto_acumulado,
+                'General': MontoAcumulado.objects.get(tipo__id=ID_GENERAL).monto_acumulado,
             }
             response = JsonResponse(montos, status=status.HTTP_200_OK)
         except Exception as e:
