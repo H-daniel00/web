@@ -109,9 +109,9 @@ class MovimientoCajaViewSet(viewsets.ModelViewSet):
     def montos_acumulados(self, request):
         try:
             montos = {
-                'Consultorio 1': MontoAcumulado.objects.get(tipo__id=ID_CONSULTORIO_1).monto_acumulado,
-                'Consultorio 2': MontoAcumulado.objects.get(tipo__id=ID_CONSULTORIO_2).monto_acumulado,
-                'General': MontoAcumulado.objects.get(tipo__id=ID_GENERAL).monto_acumulado,
+                'consultorio_1': MontoAcumulado.objects.get(tipo__id=ID_CONSULTORIO_1).monto_acumulado,
+                'consultorio_2': MontoAcumulado.objects.get(tipo__id=ID_CONSULTORIO_2).monto_acumulado,
+                'general': MontoAcumulado.objects.get(tipo__id=ID_GENERAL).monto_acumulado,
             }
             response = JsonResponse(montos, status=status.HTTP_200_OK)
         except Exception as e:

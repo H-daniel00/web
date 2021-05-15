@@ -81,8 +81,7 @@
     "pk": 1,
     "fields": {
         "monto_acumulado": 5,
-        "tipo": 9,
-        "movimiento": 1
+        "tipo": 9
     }
 },
 {
@@ -90,8 +89,7 @@
     "pk": 2,
     "fields": {
         "monto_acumulado": 7,
-        "tipo": 3,
-        "movimiento": 2
+        "tipo": 1
     }
 },
 {
@@ -99,8 +97,7 @@
     "pk": 3,
     "fields": {
         "monto_acumulado": 50,
-        "tipo": 12,
-        "movimiento": 1
+        "tipo": 12
     }
 }
 ]
