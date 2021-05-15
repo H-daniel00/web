@@ -406,25 +406,11 @@ class UpdateCajaTest(TestCase):
         self.campos_update = ['concepto', 'medico', 'tipo']
 
     def test_movimientos_update_solo_un_field_funciona(self):
-        for key in self.campos_fijos:
-            del self.body[key]
-
         for key in self.campos_update:
-            body_backup = self.body.copy()
-
-            for elim in self.campos_update:
-                if key != elim:
-                    del body_backup[elim]
-
-            response = self.client.patch(self.url, data=json.dumps(body_backup), content_type='application/json')
-
+            response = self.client.patch(self.url, data=json.dumps({key: self.body[key]}), content_type='application/json')
             assert response.status_code == status.HTTP_200_OK
-
             movimiento_update = MovimientoCaja.objects.get(pk=self.movimiento.id)
-
             assert getattr(self.movimiento, key, None) != getattr(movimiento_update, key, None)
-
-        movimiento_update = MovimientoCaja.objects.get(pk=self.movimiento.id)
 
     def test_movimientos_update_funciona(self):
         for key in self.campos_fijos:
@@ -466,7 +452,7 @@ class UpdateCajaTest(TestCase):
             else:
                 assert self.body[key] == campoUpdate
 
-    def test_movimientos_update_desasosea_medico(self):
+    def test_movimientos_update_quita_medico_field(self):
         response = self.client.patch(self.url, data=json.dumps(self.body), content_type='application/json')
 
         assert response.status_code == status.HTTP_200_OK

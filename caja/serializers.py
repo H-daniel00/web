@@ -164,7 +164,7 @@ class MovimientoCajaUpdateSerializer(serializers.ModelSerializer):
         for key in data:
             if key in self.fields:
                 datos[key] = data[key]
-        return datos
+        return standar_to_internal_value(self, datos)
 
     def validate_medico(self, value):
         try:
@@ -184,13 +184,6 @@ class MovimientoCajaUpdateSerializer(serializers.ModelSerializer):
         except TipoMovimientoCaja.DoesNotExist:
             raise ValidationError('Tipo de movimiento invalido')
         return value
-
-    def validate(self, attrs):
-        if 'medico' in attrs:
-            attrs['medico'] = self.validate_medico(attrs['medico'])
-        if 'tipo' in attrs:
-            attrs['tipo'] = self.validate_tipo(attrs['tipo'])
-        return attrs
 
     def update(self, instance, validated_data):
         for key in validated_data:
