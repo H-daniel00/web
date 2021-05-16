@@ -61,5 +61,43 @@
     "fields": {
         "descripcion": "Honorario Médico"
     }
+},
+{
+    "model": "caja.tipomovimientocaja",
+    "pk": 9,
+    "fields": {
+        "descripcion": "Consultorio 1"
+    }
+},
+{
+    "model": "caja.tipomovimientocaja",
+    "pk": 12,
+    "fields": {
+        "descripcion": "Consultorio 2"
+    }
+},
+{
+    "model": "caja.montoacumulado",
+    "pk": 1,
+    "fields": {
+        "monto_acumulado": 5,
+        "tipo": 9
+    }
+},
+{
+    "model": "caja.montoacumulado",
+    "pk": 2,
+    "fields": {
+        "monto_acumulado": 7,
+        "tipo": 1
+    }
+},
+{
+    "model": "caja.montoacumulado",
+    "pk": 3,
+    "fields": {
+        "monto_acumulado": 50,
+        "tipo": 12
+    }
 }
 ]
