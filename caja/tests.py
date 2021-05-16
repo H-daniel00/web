@@ -385,7 +385,7 @@ class ImprimirCajaTest(TestCase):
         for mov, mov_serializer in zip(movimientos, movimientos_serializer):
             assert str(mov.monto) == mov_serializer['monto']
             assert str(mov.monto_acumulado) == mov_serializer['monto_acumulado']
-            assert mov.hora == mov_serializer['hora']
+            assert str(mov.hora)[:5] == mov_serializer['hora']
             assert mov.concepto == mov_serializer['concepto']
             assert str(mov.tipo) == mov_serializer['tipo']
             
