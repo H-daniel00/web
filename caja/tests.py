@@ -271,7 +271,7 @@ class CrearMovimientosTest(TestCase):
         assert 55 + montos[2] == montos_actualizados[2]
 
 class ListadoCajaTest(TestCase):
-    fixtures = ['caja.json', 'medicos.json', 'pacientes.json', 'medicos.json', 'practicas.json', 'obras_sociales.json',
+    fixtures = ['caja.json', 'pacientes.json', 'medicos.json', 'practicas.json', 'obras_sociales.json',
         'anestesistas.json', 'presentaciones.json', 'comprobantes.json', 'estudios.json', 'medicamentos.json']
 
     def setUp(self):
@@ -429,3 +429,90 @@ class ImprimirCajaTest(TestCase):
         movimiento_serializer = MovimientoCajaImprimirSerializer(movimiento).data
 
         assert movimiento_serializer['medico'] == str(medico)
+
+class UpdateCajaTest(TestCase):
+    fixtures = ['caja.json', 'pacientes.json', 'medicos.json', 'practicas.json', 'obras_sociales.json',
+        'anestesistas.json', 'presentaciones.json', 'comprobantes.json', 'estudios.json', 'medicamentos.json']
+
+    def setUp(self):
+        self.user = User.objects.create_user(username='walter', password='xx11', is_superuser=True)
+        self.client = Client(HTTP_POST='localhost')
+        self.client.login(username='walter', password='xx11')
+
+        self.movimiento = MovimientoCaja.objects.first()
+        self.url = '/api/caja/{0}/update_movimientos/'.format(self.movimiento.id)
+
+        self.body = {'concepto': 'Concepto Nuevo', 'fecha': str(date.today()), 'hora': str(datetime.now().time()),
+        'tipo': 2, 'estudio': 1, 'medico': 1, 'monto': "0.00", 'monto_acumulado': "0.00",
+        'user': 'walter'
+        }
+
+        self.campos_id = ['tipo', 'estudio', 'medico']
+        self.campos_fijos = ['hora', 'estudio', 'monto', 'fecha', 'user', 'monto_acumulado']
+        self.campos_update = ['concepto', 'medico', 'tipo']
+
+    def test_movimientos_update_solo_un_field_funciona(self):
+        for key in self.campos_update:
+            response = self.client.patch(self.url, data=json.dumps({key: self.body[key]}), content_type='application/json')
+            assert response.status_code == status.HTTP_200_OK
+            movimiento_update = MovimientoCaja.objects.get(pk=self.movimiento.id)
+            assert getattr(self.movimiento, key, None) != getattr(movimiento_update, key, None)
+
+    def test_movimientos_update_funciona(self):
+        for key in self.campos_fijos:
+            del self.body[key]
+
+        response = self.client.patch(self.url, data=json.dumps(self.body), content_type='application/json')
+
+        assert response.status_code == status.HTTP_200_OK
+
+        movimiento_update = MovimientoCaja.objects.get(pk=self.movimiento.id)
+
+        for key in self.campos_fijos:
+            assert getattr(self.movimiento, key, None) == getattr(movimiento_update, key, None)
+
+        for key in self.campos_update:
+            campoUpdate = getattr(movimiento_update, key, None)
+
+            assert getattr(self.movimiento, key, None) != campoUpdate
+            if key in self.campos_id:
+                assert self.body[key] == campoUpdate.id
+            else:
+                assert self.body[key] == campoUpdate
+
+    def test_movimientos_update_no_cambia_todos_los_campos(self):
+        response = self.client.patch(self.url, data=json.dumps(self.body), content_type='application/json')
+
+        assert response.status_code == status.HTTP_200_OK
+
+        movimiento_update = MovimientoCaja.objects.get(pk=self.movimiento.id)
+
+        for key in self.campos_fijos:
+            assert getattr(self.movimiento, key, None) == getattr(movimiento_update, key, None)
+
+        for key in self.campos_update:
+            campoUpdate = getattr(movimiento_update, key, None)
+            assert getattr(self.movimiento, key, None) != campoUpdate
+            if key in self.campos_id:
+                assert self.body[key] == campoUpdate.id
+            else:
+                assert self.body[key] == campoUpdate
+
+    def test_movimientos_update_quita_medico_field(self):
+        response = self.client.patch(self.url, data=json.dumps(self.body), content_type='application/json')
+
+        assert response.status_code == status.HTTP_200_OK
+
+        self.movimiento = MovimientoCaja.objects.get(pk=self.movimiento.id)
+
+        assert self.body['medico'] == self.movimiento.medico.id
+
+        body = {'medico': ""}
+        response = self.client.patch(self.url, data=json.dumps(body), content_type='application/json')
+
+        assert response.status_code == status.HTTP_200_OK
+
+        movimiento_update = MovimientoCaja.objects.get(pk=self.movimiento.id)
+
+        assert movimiento_update.medico != self.movimiento.medico
+        assert movimiento_update.medico == None

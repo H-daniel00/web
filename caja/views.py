@@ -1,14 +1,17 @@
 # pylint: disable=no-name-in-module, import-error
 from rest_framework import viewsets, status, serializers
+from caja.serializers import MovimientoCajaFullSerializer, MovimientoCajaImprimirSerializer, MovimientoCajaCreateSerializer, MovimientoCajaUpdateSerializer
 from caja.models import MovimientoCaja, MontoAcumulado, TipoMovimientoCaja, ID_CONSULTORIO_1, ID_CONSULTORIO_2, ID_GENERAL
-from caja.serializers import MovimientoCajaFullSerializer, MovimientoCajaImprimirSerializer, MovimientoCajaCreateSerializer
 from caja.imprimir import generar_pdf_caja
+from common.utils import add_log_entry
 
 from common.drf.views import StandardResultsSetPagination
 from distutils.util import strtobool
 from functools import reduce
 from operator import and_
 from django.db.models import Q
+from django.contrib.admin.models import CHANGE
+from rest_framework.decorators import detail_route
 
 from typing import Dict
 from datetime import date, datetime
@@ -82,6 +85,26 @@ class MovimientoCajaViewSet(viewsets.ModelViewSet):
         except Exception as ex:
             response = JsonResponse({'error': str(ex)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
         
+        return response
+
+    @detail_route(methods=['patch'])
+    def update_movimientos(self, request, pk=None):
+        try:
+            movimiento = MovimientoCaja.objects.get(pk=pk)
+
+            movimientos_serializer = MovimientoCajaUpdateSerializer(movimiento, data=request.data)
+            if not movimientos_serializer.is_valid():
+                raise ValidationError(movimientos_serializer.errors)
+
+            movimientos_serializer.save()
+            add_log_entry(movimiento, self.request.user, CHANGE, 'ACTUALIZACION MOVIMIENTO CAJA')
+
+            response = JsonResponse({}, status=status.HTTP_200_OK)
+        except ValidationError as ex:
+            response = JsonResponse({'error': str(ex)}, status=status.HTTP_400_BAD_REQUEST)
+        except Exception as ex:
+            response = JsonResponse({'error': str(ex)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
         return response
 
     @list_route(methods=['GET'])
