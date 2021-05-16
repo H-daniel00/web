@@ -1,7 +1,7 @@
 # pylint: disable=no-name-in-module, import-error
 from rest_framework import viewsets, status, serializers
-from caja.models import MovimientoCaja
 from caja.serializers import MovimientoCajaFullSerializer, MovimientoCajaImprimirSerializer, MovimientoCajaCreateSerializer, MovimientoCajaUpdateSerializer
+from caja.models import MovimientoCaja, MontoAcumulado, TipoMovimientoCaja, ID_CONSULTORIO_1, ID_CONSULTORIO_2, ID_GENERAL
 from caja.imprimir import generar_pdf_caja
 from common.utils import add_log_entry
 
@@ -125,5 +125,19 @@ class MovimientoCajaViewSet(viewsets.ModelViewSet):
             response = JsonResponse({'error': str(ex)}, status=status.HTTP_400_BAD_REQUEST)
         except Exception as ex:
             response = JsonResponse({'error': str(ex)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
+        return response
+
+    @list_route(methods=['GET'])
+    def montos_acumulados(self, request):
+        try:
+            montos = {
+                'consultorio_1': MontoAcumulado.objects.get(tipo__id=ID_CONSULTORIO_1).monto_acumulado,
+                'consultorio_2': MontoAcumulado.objects.get(tipo__id=ID_CONSULTORIO_2).monto_acumulado,
+                'general': MontoAcumulado.objects.get(tipo__id=ID_GENERAL).monto_acumulado,
+            }
+            response = JsonResponse(montos, status=status.HTTP_200_OK)
+        except Exception as e:
+            response = JsonResponse({'error': str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
         return response

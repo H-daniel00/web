@@ -5,7 +5,7 @@ from django.test import Client
 from django.contrib.auth.models import User
 from django.db.models import Q
 from rest_framework import status
-from caja.models import MovimientoCaja, TipoMovimientoCaja
+from caja.models import MovimientoCaja, TipoMovimientoCaja, MontoAcumulado, ID_CONSULTORIO_1, ID_CONSULTORIO_2, ID_GENERAL
 from caja.serializers import MovimientoCajaImprimirSerializer
 from medico.models import Medico
 from estudio.models import Estudio
@@ -232,6 +232,43 @@ class CrearMovimientosTest(TestCase):
 
         assert response.status_code == status.HTTP_400_BAD_REQUEST
         assert self.cantidad_movimientos == MovimientoCaja.objects.count()
+    
+    def test_crear_movimientos_suma_monto_acumulado(self):
+        datos = {
+            'estudio_id': '',
+            'movimientos': [
+                {
+                    **self.movimientos[0],
+                    'tipo_id': ID_CONSULTORIO_1,
+                    'medico_id': '',
+                    'concepto': '',
+                },
+                {
+                    **self.movimientos[1],
+                    'tipo_id': ID_CONSULTORIO_2,
+                    'medico_id': '',
+                    'concepto': '',
+                },
+                {
+                    'tipo_id': ID_GENERAL,
+                    'monto': 55,
+                    'medico_id': '',
+                    'concepto': '',
+                }
+            ]
+        }
+        montos = [MontoAcumulado.objects.get(tipo__id=tipo).monto_acumulado
+                    for tipo in (ID_CONSULTORIO_1, ID_CONSULTORIO_2, ID_GENERAL)]
+
+        response = self.client.post('/api/caja/', data=json.dumps(datos), content_type='application/json')
+        assert response.status_code == status.HTTP_201_CREATED
+
+        montos_actualizados = [MontoAcumulado.objects.get(tipo__id=tipo).monto_acumulado
+                    for tipo in (ID_CONSULTORIO_1, ID_CONSULTORIO_2, ID_GENERAL)]
+
+        assert Decimal(self.montos[0]) + montos[0] == Decimal(montos_actualizados[0])
+        assert Decimal(self.montos[1]) + montos[1] == Decimal(montos_actualizados[1])
+        assert 55 + montos[2] == montos_actualizados[2]
 
 class ListadoCajaTest(TestCase):
     fixtures = ['caja.json', 'pacientes.json', 'medicos.json', 'practicas.json', 'obras_sociales.json',
@@ -320,6 +357,15 @@ class ListadoCajaTest(TestCase):
         for result in results:
             assert paciente_id == result['estudio']['paciente']['id']
 
+    def test_montos_acumulados_funciona(self):
+        response = self.client.get('/api/caja/montos_acumulados/')
+        assert response.status_code == status.HTTP_200_OK
+
+        montos = json.loads(response.content)
+
+        assert Decimal(montos['consultorio_1']) == MontoAcumulado.objects.get(tipo__id=ID_CONSULTORIO_1).monto_acumulado
+        assert Decimal(montos['consultorio_2']) == MontoAcumulado.objects.get(tipo__id=ID_CONSULTORIO_2).monto_acumulado
+        assert Decimal(montos['general']) == MontoAcumulado.objects.get(tipo__id=ID_GENERAL).monto_acumulado
 
 class ImprimirCajaTest(TestCase):
     fixtures = ['caja.json', 'medicos.json', 'pacientes.json', 'practicas.json', 'obras_sociales.json',
