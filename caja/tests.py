@@ -3,7 +3,6 @@ import json
 from django.test import TestCase
 from django.test import Client
 from django.contrib.auth.models import User
-from django.db.models import Q
 from rest_framework import status
 from caja.models import MovimientoCaja, TipoMovimientoCaja, MontoAcumulado, ID_CONSULTORIO_1, ID_CONSULTORIO_2, ID_GENERAL
 from caja.serializers import MovimientoCajaImprimirSerializer
@@ -296,14 +295,14 @@ class ListadoCajaTest(TestCase):
                 assert word in movimiento['concepto']
 
     def test_filtro_medico_funciona(self):
-        for medico_id in (1, 2): # Con los fixtures que hay con esto se prueban los dos casos
+        for medico_id in (1, 2):
             response = self.client.get('/api/caja/?medico={0}'.format(medico_id))
             results = json.loads(response.content).get('results')
         
             for result in results:
                 assert result['medico']['id'] == medico_id or result['estudio']['medico']['id'] == medico_id
 
-            cant_movimientos = MovimientoCaja.objects.filter(Q(medico__id=medico_id) | Q(estudio__medico__id=medico_id))
+            cant_movimientos = MovimientoCaja.objects.filter(medico__id=medico_id)
             assert cant_movimientos.count() == len(results)
 
     def test_filtro_fecha_funciona(self):

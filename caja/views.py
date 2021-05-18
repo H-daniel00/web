@@ -55,7 +55,7 @@ class CajaEstudioFilterBackend(BaseFilterBackend):
             queryset = queryset.exclude(estudio__isnull=strtobool(estudio))
 
         if medico:
-            queryset = queryset.filter(Q(medico__id=medico) | Q(estudio__medico__id=medico))
+            queryset = queryset.filter(medico__id=medico)
 
         if paciente:
             queryset = queryset.filter(estudio__paciente__id=paciente)
