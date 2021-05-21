@@ -92,7 +92,7 @@ def pdf_tabla(movimientos: MovimientosSerializer) -> List[Table]:
     table_style = TableStyle(
         [('BACKGROUND', (0, 0), (-1, 0), colors.HexColor(GRIS_OSCURO))] +       # La fila con los nombres de las columnas esta con fondo gris oscuro
         [('BACKGROUND', (0, i), (-1, i), colors.HexColor(GRIS_CLARO))           # Las filas pares tienen fondo gris claro
-        for i in range(2, len(movimientos), 2)]
+        for i in range(2, len(movimientos) + 1, 2)]
     )
 
     return [Table(
