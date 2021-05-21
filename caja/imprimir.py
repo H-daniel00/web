@@ -8,7 +8,7 @@ from reportlab.lib.pagesizes import A4, landscape
 from reportlab.platypus.doctemplate import SimpleDocTemplate
 from reportlab.lib.enums import TA_RIGHT, TA_CENTER
 from reportlab.lib.styles import getSampleStyleSheet, ParagraphStyle
-from reportlab.platypus import Table, Paragraph, TableStyle
+from reportlab.platypus import Table, Paragraph, TableStyle, tables
 from reportlab.lib.units import mm, cm
 from reportlab.lib import colors
 
@@ -21,6 +21,7 @@ GRIS_CLARO = 0xE0E0E0
 GRIS_OSCURO = 0xBDBBBC
 
 LARGOS_CABECERA = [100*mm, 75*mm, 103*mm]
+LARGOS_PIE = [249*mm, 24*mm]
 MARGINS = { 'top': 10*mm, 'bottom': 10*mm }
 
 #Columnas contiene en cada entrada (nombre_columna, tamaño, key)
@@ -45,7 +46,7 @@ def setUpStyles():
         pdfmetrics.registerFont(TTFont('Gothic-Bold', GOTHIC_BOLD_FONT_PATH))
     
         styles['Normal'].fontName='Gothic'
-        styles['Normal'].fontSize=10
+        styles['Normal'].fontSize=8
         styles['Heading3'].fontName='Gothic-Bold'
         styles['Heading3'].fontSize = 12
     
@@ -56,7 +57,10 @@ def setUpStyles():
     
 styles = setUpStyles()
 
-def generar_pdf_caja(response: HttpResponse, movimientos: MovimientosSerializer, fecha: Optional[datetime], monto_acumulado: Decimal) -> HttpResponse:
+def generar_pdf_caja(
+    response: HttpResponse, movimientos: MovimientosSerializer,
+    fecha: Optional[datetime], monto_acumulado: Decimal, total: Decimal
+) -> HttpResponse:
     pdf = SimpleDocTemplate(
         response,
         pagesize=landscape(A4),
@@ -67,6 +71,7 @@ def generar_pdf_caja(response: HttpResponse, movimientos: MovimientosSerializer,
 
     elements = pdf_encabezado(fecha, monto_acumulado)
     elements += pdf_tabla(movimientos)
+    elements += pdf_pie(total)
 
     pdf.build(elements)
     return response
@@ -106,3 +111,9 @@ def pdf_tabla_body(movimientos: MovimientosSerializer) -> List[List[Paragraph]]:
         [paragraph(movimiento[key[2]]) for key in COLUMNAS]
         for movimiento in movimientos
     ]
+
+def pdf_pie(total: Decimal):
+    return [Table([[paragraph('Total:'), paragraph(f'${total}')]],
+        colWidths=LARGOS_PIE,
+        style=TableStyle([('BACKGROUND', (0, 0), (-1, 0), colors.HexColor(GRIS_OSCURO))])
+    )]

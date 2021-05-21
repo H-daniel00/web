@@ -110,7 +110,7 @@ class MovimientoCajaViewSet(viewsets.ModelViewSet):
     @list_route(methods=['GET'])
     def imprimir(self, request):
         try:
-            movimientos = self.filter_queryset(self.queryset)
+            movimientos = self.filter_queryset(MovimientoCaja.objects.all())
 
             if len(movimientos) == 0:
                 raise ValidationError('Debe seleccionarse una fecha donde hayan movimientos')
@@ -120,7 +120,9 @@ class MovimientoCajaViewSet(viewsets.ModelViewSet):
             response['Content-Disposition'] = f'filename="Detalle_Caja_Generado_{date.today()}.pdf"'
 
             fecha = movimientos.first().fecha if movimientos.first().fecha == movimientos.last().fecha else ''
-            response = generar_pdf_caja(response, movimientos_serializer, fecha, MovimientoCaja.objects.last().monto_acumulado)
+            total = reduce(lambda total, movimiento: total + Decimal(movimiento['monto']), movimientos_serializer, 0)
+
+            response = generar_pdf_caja(response, movimientos_serializer, fecha, MovimientoCaja.objects.last().monto_acumulado, total)
         except ValidationError as ex:
             response = JsonResponse({'error': str(ex)}, status=status.HTTP_400_BAD_REQUEST)
         except Exception as ex:
