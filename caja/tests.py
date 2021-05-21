@@ -419,15 +419,8 @@ class ImprimirCajaTest(TestCase):
         assert movimiento_serializer['medico'] == str(medico)
 
         movimiento.medico = None
-        movimiento.estudio = Estudio.objects.first()
-        movimiento.estudio.medico = medico_estudio
         movimiento_serializer = MovimientoCajaImprimirSerializer(movimiento).data
-        assert movimiento_serializer['medico'] == str(medico_estudio)
-
-        movimiento.medico = medico
-        movimiento_serializer = MovimientoCajaImprimirSerializer(movimiento).data
-
-        assert movimiento_serializer['medico'] == str(medico)
+        assert movimiento_serializer['medico'] == ''
 
 class UpdateCajaTest(TestCase):
     fixtures = ['caja.json', 'pacientes.json', 'medicos.json', 'practicas.json', 'obras_sociales.json',
