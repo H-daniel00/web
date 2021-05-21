@@ -46,8 +46,8 @@ responsables = {
     'cedir': {
         'CBU': '0150506102000109564632',
         'CUIT': '30709300152',
-        'nombre': 'C.E.DI.R Centro de Endoscopia Digestiva',
-        'razon': 'C.E.D.I.R Sociedad Colectiva',
+        'nombre': 'CENTRO DE ENDOSCOPIA DIGESTIVA DE ROSARIO S.A.S.',
+        'razon': 'Centro de Endoscopia Digestiva de Rosario S.A.S.',
         'direccion': 'Bv. Oroño 1564. - Rosario Sud, Santa Fe.',
         'condicion_iva': 'IVA Responsable Inscripto',
         'condicion_ib': '021-335420-4',
