@@ -1,7 +1,7 @@
 # pylint: disable=no-name-in-module, import-error
 from rest_framework import viewsets, status, serializers
 from caja.serializers import MovimientoCajaFullSerializer, MovimientoCajaImprimirSerializer, MovimientoCajaCreateSerializer, MovimientoCajaUpdateSerializer
-from caja.models import MovimientoCaja, MontoAcumulado, TipoMovimientoCaja, ID_CONSULTORIO_1, ID_CONSULTORIO_2, ID_GENERAL
+from caja.models import MovimientoCaja, MontoAcumulado, ID_CONSULTORIO_1, ID_CONSULTORIO_2, ID_GENERAL
 from caja.imprimir import generar_pdf_caja
 from common.utils import add_log_entry
 
@@ -13,8 +13,7 @@ from django.db.models import Q
 from django.contrib.admin.models import CHANGE
 from rest_framework.decorators import detail_route
 
-from typing import Dict
-from datetime import date, datetime
+from datetime import date
 from decimal import Decimal
 
 from django.http import HttpResponse, JsonResponse
@@ -78,7 +77,7 @@ class MovimientoCajaViewSet(viewsets.ModelViewSet):
             if not movimientos_serializer.is_valid():
                 raise serializers.ValidationError(movimientos_serializer.errors)
 
-            movimientos = movimientos_serializer.save()
+            movimientos_serializer.save()
             response = JsonResponse({}, status=status.HTTP_201_CREATED)
         except serializers.ValidationError as ex:
             response = JsonResponse({'error': str(ex)}, status=status.HTTP_400_BAD_REQUEST)
