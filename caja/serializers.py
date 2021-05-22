@@ -5,7 +5,7 @@ from django.contrib.auth.models import User
 
 from estudio.models import Estudio
 from medico.models import Medico
-from .models import MovimientoCaja, TipoMovimientoCaja, MontoAcumulado, ID_GENERAL
+from caja.models import MovimientoCaja, TipoMovimientoCaja, MontoAcumulado, ID_GENERAL, ID_CONSULTORIO_1, ID_CONSULTORIO_2, get_monto_acumulado
 from practica.serializers import PracticaSerializer
 from obra_social.serializers import ObraSocialSerializer
 from paciente.serializers import PacienteSerializer
@@ -199,6 +199,14 @@ class MovimientoCajaUpdateSerializer(serializers.ModelSerializer):
 
     def update(self, instance, validated_data):
         for key in validated_data:
+            if key == 'tipo':
+                montoActual = get_monto_acumulado(instance.tipo.id)
+                montoActual.monto_acumulado -= instance.monto
+                montoActual.save()
+                montoUpdate = get_monto_acumulado(validated_data['tipo'].id)
+                montoUpdate.monto_acumulado += instance.monto
+                montoUpdate.save()
+
             setattr(instance, key, validated_data[key])
 
         instance.save()
