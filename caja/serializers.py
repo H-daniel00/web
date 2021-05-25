@@ -198,15 +198,15 @@ class MovimientoCajaUpdateSerializer(serializers.ModelSerializer):
         return value
 
     def update(self, instance, validated_data):
-        for key in validated_data:
-            if key == 'tipo':
-                montoActual = get_monto_acumulado(instance.tipo.id)
-                montoActual.monto_acumulado -= instance.monto
-                montoActual.save()
-                montoUpdate = get_monto_acumulado(validated_data['tipo'].id)
-                montoUpdate.monto_acumulado += instance.monto
-                montoUpdate.save()
+        if 'tipo' in validated_data:
+            montoActual = get_monto_acumulado(instance.tipo.id)
+            montoActual.monto_acumulado -= instance.monto
+            montoActual.save()
+            montoUpdate = get_monto_acumulado(validated_data['tipo'].id)
+            montoUpdate.monto_acumulado += instance.monto
+            montoUpdate.save()
 
+        for key in validated_data:
             setattr(instance, key, validated_data[key])
 
         instance.save()
