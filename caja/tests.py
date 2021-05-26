@@ -457,7 +457,10 @@ class UpdateCajaTest(TestCase):
             movimiento_update = MovimientoCaja.objects.get(pk=self.movimiento.id)
             assert getattr(self.movimiento, key, None) != getattr(movimiento_update, key, None)
 
-    def tests_movimientos_update_actualiza_montos_acumulados(self):
+    def tests_movimientos_update_actualiza_montos_acumulados_si_es_del_dia(self):
+        self.movimiento.fecha = date.today()
+        self.movimiento.save()
+
         self.body['tipo'] = ID_GENERAL
         montoConsultorio1 = MontoAcumulado.objects.get(tipo__id=ID_CONSULTORIO_1).monto_acumulado
         montoConsultorio2 = MontoAcumulado.objects.get(tipo__id=ID_CONSULTORIO_2).monto_acumulado
@@ -478,6 +481,28 @@ class UpdateCajaTest(TestCase):
         assert montoConsultorio1 + self.movimiento.monto == MontoAcumulado.objects.get(tipo__id=ID_CONSULTORIO_1).monto_acumulado
         assert montoConsultorio2 == MontoAcumulado.objects.get(tipo__id=ID_CONSULTORIO_2).monto_acumulado
         assert montoGeneral - self.movimiento.monto == MontoAcumulado.objects.get(tipo__id=ID_GENERAL).monto_acumulado
+
+    def tests_movimientos_update_actualiza_montos_acumulados_si_no_es_del_dia(self):
+        self.body['tipo'] = ID_GENERAL
+        montoConsultorio1 = MontoAcumulado.objects.get(tipo__id=ID_CONSULTORIO_1).monto_acumulado
+        montoConsultorio2 = MontoAcumulado.objects.get(tipo__id=ID_CONSULTORIO_2).monto_acumulado
+        montoGeneral = MontoAcumulado.objects.get(tipo__id=ID_GENERAL).monto_acumulado
+
+        response = self.client.patch(self.url, data=json.dumps(self.body), content_type='application/json')
+        assert response.status_code == status.HTTP_200_OK
+
+        assert montoConsultorio1 == MontoAcumulado.objects.get(tipo__id=ID_CONSULTORIO_1).monto_acumulado
+        assert montoConsultorio2 == MontoAcumulado.objects.get(tipo__id=ID_CONSULTORIO_2).monto_acumulado
+        assert montoGeneral == MontoAcumulado.objects.get(tipo__id=ID_GENERAL).monto_acumulado
+
+        self.body['tipo'] = ID_CONSULTORIO_1
+
+        response = self.client.patch(self.url, data=json.dumps(self.body), content_type='application/json')
+        assert response.status_code == status.HTTP_200_OK
+
+        assert montoConsultorio1 == MontoAcumulado.objects.get(tipo__id=ID_CONSULTORIO_1).monto_acumulado
+        assert montoConsultorio2 == MontoAcumulado.objects.get(tipo__id=ID_CONSULTORIO_2).monto_acumulado
+        assert montoGeneral == MontoAcumulado.objects.get(tipo__id=ID_GENERAL).monto_acumulado
 
     def test_movimientos_update_funciona(self):
         for key in self.campos_fijos:

@@ -13,6 +13,7 @@ from medico.serializers import MedicoSerializer
 from common.utils import add_log_entry, standar_to_internal_value
 
 from decimal import Decimal
+from datetime import date
 
 class TipoMovimientoCajaSerializer(serializers.ModelSerializer):
 
@@ -198,7 +199,7 @@ class MovimientoCajaUpdateSerializer(serializers.ModelSerializer):
         return value
 
     def update(self, instance, validated_data):
-        if 'tipo' in validated_data:
+        if 'tipo' in validated_data and instance.fecha == date.today():
             montoActual = get_monto_acumulado(instance.tipo.id)
             montoActual.monto_acumulado -= instance.monto
             montoActual.save()
