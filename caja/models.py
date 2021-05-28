@@ -18,6 +18,11 @@ ID_COSEGURO = 10
 ID_EGRESO = 11
 ID_CONSULTORIO_2 = 12
 
+def get_monto_acumulado(tipo):
+    if tipo in (ID_CONSULTORIO_2, ID_CONSULTORIO_1):
+        return MontoAcumulado.objects.get(tipo= tipo)
+    return MontoAcumulado.objects.get(tipo=ID_GENERAL)
+
 class TipoMovimientoCaja(models.Model):
     descripcion = models.CharField(max_length=50, blank=True, null=True)
 
