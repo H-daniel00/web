@@ -312,10 +312,10 @@ class ListadoCajaTest(TestCase):
         results = json.loads(response.content).get('results')
 
         for result in results:
-            fecha = list(map(int, result['fecha'].split('-')))
-            assert fecha[0] == 2019
+            fecha = list(map(int, result['fecha'].split('/')))
+            assert fecha[2] == 2019
             assert fecha[1] == 2
-            assert 1 <= fecha[2] <= 8
+            assert 1 <= fecha[0] <= 8
 
     def test_filtro_tipo_movimiento_funciona(self):
         parametro_busqueda = 'General'

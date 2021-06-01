@@ -47,6 +47,7 @@ class MovimientoCajaFullSerializer(serializers.ModelSerializer):
     medico = MedicoSerializer()
     user = serializers.SerializerMethodField()
     hora = serializers.SerializerMethodField()
+    fecha = serializers.SerializerMethodField()
 
     class Meta:
         model = MovimientoCaja
@@ -57,6 +58,9 @@ class MovimientoCajaFullSerializer(serializers.ModelSerializer):
     
     def get_hora(self, obj):
         return str(obj.hora)[:5]
+
+    def get_fecha(self, obj):
+        return obj.fecha.strftime("%d/%m/%Y")
 
 class MovimientoCajaCamposVariablesSerializer(serializers.Serializer):
     tipo_id = serializers.IntegerField(required=True)
