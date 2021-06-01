@@ -1,4 +1,5 @@
 # pylint: disable=no-name-in-module, import-error
+from django.db import reset_queries
 from rest_framework import viewsets, status, serializers
 from caja.serializers import MovimientoCajaFullSerializer, MovimientoCajaImprimirSerializer, MovimientoCajaCreateSerializer, MovimientoCajaUpdateSerializer
 from caja.models import MovimientoCaja, MontoAcumulado, ID_CONSULTORIO_1, ID_CONSULTORIO_2, ID_GENERAL
@@ -19,7 +20,7 @@ from decimal import Decimal
 from django.http import HttpResponse, JsonResponse
 
 from rest_framework.serializers import ValidationError
-from rest_framework.filters import BaseFilterBackend
+from rest_framework.filters import BaseFilterBackend, OrderingFilter
 from rest_framework.decorators import list_route
 
 class CajaMovimientoFilterBackend(BaseFilterBackend):
@@ -63,10 +64,11 @@ class CajaEstudioFilterBackend(BaseFilterBackend):
 
 class MovimientoCajaViewSet(viewsets.ModelViewSet):
     model = MovimientoCaja
-    queryset = MovimientoCaja.objects.all().order_by('-id')
+    queryset = MovimientoCaja.objects.all().order_by('id')
     serializer_class = MovimientoCajaFullSerializer
     pagination_class = StandardResultsSetPagination
-    filter_backends = (CajaMovimientoFilterBackend, CajaEstudioFilterBackend)
+    filter_backends = (CajaMovimientoFilterBackend, CajaEstudioFilterBackend, OrderingFilter)
+    ordering_fields = '__all__'
 
     def create(self, request):
         try:
@@ -109,7 +111,7 @@ class MovimientoCajaViewSet(viewsets.ModelViewSet):
     @list_route(methods=['GET'])
     def imprimir(self, request):
         try:
-            movimientos = self.filter_queryset(MovimientoCaja.objects.all())
+            movimientos = self.filter_queryset(MovimientoCaja.objects.all().order_by('id'))
 
             if len(movimientos) == 0:
                 raise ValidationError('Debe seleccionarse una fecha donde hayan movimientos')
