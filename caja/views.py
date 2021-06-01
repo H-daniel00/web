@@ -1,5 +1,4 @@
 # pylint: disable=no-name-in-module, import-error
-from django.db import reset_queries
 from rest_framework import viewsets, status, serializers
 from caja.serializers import MovimientoCajaFullSerializer, MovimientoCajaImprimirSerializer, MovimientoCajaCreateSerializer, MovimientoCajaUpdateSerializer
 from caja.models import MovimientoCaja, MontoAcumulado, ID_CONSULTORIO_1, ID_CONSULTORIO_2, ID_GENERAL
