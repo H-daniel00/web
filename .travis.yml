@@ -35,5 +35,6 @@ script:
     - python manage.py test
     - pylint anestesista/ caja/ comprobante/ estudio/ medico/ medicamento/ obra_social/ paciente/ practica/ presentacion/ sala/ scripts/ security/ turno/ usuario/
     - python manage.py runserver & node_modules/.bin/newman run integration_tests/cedir_web.postman_collection.json -e integration_tests/local.postman_environment.json --verbose
+    - node_modules/.bin/newman run integration_tests/cedir_web_caja.postman_collection.json -e integration_tests/local.postman_environment.json --verbose
 after_script:
     - scp -i /tmp/travis_rsa -r comprobante/cache $SSH_SERVER:./
