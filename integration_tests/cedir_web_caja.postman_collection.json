@@ -44,22 +44,26 @@
 											"var moment = require('moment');",
 											"pm.environment.set('currentdate', moment().format((\"YYYY-MM-DD\")));",
 											"",
+											"console.log(pm.variables.get(\"token\", null));",
 											"if (pm.variables.get(\"token\", null) === undefined) {",
+											"    console.log(\":c\");",
 											"    const echoPostRequest = {",
 											"        url: pm.environment.get(\"baseUrl\") + \"/security/auth/\",",
 											"        method: 'POST',",
 											"        body: {",
 											"            mode: 'urlencoded',",
 											"            urlencoded: [",
-											"                {key: \"username\", value: 'user', disabled: false},",
-											"                {key: \"password\", value: 'user', disabled: false}",
+											"                {key: \"username\", value: 'robertoperez', disabled: false},",
+											"                {key: \"password\", value: 'robertoperez', disabled: false}",
 											"            ]",
 											"        }",
 											"    };",
 											"    pm.sendRequest(echoPostRequest, function (err, res) {",
 											"        pm.globals.set(\"token\", res.json().token);",
+											"        console.log(res.json());",
 											"    })",
-											"}"
+											"}",
+											"console.log(\"Chau\");"
 										],
 										"type": "text/javascript"
 									}
@@ -82,7 +86,14 @@
 									]
 								},
 								"method": "GET",
-								"header": [],
+								"header": [
+									{
+										"key": "",
+										"value": "",
+										"type": "text",
+										"disabled": true
+									}
+								],
 								"url": {
 									"raw": "{{baseUrl}}/caja/?fecha_desde=&fecha_hasta=&medico=&concepto=&estado=&paciente=&tipo_movimiento=&incluir_estudio=&page=1",
 									"host": [
@@ -892,7 +903,7 @@
 								"method": "GET",
 								"header": [],
 								"url": {
-									"raw": "{{baseUrl}}/caja/imprimir?fecha_desde={{currentdate}}&fecha_hasta={{currentdate}}&medico=&concepto={{conceptoInicial1}}&estado=&paciente=&tipo_movimiento=&incluir_estudio=&page=1",
+									"raw": "{{baseUrl}}/caja/imprimir?fecha_desde={{currentdate}}&fecha_hasta={{currentdate}}&medico=&concepto=&estado=&paciente=&tipo_movimiento=&incluir_estudio=&page=1",
 									"host": [
 										"{{baseUrl}}"
 									],
@@ -915,7 +926,7 @@
 										},
 										{
 											"key": "concepto",
-											"value": "{{conceptoInicial1}}"
+											"value": ""
 										},
 										{
 											"key": "estado",
