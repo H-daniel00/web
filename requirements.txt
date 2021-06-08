@@ -3,7 +3,7 @@
 # reinstall pillow: pip install --no-cache-dir -I pillow
 gunicorn==20.0.4
 Django==1.11.29
-Pillow==2.5.1
+Pillow==8.2.0
 psycopg2==2.8.3
 #bootstrap-admin  # https://github.com/douglasmiranda/django-admin-bootstrap
 ConcurrentLogHandler==0.9.1
