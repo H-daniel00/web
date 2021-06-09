@@ -26,7 +26,7 @@
 											"});",
 											"pm.test(\"Filter movimientos caja aplica paginacion\", function() {",
 											"    pm.expect(resJson).to.have.all.keys('count', 'next', 'previous', 'results');",
-											"    pm.expect(resJson['results']).to.length.lessThan(Number(pm.environment.get(\"paginacionCaja\")) + 1);",
+											"    pm.expect(resJson['results']).to.length.lessThan(Number(pm.collectionVariables.get(\"paginacionCaja\")) + 1);",
 											"})",
 											"pm.test(\"Filter trae algo\", function() {",
 											"    pm.expect(resJson['results'].length).to.not.equal(0);",
@@ -42,19 +42,18 @@
 									"script": {
 										"exec": [
 											"var moment = require('moment');",
-											"pm.environment.set('currentdate', moment().format((\"YYYY-MM-DD\")));",
+											"pm.collectionVariables.set('currentdate', moment().format((\"YYYY-MM-DD\")));",
 											"",
-											"console.log(pm.variables.get(\"token\", null));",
-											"if (pm.variables.get(\"token\", null) === undefined) {",
-											"    console.log(\":c\");",
+											"console.log(typeof(pm.variables.get(\"token\", null)));",
+											"if (!pm.variables.get(\"token\", null)) {",
 											"    const echoPostRequest = {",
 											"        url: pm.environment.get(\"baseUrl\") + \"/security/auth/\",",
 											"        method: 'POST',",
 											"        body: {",
 											"            mode: 'urlencoded',",
 											"            urlencoded: [",
-											"                {key: \"username\", value: 'robertoperez', disabled: false},",
-											"                {key: \"password\", value: 'robertoperez', disabled: false}",
+											"                {key: \"username\", value: 'asd', disabled: false},",
+											"                {key: \"password\", value: 'asd', disabled: false}",
 											"            ]",
 											"        }",
 											"    };",
@@ -62,8 +61,7 @@
 											"        pm.globals.set(\"token\", res.json().token);",
 											"        console.log(res.json());",
 											"    })",
-											"}",
-											"console.log(\"Chau\");"
+											"}"
 										],
 										"type": "text/javascript"
 									}
@@ -161,14 +159,14 @@
 											"paginacionCaja = 100;",
 											"pm.test(\"Filter movimientos caja aplica paginacion\", function() {",
 											"    pm.expect(resJson).to.have.all.keys('count', 'next', 'previous', 'results');",
-											"    pm.expect(resJson['results']).to.length.lessThan(Number(pm.environment.get(\"paginacionCaja\")) + 1);",
+											"    pm.expect(resJson['results']).to.length.lessThan(Number(pm.collectionVariables.get(\"paginacionCaja\")) + 1);",
 											"    pm.expect(resJson['count']).to.not.eql(0);",
 											"})",
 											"pm.test(\"Filter trae movimiento especifico\", function() {",
 											"    pm.expect(resJson['results'].length).to.not.equal(0);",
 											"    pm.expect(resJson['count']).to.not.eql(0);",
 											"})",
-											"pm.environment.set(\"movimientoId\",resJson['results'][0].id);",
+											"pm.collectionVariables.set(\"movimientoId\",resJson['results'][0].id);",
 											"postman.setNextRequest('Traer montos acumulados');"
 										],
 										"type": "text/javascript"
@@ -194,7 +192,7 @@
 								"method": "GET",
 								"header": [],
 								"url": {
-									"raw": "{{baseUrl}}/caja/?fecha_desde=&fecha_hasta=&medico={{medicoInicialId}}&concepto={{conceptoInicial1}}&estado=&paciente=&tipo_movimiento={{tipoGeneral}}&incluir_estudio=True&page=1",
+									"raw": "{{baseUrl}}/caja/?fecha_desde=&fecha_hasta=&medico={{medicoInicialId}}&concepto={{conceptoInicial1}}&estado=&paciente=&tipo_movimiento={{tipoGeneral}}&incluir_estudio=True&page=1&ordering=-id",
 									"host": [
 										"{{baseUrl}}"
 									],
@@ -238,6 +236,10 @@
 										{
 											"key": "page",
 											"value": "1"
+										},
+										{
+											"key": "ordering",
+											"value": "-id"
 										}
 									]
 								}
@@ -259,7 +261,7 @@
 											"});",
 											"pm.test(\"Filter movimientos caja aplica paginacion\", function() {",
 											"    pm.expect(resJson).to.have.all.keys('count', 'next', 'previous', 'results');",
-											"    pm.expect(resJson['results']).to.length.lessThan(Number(pm.environment.get(\"paginacionCaja\")) + 1);",
+											"    pm.expect(resJson['results']).to.length.lessThan(Number(pm.collectionVariables.get(\"paginacionCaja\")) + 1);",
 											"})",
 											"pm.test(\"Filter movimientos caja sin movimientos\", function() {",
 											"    pm.expect(resJson['count']).to.eql(0);",
@@ -357,7 +359,7 @@
 											"});",
 											"pm.test(\"Filter movimientos caja aplica paginacion\", function() {",
 											"    pm.expect(resJson).to.have.all.keys('count', 'next', 'previous', 'results');",
-											"    pm.expect(resJson['results']).to.length.lessThan(Number(pm.environment.get(\"paginacionCaja\")) + 1);",
+											"    pm.expect(resJson['results']).to.length.lessThan(Number(pm.collectionVariables.get(\"paginacionCaja\")) + 1);",
 											"})",
 											"pm.test(\"Filter trae movimiento modificado\", function() {",
 											"    pm.expect(resJson['results'].length).to.not.equal(0);",
@@ -394,7 +396,7 @@
 									}
 								],
 								"url": {
-									"raw": "{{baseUrl}}/caja/?fecha_desde=&fecha_hasta=&medico={{medicoNuevo}}&concepto={{conceptoNuevo}}&estado=&paciente=&tipo_movimiento={{tipoConsultorio1}}&incluir_estudio=&page=1",
+									"raw": "{{baseUrl}}/caja/?fecha_desde={{currentdate}}&fecha_hasta={{currentdate}}&medico={{medicoNuevoId}}&concepto={{conceptoNuevo}}&estado=&paciente=&tipo_movimiento={{tipoConsultorio1}}&incluir_estudio=&page=1",
 									"host": [
 										"{{baseUrl}}"
 									],
@@ -405,15 +407,15 @@
 									"query": [
 										{
 											"key": "fecha_desde",
-											"value": ""
+											"value": "{{currentdate}}"
 										},
 										{
 											"key": "fecha_hasta",
-											"value": ""
+											"value": "{{currentdate}}"
 										},
 										{
 											"key": "medico",
-											"value": "{{medicoNuevo}}"
+											"value": "{{medicoNuevoId}}"
 										},
 										{
 											"key": "concepto",
@@ -1137,10 +1139,6 @@
 	],
 	"variable": [
 		{
-			"key": "baseUrl",
-			"value": "localhost:8000/api"
-		},
-		{
 			"key": "idEstudio",
 			"value": 223433
 		},
@@ -1167,6 +1165,62 @@
 		{
 			"key": "idPractica",
 			"value": "1"
+		},
+		{
+			"key": "paginacionCaja",
+			"value": "100"
+		},
+		{
+			"key": "medicoInicialId",
+			"value": "1"
+		},
+		{
+			"key": "conceptoInicial1",
+			"value": "concepto uno"
+		},
+		{
+			"key": "tipoGeneral",
+			"value": "General"
+		},
+		{
+			"key": "fechaHasta",
+			"value": "2020-10-10"
+		},
+		{
+			"key": "fechaDesde",
+			"value": "2020-9-10"
+		},
+		{
+			"key": "conceptoInicial2",
+			"value": "concepto dos"
+		},
+		{
+			"key": "tipoGeneralId",
+			"value": "1"
+		},
+		{
+			"key": "tipoConsultorio1Id",
+			"value": "9"
+		},
+		{
+			"key": "conceptoNuevo",
+			"value": "concepto nuevo distinto al anterior"
+		},
+		{
+			"key": "medicoNuevoId",
+			"value": "3"
+		},
+		{
+			"key": "currentdate",
+			"value": ""
+		},
+		{
+			"key": "movimientoId",
+			"value": ""
+		},
+		{
+			"key": "tipoConsultorio1",
+			"value": "Consultorio 1"
 		}
 	]
 }
