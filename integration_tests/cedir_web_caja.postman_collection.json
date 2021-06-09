@@ -1,0 +1,1226 @@
+{
+	"info": {
+		"_postman_id": "41aed9f6-c245-44d3-a193-e9292c243803",
+		"name": "CEDIR Collection",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Caja",
+			"item": [
+				{
+					"name": "Filter",
+					"item": [
+						{
+							"name": "Traer todos los movimientos",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"res = pm.response;",
+											"resJson = res.json();",
+											"pm.test(\"Filter movimientos caja status test\", function () {",
+											"    pm.expect(res).to.have.status(200);",
+											"    pm.expect(resJson).to.not.have.keys('error');",
+											"});",
+											"pm.test(\"Filter movimientos caja aplica paginacion\", function() {",
+											"    pm.expect(resJson).to.have.all.keys('count', 'next', 'previous', 'results');",
+											"    pm.expect(resJson['results']).to.length.lessThan(Number(pm.collectionVariables.get(\"paginacionCaja\")) + 1);",
+											"})",
+											"pm.test(\"Filter trae algo\", function() {",
+											"    pm.expect(resJson['results'].length).to.not.equal(0);",
+											"    pm.expect(resJson['count']).to.not.eql(0);",
+											"})",
+											"postman.setNextRequest('Filtro malo anda bien');"
+										],
+										"type": "text/javascript"
+									}
+								},
+								{
+									"listen": "prerequest",
+									"script": {
+										"exec": [
+											"var moment = require('moment');",
+											"pm.collectionVariables.set('currentdate', moment().format((\"YYYY-MM-DD\")));",
+											"",
+											"console.log(typeof(pm.variables.get(\"token\", null)));",
+											"if (!pm.variables.get(\"token\", null)) {",
+											"    const echoPostRequest = {",
+											"        url: pm.environment.get(\"baseUrl\") + \"/security/auth/\",",
+											"        method: 'POST',",
+											"        body: {",
+											"            mode: 'urlencoded',",
+											"            urlencoded: [",
+											"                {key: \"username\", value: 'asd', disabled: false},",
+											"                {key: \"password\", value: 'asd', disabled: false}",
+											"            ]",
+											"        }",
+											"    };",
+											"    pm.sendRequest(echoPostRequest, function (err, res) {",
+											"        pm.globals.set(\"token\", res.json().token);",
+											"        console.log(res.json());",
+											"    })",
+											"}"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"auth": {
+									"type": "apikey",
+									"apikey": [
+										{
+											"key": "value",
+											"value": "Token {{token}}",
+											"type": "string"
+										},
+										{
+											"key": "key",
+											"value": "Authorization",
+											"type": "string"
+										}
+									]
+								},
+								"method": "GET",
+								"header": [
+									{
+										"key": "",
+										"value": "",
+										"type": "text",
+										"disabled": true
+									}
+								],
+								"url": {
+									"raw": "{{baseUrl}}/caja/?fecha_desde=&fecha_hasta=&medico=&concepto=&estado=&paciente=&tipo_movimiento=&incluir_estudio=&page=1",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"caja",
+										""
+									],
+									"query": [
+										{
+											"key": "fecha_desde",
+											"value": ""
+										},
+										{
+											"key": "fecha_hasta",
+											"value": ""
+										},
+										{
+											"key": "medico",
+											"value": ""
+										},
+										{
+											"key": "concepto",
+											"value": ""
+										},
+										{
+											"key": "estado",
+											"value": ""
+										},
+										{
+											"key": "paciente",
+											"value": ""
+										},
+										{
+											"key": "tipo_movimiento",
+											"value": ""
+										},
+										{
+											"key": "incluir_estudio",
+											"value": ""
+										},
+										{
+											"key": "page",
+											"value": "1"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Traer movimientos especificos",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"res = pm.response;",
+											"resJson = res.json();",
+											"pm.test(\"Filter movimientos caja status test\", function () {",
+											"    pm.expect(res).to.have.status(200);",
+											"    pm.expect(resJson).to.not.have.keys('error');",
+											"});",
+											"paginacionCaja = 100;",
+											"pm.test(\"Filter movimientos caja aplica paginacion\", function() {",
+											"    pm.expect(resJson).to.have.all.keys('count', 'next', 'previous', 'results');",
+											"    pm.expect(resJson['results']).to.length.lessThan(Number(pm.collectionVariables.get(\"paginacionCaja\")) + 1);",
+											"    pm.expect(resJson['count']).to.not.eql(0);",
+											"})",
+											"pm.test(\"Filter trae movimiento especifico\", function() {",
+											"    pm.expect(resJson['results'].length).to.not.equal(0);",
+											"    pm.expect(resJson['count']).to.not.eql(0);",
+											"})",
+											"pm.collectionVariables.set(\"movimientoId\",resJson['results'][0].id);",
+											"postman.setNextRequest('Traer montos acumulados');"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"auth": {
+									"type": "apikey",
+									"apikey": [
+										{
+											"key": "value",
+											"value": "Token {{token}}",
+											"type": "string"
+										},
+										{
+											"key": "key",
+											"value": "Authorization",
+											"type": "string"
+										}
+									]
+								},
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{baseUrl}}/caja/?fecha_desde=&fecha_hasta=&medico={{medicoInicialId}}&concepto={{conceptoInicial1}}&estado=&paciente=&tipo_movimiento={{tipoGeneral}}&incluir_estudio=True&page=1&ordering=-id",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"caja",
+										""
+									],
+									"query": [
+										{
+											"key": "fecha_desde",
+											"value": ""
+										},
+										{
+											"key": "fecha_hasta",
+											"value": ""
+										},
+										{
+											"key": "medico",
+											"value": "{{medicoInicialId}}"
+										},
+										{
+											"key": "concepto",
+											"value": "{{conceptoInicial1}}"
+										},
+										{
+											"key": "estado",
+											"value": ""
+										},
+										{
+											"key": "paciente",
+											"value": ""
+										},
+										{
+											"key": "tipo_movimiento",
+											"value": "{{tipoGeneral}}"
+										},
+										{
+											"key": "incluir_estudio",
+											"value": "True"
+										},
+										{
+											"key": "page",
+											"value": "1"
+										},
+										{
+											"key": "ordering",
+											"value": "-id"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Filtro malo anda bien",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"res = pm.response;",
+											"resJson = res.json();",
+											"pm.test(\"Filter movimientos caja status test\", function () {",
+											"    pm.expect(res).to.have.status(200);",
+											"    pm.expect(resJson).to.not.have.keys('error');",
+											"});",
+											"pm.test(\"Filter movimientos caja aplica paginacion\", function() {",
+											"    pm.expect(resJson).to.have.all.keys('count', 'next', 'previous', 'results');",
+											"    pm.expect(resJson['results']).to.length.lessThan(Number(pm.collectionVariables.get(\"paginacionCaja\")) + 1);",
+											"})",
+											"pm.test(\"Filter movimientos caja sin movimientos\", function() {",
+											"    pm.expect(resJson['count']).to.eql(0);",
+											"    pm.expect(resJson['next']).to.eql(null);",
+											"    pm.expect(resJson['previous']).to.eql(null);",
+											"    pm.expect(resJson['results']).to.length(0);",
+											"})",
+											"postman.setNextRequest('Crear un movimiento complejo');"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"auth": {
+									"type": "apikey",
+									"apikey": [
+										{
+											"key": "value",
+											"value": "Token {{token}}",
+											"type": "string"
+										},
+										{
+											"key": "key",
+											"value": "Authorization",
+											"type": "string"
+										}
+									]
+								},
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{baseUrl}}/caja/?fecha_desde={{fechaHasta}}&fecha_hasta={{fechaDesde}}&medico=&concepto=&estado=&paciente=&tipo_movimiento=&incluir_estudio=&page=1",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"caja",
+										""
+									],
+									"query": [
+										{
+											"key": "fecha_desde",
+											"value": "{{fechaHasta}}"
+										},
+										{
+											"key": "fecha_hasta",
+											"value": "{{fechaDesde}}"
+										},
+										{
+											"key": "medico",
+											"value": ""
+										},
+										{
+											"key": "concepto",
+											"value": ""
+										},
+										{
+											"key": "estado",
+											"value": ""
+										},
+										{
+											"key": "paciente",
+											"value": ""
+										},
+										{
+											"key": "tipo_movimiento",
+											"value": ""
+										},
+										{
+											"key": "incluir_estudio",
+											"value": ""
+										},
+										{
+											"key": "page",
+											"value": "1"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Traer movimiento modificado",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"res = pm.response;",
+											"resJson = res.json();",
+											"pm.test(\"Filter movimientos caja status test\", function () {",
+											"    pm.expect(res).to.have.status(200);",
+											"    pm.expect(resJson).to.not.have.keys('error');",
+											"});",
+											"pm.test(\"Filter movimientos caja aplica paginacion\", function() {",
+											"    pm.expect(resJson).to.have.all.keys('count', 'next', 'previous', 'results');",
+											"    pm.expect(resJson['results']).to.length.lessThan(Number(pm.collectionVariables.get(\"paginacionCaja\")) + 1);",
+											"})",
+											"pm.test(\"Filter trae movimiento modificado\", function() {",
+											"    pm.expect(resJson['results'].length).to.not.equal(0);",
+											"    pm.expect(resJson['count']).to.not.eql(0);",
+											"})",
+											"postman.setNextRequest('Update movimiento campos erroneos');"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"auth": {
+									"type": "apikey",
+									"apikey": [
+										{
+											"key": "value",
+											"value": "Token {{token}}",
+											"type": "string"
+										},
+										{
+											"key": "key",
+											"value": "Authorization",
+											"type": "string"
+										}
+									]
+								},
+								"method": "GET",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "{{jsonContentType}}",
+										"type": "text"
+									}
+								],
+								"url": {
+									"raw": "{{baseUrl}}/caja/?fecha_desde={{currentdate}}&fecha_hasta={{currentdate}}&medico={{medicoNuevoId}}&concepto={{conceptoNuevo}}&estado=&paciente=&tipo_movimiento={{tipoConsultorio1}}&incluir_estudio=&page=1",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"caja",
+										""
+									],
+									"query": [
+										{
+											"key": "fecha_desde",
+											"value": "{{currentdate}}"
+										},
+										{
+											"key": "fecha_hasta",
+											"value": "{{currentdate}}"
+										},
+										{
+											"key": "medico",
+											"value": "{{medicoNuevoId}}"
+										},
+										{
+											"key": "concepto",
+											"value": "{{conceptoNuevo}}"
+										},
+										{
+											"key": "estado",
+											"value": ""
+										},
+										{
+											"key": "paciente",
+											"value": ""
+										},
+										{
+											"key": "tipo_movimiento",
+											"value": "{{tipoConsultorio1}}"
+										},
+										{
+											"key": "incluir_estudio",
+											"value": ""
+										},
+										{
+											"key": "page",
+											"value": "1"
+										}
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "Create",
+					"item": [
+						{
+							"name": "Crear un movimiento complejo",
+							"event": [
+								{
+									"listen": "prerequest",
+									"script": {
+										"exec": [
+											""
+										],
+										"type": "text/javascript"
+									}
+								},
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"res = pm.response;",
+											"pm.test(\"Create movimientos caja status test\", function () {",
+											"    pm.expect(res).to.have.status(201);",
+											"    pm.expect(res.json()).to.not.have.keys('error');",
+											"});",
+											"postman.setNextRequest('Crear movimiento sin monto falla');",
+											""
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"protocolProfileBehavior": {
+								"disabledSystemHeaders": {}
+							},
+							"request": {
+								"auth": {
+									"type": "apikey",
+									"apikey": [
+										{
+											"key": "value",
+											"value": "Token {{token}}",
+											"type": "string"
+										},
+										{
+											"key": "key",
+											"value": "Authorization",
+											"type": "string"
+										}
+									]
+								},
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"estudio_id\": 1,\n    \"movimientos\": [\n        {\n            \"monto\": 10.00,\n            \"concepto\": \"{{conceptoInicial1}}\",\n            \"medico_id\": \"{{medicoInicialId}}\",\n            \"tipo_id\": \"{{tipoGeneralId}}\"\n        },\n        {\n            \"monto\": -10.12,\n            \"concepto\": \"{{conceptoInicial2}}\",\n            \"medico_id\": \"\",\n            \"tipo_id\": \"{{tipoConsultorio1Id}}\"\n        }\n    ]\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{baseUrl}}/caja/",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"caja",
+										""
+									]
+								},
+								"description": "Se crean varios movimientos con estudio asociado"
+							},
+							"response": []
+						},
+						{
+							"name": "Crear movimiento simple",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"res = pm.response;",
+											"pm.test(\"Create movimientos caja status test\", function () {",
+											"    pm.expect(res).to.have.status(201);",
+											"    pm.expect(res.json()).to.not.have.keys('error');",
+											"});",
+											"postman.setNextRequest('Crear movimiento sin tipo falla');"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"protocolProfileBehavior": {
+								"disabledSystemHeaders": {}
+							},
+							"request": {
+								"auth": {
+									"type": "apikey",
+									"apikey": [
+										{
+											"key": "value",
+											"value": "Token {{token}}",
+											"type": "string"
+										},
+										{
+											"key": "key",
+											"value": "Authorization",
+											"type": "string"
+										}
+									]
+								},
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"estudio_id\": \"\",\n    \"movimientos\": [\n        {\n            \"monto\": 10.00,\n            \"concepto\": \"\",\n            \"medico_id\": \"\",\n            \"tipo_id\": \"{{tipoGeneralId}}\"\n        }\n    ]\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{baseUrl}}/caja/",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"caja",
+										""
+									]
+								},
+								"description": "Se crea un movimiento con los datos necesarios"
+							},
+							"response": []
+						},
+						{
+							"name": "Crear movimiento sin monto falla",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"res = pm.response;",
+											"pm.test(\"Create movimientos caja status test\", function () {",
+											"    pm.expect(res).to.have.status(400);",
+											"    pm.expect(res.json()).to.have.keys('error');",
+											"});",
+											"postman.setNextRequest('Crear movimiento simple');"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"protocolProfileBehavior": {
+								"disabledSystemHeaders": {}
+							},
+							"request": {
+								"auth": {
+									"type": "apikey",
+									"apikey": [
+										{
+											"key": "value",
+											"value": "Token {{token}}",
+											"type": "string"
+										},
+										{
+											"key": "key",
+											"value": "Authorization",
+											"type": "string"
+										}
+									]
+								},
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"estudio_id\": \"\",\n    \"movimientos\": [\n        {\n            \"monto\": \"\",\n            \"concepto\": \"\",\n            \"medico_id\": \"\",\n            \"tipo_id\": \"{{tipoGeneralId}}\"\n        }\n    ]\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{baseUrl}}/caja/",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"caja",
+										""
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Crear movimiento sin tipo falla",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"res = pm.response;",
+											"pm.test(\"Create movimientos caja status test\", function () {",
+											"    pm.expect(res).to.have.status(400);",
+											"    pm.expect(res.json()).to.have.keys('error');",
+											"});",
+											"postman.setNextRequest('Traer movimientos especificos');"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"protocolProfileBehavior": {
+								"disabledSystemHeaders": {}
+							},
+							"request": {
+								"auth": {
+									"type": "apikey",
+									"apikey": [
+										{
+											"key": "value",
+											"value": "Token {{token}}",
+											"type": "string"
+										},
+										{
+											"key": "key",
+											"value": "Authorization",
+											"type": "string"
+										}
+									]
+								},
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"estudio_id\": \"\",\n    \"movimientos\": [\n        {\n            \"monto\": 10.00,\n            \"concepto\": \"\",\n            \"medico_id\": \"\",\n            \"tipo_id\": \"\"\n        }\n    ]\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{baseUrl}}/caja/",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"caja",
+										""
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "Update",
+					"item": [
+						{
+							"name": "Modificar campos de un movimiento",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"res = pm.response;",
+											"pm.test(\"Update movimientos caja status test\", function () {",
+											"    pm.expect(res).to.have.status(200);",
+											"    pm.expect(res.json()).to.not.have.keys('error');",
+											"});",
+											"postman.setNextRequest('Traer movimiento modificado');"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"protocolProfileBehavior": {
+								"disabledSystemHeaders": {}
+							},
+							"request": {
+								"auth": {
+									"type": "apikey",
+									"apikey": [
+										{
+											"key": "value",
+											"value": "Token {{token}}",
+											"type": "string"
+										},
+										{
+											"key": "key",
+											"value": "Authorization",
+											"type": "string"
+										}
+									]
+								},
+								"method": "PATCH",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"concepto\":\"{{conceptoNuevo}}\",\n    \"tipo\":\"{{tipoConsultorio1Id}}\",\n    \"medico\":\"{{medicoNuevoId}}\"\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{baseUrl}}/caja/:id/update_movimientos/",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"caja",
+										":id",
+										"update_movimientos",
+										""
+									],
+									"variable": [
+										{
+											"key": "id",
+											"value": "{{movimientoId}}"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Update movimiento campos erroneos",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"res = pm.response;",
+											"pm.test(\"Update movimientos caja status test\", function () {",
+											"    pm.expect(res).to.have.status(400);",
+											"    pm.expect(res.json()).to.have.keys('error');",
+											"});",
+											"postman.setNextRequest('Imprimir general');"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"auth": {
+									"type": "apikey",
+									"apikey": [
+										{
+											"key": "value",
+											"value": "Token {{token}}",
+											"type": "string"
+										},
+										{
+											"key": "key",
+											"value": "Authorization",
+											"type": "string"
+										}
+									]
+								},
+								"method": "PATCH",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "{{jsonContentType}}",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "formdata",
+									"formdata": [
+										{
+											"key": "concepto",
+											"value": "{{conceptoNuevo}}",
+											"type": "text"
+										},
+										{
+											"key": "medico",
+											"value": "{{medicoNuevoId}}",
+											"type": "text"
+										},
+										{
+											"key": "tipo",
+											"value": "",
+											"type": "text"
+										}
+									]
+								},
+								"url": {
+									"raw": "{{baseUrl}}/caja/:id/update_movimientos/",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"caja",
+										":id",
+										"update_movimientos",
+										""
+									],
+									"variable": [
+										{
+											"key": "id",
+											"value": "{{movimientoId}}"
+										}
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "Print",
+					"item": [
+						{
+							"name": "Imprimir general",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"res = pm.response;",
+											"pm.test(\"Imprimir movimientos caja status test\", function () {",
+											"    pm.expect(res).to.have.status(200);",
+											"});",
+											"postman.setNextRequest(\"Imprimir movimiento modificado\");"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"auth": {
+									"type": "apikey",
+									"apikey": [
+										{
+											"key": "value",
+											"value": "Token {{token}}",
+											"type": "string"
+										},
+										{
+											"key": "key",
+											"value": "Authorization",
+											"type": "string"
+										}
+									]
+								},
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{baseUrl}}/caja/imprimir?fecha_desde={{currentdate}}&fecha_hasta={{currentdate}}&medico=&concepto=&estado=&paciente=&tipo_movimiento=&incluir_estudio=&page=1",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"caja",
+										"imprimir"
+									],
+									"query": [
+										{
+											"key": "fecha_desde",
+											"value": "{{currentdate}}"
+										},
+										{
+											"key": "fecha_hasta",
+											"value": "{{currentdate}}"
+										},
+										{
+											"key": "medico",
+											"value": ""
+										},
+										{
+											"key": "concepto",
+											"value": ""
+										},
+										{
+											"key": "estado",
+											"value": ""
+										},
+										{
+											"key": "paciente",
+											"value": ""
+										},
+										{
+											"key": "tipo_movimiento",
+											"value": ""
+										},
+										{
+											"key": "incluir_estudio",
+											"value": ""
+										},
+										{
+											"key": "page",
+											"value": "1"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Imprimir movimiento modificado",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"res = pm.response;",
+											"pm.test(\"Imprimir movimientos caja status test\", function () {",
+											"    pm.expect(res).to.have.status(200);",
+											"});",
+											"postman.setNextRequest(null);"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"auth": {
+									"type": "apikey",
+									"apikey": [
+										{
+											"key": "value",
+											"value": "Token {{token}}",
+											"type": "string"
+										},
+										{
+											"key": "key",
+											"value": "Authorization",
+											"type": "string"
+										}
+									]
+								},
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{baseUrl}}/caja/imprimir?fecha_desde={{currentdate}}&fecha_hasta={{currentdate}}&medico={{medicoNuevoId}}&concepto={{conceptoNuevo}}&estado=&paciente=&tipo_movimiento={{tipoConsultorio1}}&incluir_estudio=True&page=1",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"caja",
+										"imprimir"
+									],
+									"query": [
+										{
+											"key": "fecha_desde",
+											"value": "{{currentdate}}"
+										},
+										{
+											"key": "fecha_hasta",
+											"value": "{{currentdate}}"
+										},
+										{
+											"key": "medico",
+											"value": "{{medicoNuevoId}}"
+										},
+										{
+											"key": "concepto",
+											"value": "{{conceptoNuevo}}"
+										},
+										{
+											"key": "estado",
+											"value": ""
+										},
+										{
+											"key": "paciente",
+											"value": ""
+										},
+										{
+											"key": "tipo_movimiento",
+											"value": "{{tipoConsultorio1}}"
+										},
+										{
+											"key": "incluir_estudio",
+											"value": "True"
+										},
+										{
+											"key": "page",
+											"value": "1"
+										}
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "Montos",
+					"item": [
+						{
+							"name": "Traer montos acumulados",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"res = pm.response;",
+											"resJson = res.json();",
+											"pm.test(\"Filter movimientos caja status test\", function () {",
+											"    pm.expect(res).to.have.status(200);",
+											"    pm.expect(resJson).to.not.have.keys('error');",
+											"    pm.expect(resJson).to.have.all.keys(\"consultorio_1\", \"consultorio_2\", \"general\");",
+											"});",
+											"postman.setNextRequest('Modificar campos de un movimiento');"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"auth": {
+									"type": "apikey",
+									"apikey": [
+										{
+											"key": "value",
+											"value": "Token {{token}}",
+											"type": "string"
+										},
+										{
+											"key": "key",
+											"value": "Authorization",
+											"type": "string"
+										}
+									]
+								},
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{baseUrl}}/caja/montos_acumulados",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"caja",
+										"montos_acumulados"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				}
+			]
+		}
+	],
+	"auth": {
+		"type": "apikey",
+		"apikey": [
+			{
+				"key": "value",
+				"value": "Token {{token}}",
+				"type": "string"
+			},
+			{
+				"key": "key",
+				"value": "Authorization",
+				"type": "string"
+			}
+		]
+	},
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "idEstudio",
+			"value": 223433
+		},
+		{
+			"key": "idObraSocial",
+			"value": "5"
+		},
+		{
+			"key": "idPresentacion",
+			"value": 16915
+		},
+		{
+			"key": "idMedico",
+			"value": "1"
+		},
+		{
+			"key": "idPaciente",
+			"value": "1"
+		},
+		{
+			"key": "idAnestesista",
+			"value": "1"
+		},
+		{
+			"key": "idPractica",
+			"value": "1"
+		},
+		{
+			"key": "paginacionCaja",
+			"value": "100"
+		},
+		{
+			"key": "medicoInicialId",
+			"value": "1"
+		},
+		{
+			"key": "conceptoInicial1",
+			"value": "concepto uno"
+		},
+		{
+			"key": "tipoGeneral",
+			"value": "General"
+		},
+		{
+			"key": "fechaHasta",
+			"value": "2020-10-10"
+		},
+		{
+			"key": "fechaDesde",
+			"value": "2020-9-10"
+		},
+		{
+			"key": "conceptoInicial2",
+			"value": "concepto dos"
+		},
+		{
+			"key": "tipoGeneralId",
+			"value": "1"
+		},
+		{
+			"key": "tipoConsultorio1Id",
+			"value": "9"
+		},
+		{
+			"key": "conceptoNuevo",
+			"value": "concepto nuevo distinto al anterior"
+		},
+		{
+			"key": "medicoNuevoId",
+			"value": "2"
+		},
+		{
+			"key": "currentdate",
+			"value": ""
+		},
+		{
+			"key": "movimientoId",
+			"value": ""
+		},
+		{
+			"key": "tipoConsultorio1",
+			"value": "Consultorio 1"
+		}
+	]
+}
