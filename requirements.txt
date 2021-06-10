@@ -2,7 +2,7 @@
 # Also install libjpeg-dev before pillow sudo apt-get install libjpeg-dev
 # reinstall pillow: pip install --no-cache-dir -I pillow
 gunicorn==20.0.4
-Django==1.11.29
+Django==2.2.24
 Pillow==2.5.1
 psycopg2==2.8.3
 #bootstrap-admin  # https://github.com/douglasmiranda/django-admin-bootstrap
