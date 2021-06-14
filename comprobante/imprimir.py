@@ -68,7 +68,7 @@ responsables = {
     }
 }
 
-def leyenda_monotributista(canvas, mensaje):
+def mensaje_monotributista(canvas, mensaje):
     top = height - 243*mm
     box_width = width / 2 + 2*margin
     box_height = 20*mm
@@ -387,7 +387,7 @@ def pie_de_pagina(p, imprimir_leyenda_honorarios):
     p.restoreState()
 
 
-def generar_factura(response, comp, leyenda):
+def generar_factura(response, comp, leyenda, monotributista):
     # Create the PDF object, using the response object as its "file."
     p = canvas.Canvas(response, pagesize=A4)
     p.setTitle(obtener_filename(comp['responsable'], comp['cabecera']))
@@ -415,9 +415,10 @@ def generar_factura(response, comp, leyenda):
 
         detalle_iva(p, comp['detalle'])
 
-        pie_de_pagina(p, mensajes['mensaje_leyenda_honorarios'])
+        pie_de_pagina(p, leyenda)
 
-        leyenda_monotributista(p, mensajes['mensaje_monotributistas'])
+        if monotributista:
+            mensaje_monotributista(p, mensajes['mensaje_monotributistas'])
 
         # Escribe código de qr
         codigo_qr(p, comp['cabecera'])

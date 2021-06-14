@@ -28,6 +28,7 @@ from common.drf.views import StandardResultsSetPagination
 def imprimir(request, cae):
     # Imprime leyenda?
     leyenda = request.method == 'GET' and 'leyenda' in request.GET
+    monotributista = request.GET.get('monotributista', False)
 
     # Adquiere datos
     comp = obtener_comprobante(cae)
@@ -36,7 +37,7 @@ def imprimir(request, cae):
     response = HttpResponse(content_type='application/pdf')
     response['Content-Disposition'] = 'filename="{0}.pdf"'.format(obtener_filename(comp['responsable'], comp['cabecera']))
 
-    return generar_factura(response, comp, leyenda)
+    return generar_factura(response, comp, leyenda, monotributista)
 
 
 def ventas(request, responsable : str, anio : str, mes : str) -> HttpResponse:
