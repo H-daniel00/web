@@ -341,6 +341,102 @@
     }
 },
 {
+    "model": "estudio.estudio",
+    "pk": 17,
+    "fields": {
+        "paciente": 1,
+        "practica": 148,
+        "medico": 2,
+        "obra_social": 2,
+        "medico_solicitante": 1,
+        "presentacion": 5,
+        "importe_estudio": "10000.00",
+        "fecha": "2013-11-19",
+        "anestesista": 2,
+        "sucursal": 1
+    }
+},
+{
+    "model": "estudio.estudio",
+    "pk": 18,
+    "fields": {
+        "paciente": 5,
+        "practica": 149,
+        "medico": 2,
+        "obra_social": 2,
+        "medico_solicitante": 2,
+        "presentacion": 4,
+        "importe_estudio": "10000.00",
+        "fecha": "2013-11-10",
+        "anestesista": 2,
+        "sucursal": 1
+    }
+},
+{
+    "model": "estudio.estudio",
+    "pk": 19,
+    "fields": {
+        "paciente": 6,
+        "practica": 148,
+        "medico": 2,
+        "obra_social": 5,
+        "medico_solicitante": 2,
+        "presentacion": 4,
+        "importe_estudio": "10000.00",
+        "fecha": "2013-10-10",
+        "anestesista": 2,
+        "sucursal": 1
+    }
+},
+{
+    "model": "estudio.estudio",
+    "pk": 20,
+    "fields": {
+        "paciente": 7,
+        "practica": 150,
+        "medico": 2,
+        "obra_social": 46,
+        "medico_solicitante": 2,
+        "presentacion": 4,
+        "importe_estudio": "10000.00",
+        "fecha": "2013-10-10",
+        "anestesista": 2,
+        "sucursal": 1
+    }
+},
+{
+    "model": "estudio.estudio",
+    "pk": 21,
+    "fields": {
+        "paciente": 7,
+        "practica": 149,
+        "medico": 2,
+        "obra_social": 46,
+        "medico_solicitante": 2,
+        "presentacion": 4,
+        "importe_estudio": "10000.00",
+        "fecha": "2013-9-10",
+        "anestesista": 2,
+        "sucursal": 1
+    }
+},
+{
+    "model": "estudio.estudio",
+    "pk": 22,
+    "fields": {
+        "paciente": 7,
+        "practica": 150,
+        "medico": 2,
+        "obra_social": 46,
+        "medico_solicitante": 2,
+        "presentacion": 4,
+        "importe_estudio": "10000.00",
+        "fecha": "2013-9-10",
+        "anestesista": 2,
+        "sucursal": 1
+    }
+},
+{
     "model": "estudio.medicacion",
     "pk": 1,
     "fields": {

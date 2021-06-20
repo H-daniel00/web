@@ -12,5 +12,48 @@
         "telefono": "",
         "email": ""
     }
+},
+{
+    "pk": 2,
+    "model": "anestesista.anestesista",
+    "fields": {
+        "apellido": "Riviera",
+        "direccion": "Calle falsa 123",
+        "porcentaje_anestesista": "50.00",
+        "matricula": "12345",
+        "localidad": "Springfield",
+        "nombre": "Nick",
+        "telefono": "1234567890",
+        "email": "nico@mail.com"
+    }
+},
+{
+    "pk": 1,
+    "model": "anestesista.complejidadestudio",
+    "fields": {
+        "estudios": "149,150",
+        "formula": "c1 + c2 - 20"
+    }
+},
+{
+    "pk": 1,
+    "model": "anestesista.complejidad",
+    "fields": {
+        "importe": "2902"
+    }
+},
+{
+    "pk": 2,
+    "model": "anestesista.complejidad",
+    "fields": {
+        "importe": "4336"
+    }
+},
+{
+    "pk": 3,
+    "model": "anestesista.complejidad",
+    "fields": {
+        "importe": "5757"
+    }
 }
 ]

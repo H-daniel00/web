@@ -62,5 +62,53 @@
         "nroAfiliado": "1023512",
         "email": null
     }
+},
+{
+    "model": "paciente.paciente",
+    "pk": 5,
+    "fields": {
+        "dni": 55555555,
+        "nombre": "Coscu",
+        "apellido": "Nasheee",
+        "edad": 5,
+        "fechaNacimiento": "2015-05-21",
+        "domicilio": "",
+        "telefono": "",
+        "sexo": "Masculino",
+        "nroAfiliado": "1023513",
+        "email": null
+    }
+},
+{
+    "model": "paciente.paciente",
+    "pk": 6,
+    "fields": {
+        "dni": 66666666,
+        "nombre": "Jimbo",
+        "apellido": "Jones",
+        "edad": 15,
+        "fechaNacimiento": "1999-05-21",
+        "domicilio": "",
+        "telefono": "",
+        "sexo": "Masculino",
+        "nroAfiliado": "1023513",
+        "email": null
+    }
+},
+{
+    "model": "paciente.paciente",
+    "pk": 7,
+    "fields": {
+        "dni": 77777777,
+        "nombre": "Kearney",
+        "apellido": "Zzyzwicz",
+        "edad": 15,
+        "fechaNacimiento": "1999-05-21",
+        "domicilio": "",
+        "telefono": "",
+        "sexo": "Masculino",
+        "nroAfiliado": "1023513",
+        "email": null
+    }
 }
 ]

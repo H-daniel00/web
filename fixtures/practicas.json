@@ -148,5 +148,29 @@
         "descripcion": "TTO DE ESOFAGO DE BARRET POR RADIOFRECUENCIA",
         "usedLevel": 0
     }
+},
+{
+    "pk": 148,
+    "model": "practica.practica",
+    "fields": {
+        "descripcion": "URICEMIA",
+        "usedLevel": 1
+    }
+},
+{
+    "pk": 149,
+    "model": "practica.practica",
+    "fields": {
+        "descripcion": "UROCULTIVO",
+        "usedLevel": 1
+    }
+},
+{
+    "pk": 150,
+    "model": "practica.practica",
+    "fields": {
+        "descripcion": "VIDEO CAPSULA ENDOSCOPICA",
+        "usedLevel": 1
+    }
 }
 ]
