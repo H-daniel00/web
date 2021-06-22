@@ -2,9 +2,9 @@ from django.test import TestCase
 from mock import patch
 from datetime import date
 from decimal import Decimal
-from comprobante.comprobante_asociado import crear_comprobante_asociado, TipoComprobanteAsociadoNoValidoException
+from comprobante.comprobante_asociado import crear_comprobante_asociado, calcular_iva, TipoComprobanteAsociadoNoValidoException
 from comprobante.afip import AfipErrorRed, AfipErrorValidacion
-from comprobante.models import Comprobante, TipoComprobante, LineaDeComprobante, \
+from comprobante.models import Comprobante, Gravado, TipoComprobante, LineaDeComprobante, \
     ID_TIPO_COMPROBANTE_FACTURA, ID_TIPO_COMPROBANTE_FACTURA_CREDITO_ELECTRONICA, \
     ID_TIPO_COMPROBANTE_NOTA_DE_CREDITO, ID_TIPO_COMPROBANTE_NOTA_DE_CREDITO_ELECTRONICA, \
     ID_TIPO_COMPROBANTE_NOTA_DE_DEBITO, ID_TIPO_COMPROBANTE_NOTA_DE_DEBITO_ELECTRONICA, \
@@ -216,3 +216,44 @@ class TestComprobantesAsociados(TestCase):
         nuevo_comp = crear_comprobante_asociado(1, Decimal(200.52), '')
 
         assert nuevo_comp.total_facturado == Decimal(200.52).quantize(Decimal(10)**-2)
+    
+    @patch('comprobante.comprobante_asociado.Afip')
+    def test_comprobante_asociado_acepta_iva(self, afip_mock):
+        afip = afip_mock()
+        afip.consultar_proximo_numero.return_value = 11
+
+        gravado = Gravado.objects.get(pk=1)
+        importe = Decimal('100.21')
+
+        nuevo_comp = crear_comprobante_asociado(1, importe, '', None, gravado.id)
+        importe_total = importe + calcular_iva(importe, gravado.porcentaje)
+        
+        assert nuevo_comp.total_facturado == importe_total.quantize(Decimal(10) ** -2)
+        assert nuevo_comp.gravado == gravado
+
+        afip.consultar_proximo_numero.return_value = 12
+        gravado = Gravado.objects.get(pk=2)
+
+        nuevo_comp = crear_comprobante_asociado(1, importe, '', None, gravado.id)
+        importe_total = importe + calcular_iva(importe, gravado.porcentaje)
+
+        assert nuevo_comp.total_facturado == importe_total.quantize(Decimal(10) ** -2)
+        assert nuevo_comp.gravado == gravado
+
+    @patch('comprobante.comprobante_asociado.Afip')
+    def test_comprobante_asociado_acepta_tipo(self, afip_mock):
+        afip = afip_mock()
+        afip.consultar_proximo_numero.return_value = 11
+
+        assert Comprobante.objects.get(pk=1).tipo_comprobante.id == ID_TIPO_COMPROBANTE_FACTURA 
+
+        nuevo_comp = crear_comprobante_asociado(1, Decimal(1), '', ID_TIPO_COMPROBANTE_NOTA_DE_CREDITO)
+
+        assert nuevo_comp.tipo_comprobante.id == ID_TIPO_COMPROBANTE_NOTA_DE_CREDITO
+
+        afip.consultar_proximo_numero.return_value = 11
+
+        nuevo_comp = crear_comprobante_asociado(1, Decimal(1), '', ID_TIPO_COMPROBANTE_NOTA_DE_DEBITO)
+
+        assert nuevo_comp.tipo_comprobante.id == ID_TIPO_COMPROBANTE_NOTA_DE_DEBITO
+
