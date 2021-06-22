@@ -110,9 +110,11 @@ class ComprobanteViewSet(viewsets.ModelViewSet):
         id_comprobante_asociado = int(request.POST['id-comprobante-asociado'])
         importe = Decimal(request.POST['importe'])
         concepto = request.POST['concepto']
+        tipo = request.POST.get('tipo', None)
+        iva = request.POST.get('iva', None)
 
         try:
-            comp = crear_comprobante_asociado(id_comprobante_asociado, importe, concepto)
+            comp = crear_comprobante_asociado(id_comprobante_asociado, importe, concepto, tipo, iva)
             content = {'data': ComprobanteSmallSerializer(comp).data , 'message': 'Comprobante creado correctamente'}
             return Response(content, status=status.HTTP_201_CREATED)
         except Comprobante.DoesNotExist:

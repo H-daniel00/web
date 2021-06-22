@@ -1,5 +1,5 @@
 from datetime import date
-from comprobante.models import Comprobante, TipoComprobante, LineaDeComprobante
+from comprobante.models import Comprobante, TipoComprobante, LineaDeComprobante, Gravado
 from comprobante.afip import Afip, AfipError, AfipErrorRed, AfipErrorValidacion
 from decimal import Decimal
 
@@ -27,9 +27,12 @@ def _obtener_tipo_comprobante_asociado(id_tipo):
 def _es_factura(id_tipo_comp):
     return id_tipo_comp == ID_TIPO_COMPROBANTE_FACTURA or id_tipo_comp == ID_TIPO_COMPROBANTE_FACTURA_CREDITO_ELECTRONICA
 
-def _crear_comprobante_similar(comp, importe, id_tipo_comp, numero):
-    iva = importe * comp.gravado.porcentaje / 100
-    iva = iva.quantize(Decimal(10) ** -2)
+def calcular_iva(importe, porcentaje):
+    iva = importe * porcentaje / 100
+    return iva.quantize(Decimal(10) ** -2)
+
+def _crear_comprobante_similar(comp, importe, id_tipo_comp, numero, gravado):
+    iva = calcular_iva(importe, gravado.porcentaje)
     return Comprobante(**{
         'nombre_cliente' : comp.nombre_cliente,
         'domicilio_cliente': comp.domicilio_cliente,
@@ -47,12 +50,11 @@ def _crear_comprobante_similar(comp, importe, id_tipo_comp, numero):
         'fecha_recepcion': date.today(),
         'tipo_comprobante': TipoComprobante.objects.get(pk = id_tipo_comp),
         'factura': comp,
-        'gravado': comp.gravado,
+        'gravado': gravado,
     })
 
-def _crear_linea(comp, importe, concepto):
-    iva = importe * comp.gravado.porcentaje / 100
-    iva = iva.quantize(Decimal(10) ** -2)
+def _crear_linea(comp, importe, concepto, gravado):
+    iva = calcular_iva(importe, gravado.porcentaje)
     return [LineaDeComprobante(**{
         'comprobante': comp,
         'concepto': concepto if concepto != '' else 'AJUSTA FACTURA {} No {}-{} SEGUN DEBITO APLICADO'.format(comp.sub_tipo, comp.nro_terminal, comp.numero),
@@ -62,29 +64,31 @@ def _crear_linea(comp, importe, concepto):
     })]
 
 
-def crear_comprobante_asociado(id_comp, importe, concepto):
-
+def crear_comprobante_asociado(id_comp, importe, concepto, tipo_comprobante = None, tipo_iva = None):
     importe = importe.quantize(Decimal(10) ** -2)
 
     comp = Comprobante.objects.get(pk = id_comp)
 
+    gravado = Gravado.objects.get(pk=tipo_iva) if tipo_iva else comp.gravado
+
     if comp.tipo_comprobante.id == ID_TIPO_COMPROBANTE_LIQUIDACION:
         raise TipoComprobanteAsociadoNoValidoException("No es posible usar una liquidacion como comprobante asociado")
 
-    id_new_comp =  _obtener_tipo_comprobante_asociado(comp.tipo_comprobante.id)
+    if not tipo_comprobante:
+        tipo_comprobante =  _obtener_tipo_comprobante_asociado(comp.tipo_comprobante.id)
 
     afip = Afip()
 
     nro_siguiente = afip.consultar_proximo_numero(
         comp.responsable,
         comp.nro_terminal,
-        TipoComprobante.objects.get(pk = id_new_comp),
+        TipoComprobante.objects.get(pk = tipo_comprobante),
         comp.sub_tipo
     )
 
-    comprobante = _crear_comprobante_similar(comp, importe, id_new_comp, nro_siguiente)
+    comprobante = _crear_comprobante_similar(comp, importe, tipo_comprobante, nro_siguiente, gravado)
 
-    lineas = _crear_linea(comprobante, importe, concepto)
+    lineas = _crear_linea(comprobante, importe, concepto, gravado)
 
     afip.emitir_comprobante(comprobante, lineas)
 
