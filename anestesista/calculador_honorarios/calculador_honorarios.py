@@ -60,7 +60,7 @@ class CalculadorHonorariosAnestesista(object):
         
         result_ara = {}
         result_no_ara = {}
-        if self.obra_social.se_presenta_por_ARA:
+        if int(self.obra_social.se_presenta_por_ARA):
             result_ara = self._get_importes_ara(importe, total_mov_caja)
             if movimientos_caja:
                 result_no_ara = self._get_importes_no_ara(importe, bool(movimientos_caja), total_mov_caja)
@@ -149,7 +149,7 @@ class CalculadorHonorariosAnestesista(object):
         Retencion aca es 'a pagar'
         """
         comprobante = None
-        if self.obra_social.se_presenta_por_ARA:
+        if int(self.obra_social.se_presenta_por_ARA):
             assert existen_mov_caja == True, 'Deberia haber movimientos si se presenta por ARA y se esta caclulando No ARA'
             importe = total_mov_caja.quantize(Decimal('.01'), ROUND_UP)
             alicuota_iva = Decimal('0.0')  # es cero porque ya esta incluido en el monto del mov. de caja
