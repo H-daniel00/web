@@ -3,29 +3,10 @@ from comprobante.models import Comprobante, TipoComprobante, LineaDeComprobante,
 from comprobante.afip import Afip, AfipError, AfipErrorRed, AfipErrorValidacion
 from decimal import Decimal
 
-from comprobante.models import ID_TIPO_COMPROBANTE_FACTURA, ID_TIPO_COMPROBANTE_FACTURA_CREDITO_ELECTRONICA, \
-    ID_TIPO_COMPROBANTE_NOTA_DE_CREDITO, ID_TIPO_COMPROBANTE_NOTA_DE_CREDITO_ELECTRONICA, \
-    ID_TIPO_COMPROBANTE_NOTA_DE_DEBITO, ID_TIPO_COMPROBANTE_NOTA_DE_DEBITO_ELECTRONICA, \
-    ID_TIPO_COMPROBANTE_LIQUIDACION
-
+from comprobante.models import ID_TIPO_COMPROBANTE_LIQUIDACION
 
 class TipoComprobanteAsociadoNoValidoException(Exception):
     pass
-
-def _obtener_tipo_comprobante_asociado(id_tipo):
-    dict_comp_asociados = {
-        ID_TIPO_COMPROBANTE_FACTURA: ID_TIPO_COMPROBANTE_NOTA_DE_CREDITO,
-        ID_TIPO_COMPROBANTE_NOTA_DE_CREDITO: ID_TIPO_COMPROBANTE_NOTA_DE_DEBITO,
-        ID_TIPO_COMPROBANTE_NOTA_DE_DEBITO: ID_TIPO_COMPROBANTE_NOTA_DE_CREDITO,
-        ID_TIPO_COMPROBANTE_FACTURA_CREDITO_ELECTRONICA: ID_TIPO_COMPROBANTE_NOTA_DE_CREDITO_ELECTRONICA,
-        ID_TIPO_COMPROBANTE_NOTA_DE_CREDITO_ELECTRONICA: ID_TIPO_COMPROBANTE_NOTA_DE_DEBITO_ELECTRONICA,
-        ID_TIPO_COMPROBANTE_NOTA_DE_DEBITO_ELECTRONICA: ID_TIPO_COMPROBANTE_NOTA_DE_CREDITO_ELECTRONICA
-    }
-
-    return dict_comp_asociados[id_tipo]
-
-def _es_factura(id_tipo_comp):
-    return id_tipo_comp == ID_TIPO_COMPROBANTE_FACTURA or id_tipo_comp == ID_TIPO_COMPROBANTE_FACTURA_CREDITO_ELECTRONICA
 
 def calcular_iva(importe, porcentaje):
     iva = importe * porcentaje / 100
@@ -64,7 +45,7 @@ def _crear_linea(comp, importe, concepto, gravado):
     })]
 
 
-def crear_comprobante_asociado(id_comp, importe, concepto, tipo_comprobante = None, tipo_iva = None):
+def crear_comprobante_asociado(id_comp, importe, concepto, tipo_comprobante, tipo_iva = None):
     importe = importe.quantize(Decimal(10) ** -2)
 
     comp = Comprobante.objects.get(pk = id_comp)
@@ -73,9 +54,6 @@ def crear_comprobante_asociado(id_comp, importe, concepto, tipo_comprobante = No
 
     if comp.tipo_comprobante.id == ID_TIPO_COMPROBANTE_LIQUIDACION:
         raise TipoComprobanteAsociadoNoValidoException("No es posible usar una liquidacion como comprobante asociado")
-
-    if not tipo_comprobante:
-        tipo_comprobante =  _obtener_tipo_comprobante_asociado(comp.tipo_comprobante.id)
 
     afip = Afip()
 

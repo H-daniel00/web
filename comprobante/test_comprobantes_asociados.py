@@ -21,7 +21,7 @@ class TestComprobantesAsociados(TestCase):
 
         comp = Comprobante.objects.get(pk = 1)
 
-        nuevo_comp = crear_comprobante_asociado(1, Decimal(200), '')
+        nuevo_comp = crear_comprobante_asociado(1, Decimal(200), '', ID_TIPO_COMPROBANTE_NOTA_DE_CREDITO)
 
         assert nuevo_comp.nombre_cliente == comp.nombre_cliente
         assert nuevo_comp.nro_cuit == comp.nro_cuit
@@ -37,7 +37,7 @@ class TestComprobantesAsociados(TestCase):
         nuevo_comp.tipo_comprobante = TipoComprobante.objects.get(pk = ID_TIPO_COMPROBANTE_LIQUIDACION)
         nuevo_comp.save()
         with self.assertRaises(TipoComprobanteAsociadoNoValidoException):
-            crear_comprobante_asociado(1, Decimal(500), '')
+            crear_comprobante_asociado(1, Decimal(500), '', ID_TIPO_COMPROBANTE_NOTA_DE_CREDITO)
 
     @patch('comprobante.comprobante_asociado.Afip')
     def test_genera_nota_de_credito_si_se_envia_una_nota_de_debito(self, afip_mock):
@@ -48,7 +48,7 @@ class TestComprobantesAsociados(TestCase):
         comp.tipo_comprobante = TipoComprobante.objects.get(pk = ID_TIPO_COMPROBANTE_NOTA_DE_DEBITO)
         comp.save()
 
-        nuevo_comp = crear_comprobante_asociado(1, Decimal(300), '')
+        nuevo_comp = crear_comprobante_asociado(1, Decimal(300), '', ID_TIPO_COMPROBANTE_NOTA_DE_CREDITO)
 
         assert nuevo_comp.nombre_cliente == comp.nombre_cliente
         assert nuevo_comp.nro_cuit == comp.nro_cuit
@@ -66,7 +66,7 @@ class TestComprobantesAsociados(TestCase):
         comp = Comprobante.objects.get(pk = 1)
         comp.tipo_comprobante = TipoComprobante.objects.get(pk = ID_TIPO_COMPROBANTE_NOTA_DE_CREDITO)
         comp.save()
-        nuevo_comp = crear_comprobante_asociado(1, Decimal(400), '')
+        nuevo_comp = crear_comprobante_asociado(1, Decimal(400), '', ID_TIPO_COMPROBANTE_NOTA_DE_DEBITO)
 
         assert nuevo_comp.nombre_cliente == comp.nombre_cliente
         assert nuevo_comp.nro_cuit == comp.nro_cuit
@@ -85,7 +85,7 @@ class TestComprobantesAsociados(TestCase):
         comp.tipo_comprobante = TipoComprobante.objects.get(pk = ID_TIPO_COMPROBANTE_FACTURA_CREDITO_ELECTRONICA)
         comp.save()
 
-        nuevo_comp = crear_comprobante_asociado(1, Decimal(200), '')
+        nuevo_comp = crear_comprobante_asociado(1, Decimal(200), '', ID_TIPO_COMPROBANTE_NOTA_DE_CREDITO_ELECTRONICA)
 
         assert nuevo_comp.nombre_cliente == comp.nombre_cliente
         assert nuevo_comp.nro_cuit == comp.nro_cuit
@@ -104,7 +104,7 @@ class TestComprobantesAsociados(TestCase):
         comp.tipo_comprobante = TipoComprobante.objects.get(pk = ID_TIPO_COMPROBANTE_NOTA_DE_DEBITO_ELECTRONICA)
         comp.save()
 
-        nuevo_comp = crear_comprobante_asociado(1, Decimal(300), '')
+        nuevo_comp = crear_comprobante_asociado(1, Decimal(300), '', ID_TIPO_COMPROBANTE_NOTA_DE_CREDITO_ELECTRONICA)
 
         assert nuevo_comp.nombre_cliente == comp.nombre_cliente
         assert nuevo_comp.nro_cuit == comp.nro_cuit
@@ -122,7 +122,7 @@ class TestComprobantesAsociados(TestCase):
         comp = Comprobante.objects.get(pk = 1)
         comp.tipo_comprobante = TipoComprobante.objects.get(pk = ID_TIPO_COMPROBANTE_NOTA_DE_CREDITO_ELECTRONICA)
         comp.save()
-        nuevo_comp = crear_comprobante_asociado(1, Decimal(400), '')
+        nuevo_comp = crear_comprobante_asociado(1, Decimal(400), '', ID_TIPO_COMPROBANTE_NOTA_DE_DEBITO_ELECTRONICA)
 
         assert nuevo_comp.nombre_cliente == comp.nombre_cliente
         assert nuevo_comp.nro_cuit == comp.nro_cuit
@@ -134,7 +134,7 @@ class TestComprobantesAsociados(TestCase):
 
     def test_crear_comprobante_asociado_falla_si_el_comprobante_no_existe(self):
         with self.assertRaises(Comprobante.DoesNotExist):
-            crear_comprobante_asociado(50, Decimal(100), '')
+            crear_comprobante_asociado(50, Decimal(100), '', ID_TIPO_COMPROBANTE_NOTA_DE_CREDITO)
 
     @patch('comprobante.comprobante_asociado.Afip')
     def test_guarda_linea_en_db(self, afip_mock):
@@ -143,12 +143,12 @@ class TestComprobantesAsociados(TestCase):
 
         cantidad_inicial = LineaDeComprobante.objects.count()
 
-        nuevo_comp = crear_comprobante_asociado(1, Decimal(400), '')
+        nuevo_comp = crear_comprobante_asociado(1, Decimal(400), '', ID_TIPO_COMPROBANTE_NOTA_DE_CREDITO)
 
         assert cantidad_inicial + 1 == LineaDeComprobante.objects.count()
         assert LineaDeComprobante.objects.latest('id').concepto == 'AJUSTA FACTURA {} No {}-{} SEGUN DEBITO APLICADO'.format(nuevo_comp.sub_tipo, nuevo_comp.nro_terminal, nuevo_comp.numero)
 
-        nuevo_comp = crear_comprobante_asociado(1, Decimal(400), 'prueba')
+        nuevo_comp = crear_comprobante_asociado(1, Decimal(400), 'prueba', ID_TIPO_COMPROBANTE_NOTA_DE_CREDITO)
 
         assert cantidad_inicial + 2 == LineaDeComprobante.objects.count()
         assert LineaDeComprobante.objects.latest('id').concepto == 'prueba'
@@ -161,14 +161,14 @@ class TestComprobantesAsociados(TestCase):
         cantidad_inicial = LineaDeComprobante.objects.count()
 
         with self.assertRaises(AfipErrorValidacion):
-            crear_comprobante_asociado(1, Decimal(199), '')
+            crear_comprobante_asociado(1, Decimal(199), '', ID_TIPO_COMPROBANTE_NOTA_DE_CREDITO)
         
         assert cantidad_inicial == LineaDeComprobante.objects.count()
         
         afip.emitir_comprobante.side_effect = AfipErrorRed
 
         with self.assertRaises(AfipErrorRed):
-            crear_comprobante_asociado(1, Decimal(100), '')
+            crear_comprobante_asociado(1, Decimal(100), '', ID_TIPO_COMPROBANTE_NOTA_DE_CREDITO)
 
         assert cantidad_inicial == LineaDeComprobante.objects.count()
 
@@ -177,7 +177,7 @@ class TestComprobantesAsociados(TestCase):
         afip_mock.side_effect = AfipErrorRed
 
         with self.assertRaises(AfipErrorRed):
-            crear_comprobante_asociado(1, Decimal(100), '')
+            crear_comprobante_asociado(1, Decimal(100), '', ID_TIPO_COMPROBANTE_NOTA_DE_CREDITO)
 
     @patch('comprobante.comprobante_asociado.Afip')
     def test_crear_comprobante_asociado_falla_si_afip_no_valida_el_comprobante(self, afip_mock):
@@ -186,7 +186,7 @@ class TestComprobantesAsociados(TestCase):
         afip.emitir_comprobante.side_effect = AfipErrorValidacion
 
         with self.assertRaises(AfipErrorValidacion):
-            crear_comprobante_asociado(1, Decimal(100), '')
+            crear_comprobante_asociado(1, Decimal(100), '', ID_TIPO_COMPROBANTE_NOTA_DE_CREDITO)
 
     @patch('comprobante.comprobante_asociado.Afip')
     def test_comprobante_no_se_guarda_en_bd_si_afip_devuelve_error(self, afip_mock):
@@ -197,14 +197,14 @@ class TestComprobantesAsociados(TestCase):
         cantidad_inicial = Comprobante.objects.count()
 
         with self.assertRaises(AfipErrorValidacion):
-            crear_comprobante_asociado(1, Decimal(199), '')
+            crear_comprobante_asociado(1, Decimal(199), '', ID_TIPO_COMPROBANTE_NOTA_DE_CREDITO)
         
         assert cantidad_inicial == Comprobante.objects.count()
         
         afip.emitir_comprobante.side_effect = AfipErrorRed
 
         with self.assertRaises(AfipErrorRed):
-            crear_comprobante_asociado(1, Decimal(100), '')
+            crear_comprobante_asociado(1, Decimal(100), '', ID_TIPO_COMPROBANTE_NOTA_DE_CREDITO)
 
         assert cantidad_inicial == Comprobante.objects.count()
 
@@ -213,7 +213,7 @@ class TestComprobantesAsociados(TestCase):
         afip = afip_mock()
         afip.consultar_proximo_numero.return_value = 11
 
-        nuevo_comp = crear_comprobante_asociado(1, Decimal(200.52), '')
+        nuevo_comp = crear_comprobante_asociado(1, Decimal(200.52), '', ID_TIPO_COMPROBANTE_NOTA_DE_CREDITO)
 
         assert nuevo_comp.total_facturado == Decimal(200.52).quantize(Decimal(10)**-2)
     
@@ -225,7 +225,7 @@ class TestComprobantesAsociados(TestCase):
         gravado = Gravado.objects.get(pk=1)
         importe = Decimal('100.21')
 
-        nuevo_comp = crear_comprobante_asociado(1, importe, '', None, gravado.id)
+        nuevo_comp = crear_comprobante_asociado(1, importe, '', ID_TIPO_COMPROBANTE_NOTA_DE_CREDITO, gravado.id)
         importe_total = importe + calcular_iva(importe, gravado.porcentaje)
         
         assert nuevo_comp.total_facturado == importe_total.quantize(Decimal(10) ** -2)
@@ -234,14 +234,14 @@ class TestComprobantesAsociados(TestCase):
         afip.consultar_proximo_numero.return_value = 12
         gravado = Gravado.objects.get(pk=2)
 
-        nuevo_comp = crear_comprobante_asociado(1, importe, '', None, gravado.id)
+        nuevo_comp = crear_comprobante_asociado(1, importe, '', ID_TIPO_COMPROBANTE_NOTA_DE_CREDITO, gravado.id)
         importe_total = importe + calcular_iva(importe, gravado.porcentaje)
 
         assert nuevo_comp.total_facturado == importe_total.quantize(Decimal(10) ** -2)
         assert nuevo_comp.gravado == gravado
 
     @patch('comprobante.comprobante_asociado.Afip')
-    def test_comprobante_asociado_acepta_tipo(self, afip_mock):
+    def test_comprobante_asociado_permite_crear_distintos_tipos(self, afip_mock):
         afip = afip_mock()
         afip.consultar_proximo_numero.return_value = 11
 
