@@ -37,8 +37,8 @@ class GenerarVistaNuevoPagoTest(TestCase):
             fecha__year=self.anio,
             fecha__month=mes,
             sucursal=self.sucursal).order_by('fecha','paciente','obra_social')
-        for e in estudios:
-            paciente = e.paciente
+        for estudio in estudios:
+            paciente = estudio.paciente
             paciente.fechaNacimiento = date(self.today.year - 80, self.today.month, self.today.day)
             paciente.save()
 
@@ -76,8 +76,8 @@ class GenerarVistaNuevoPagoTest(TestCase):
         fecha__year=self.anio,
         fecha__month=mes,
         sucursal=self.sucursal).order_by('fecha','paciente','obra_social')
-        for e in estudios:
-            paciente = e.paciente
+        for estudio in estudios:
+            paciente = estudio.paciente
             paciente.fechaNacimiento = date(self.today.year - 20, self.today.month, self.today.day)
             paciente.save()
 
@@ -115,8 +115,8 @@ class GenerarVistaNuevoPagoTest(TestCase):
         fecha__year=self.anio,
         fecha__month=mes,
         sucursal=self.sucursal).order_by('fecha','paciente','obra_social')
-        for e in estudios:
-            paciente = e.paciente
+        for estudio in estudios:
+            paciente = estudio.paciente
             paciente.fechaNacimiento = date(self.today.year - 20, self.today.month, self.today.day)
             paciente.save()
 
@@ -153,8 +153,8 @@ class GenerarVistaNuevoPagoTest(TestCase):
         fecha__year=self.anio,
         fecha__month=mes,
         sucursal=self.sucursal).order_by('fecha','paciente','obra_social')
-        for e in estudios:
-            paciente = e.paciente
+        for estudio in estudios:
+            paciente = estudio.paciente
             paciente.fechaNacimiento = date(self.today.year - 10, self.today.month, self.today.day)
             paciente.save()
 
@@ -191,12 +191,12 @@ class GenerarVistaNuevoPagoTest(TestCase):
         fecha__year=self.anio,
         fecha__month=mes,
         sucursal=self.sucursal).order_by('fecha','paciente','obra_social')
-        for e in estudios:
-            paciente = e.paciente
+        for estudio in estudios:
+            paciente = estudio.paciente
             paciente.fechaNacimiento = date(self.today.year - 10, self.today.month, self.today.day)
             paciente.save()
-            e.obra_social = ObraSocial.objects.get(pk=1)
-            e.save()
+            estudio.obra_social = ObraSocial.objects.get(pk=1)
+            estudio.save()
 
         response = self.client.get('/api/anestesista/{0}/pago/{1}/{2}/?sucursal={3}'.format(self.anestesista.id, self.anio, mes, self.sucursal))
         results = json.loads(response.content)
@@ -240,8 +240,8 @@ class GenerarVistaNuevoPagoTest(TestCase):
             movimiento.tipo = TipoMovimientoCaja.objects.get(pk=ids[1])
             movimiento.save()
             movimientos += [movimiento]
-        for e in estudios:
-            paciente = e.paciente
+        for estudio in estudios:
+            paciente = estudio.paciente
             paciente.fechaNacimiento = date(self.today.year - 10, self.today.month, self.today.day)
             paciente.save()
 
@@ -270,24 +270,16 @@ class GenerarVistaNuevoPagoTest(TestCase):
             movimiento['tipo'] = dict(movimiento['tipo'])
 
         no_ara = [{
-            'fecha': fecha,
-            'paciente': paciente,
-            'obra_social': obra_social,
-            'estudios': estudios,
-            'movimientos_caja': movimientos_caja,
-            'comprobante': None, 'es_paciente_diferenciado': True,
+            'fecha': fecha, 'paciente': paciente, 'obra_social': obra_social, 'estudios': estudios,
+            'movimientos_caja': movimientos_caja, 'comprobante': None, 'es_paciente_diferenciado': True,
             'formula': 'c1 + c2 - 20', 'formula_valorizada': '2902 + 4336 - 20', 'importe': '1099.00', 'importe_con_iva': '0.00',
             'importe_iva': '0.00', 'sub_total': '714.35', 'retencion': '357.18', 'alicuota_iva': '0.00'
         }]
         assert results['lineas_no_ARA'] == no_ara
 
         ara = [{
-            'fecha': fecha,
-            'paciente': paciente,
-            'obra_social': obra_social,
-            'estudios': estudios,
-            'movimientos_caja': movimientos_caja,
-            'comprobante': None, 'es_paciente_diferenciado': True,
+            'fecha': fecha, 'paciente': paciente, 'obra_social': obra_social,
+            'estudios': estudios, 'movimientos_caja': movimientos_caja, 'comprobante': None, 'es_paciente_diferenciado': True,
             'formula': 'c1 + c2 - 20', 'formula_valorizada': '2902 + 4336 - 20', 'importe': '8284.40', 'importe_con_iva': '0.00',
             'importe_iva': '0.00', 'sub_total': '5384.86', 'retencion': '2692.43', 'alicuota_iva': '21.00'
             }]
