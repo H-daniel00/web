@@ -1,6 +1,6 @@
 from datetime import date
 from comprobante.models import Comprobante, TipoComprobante, LineaDeComprobante, Gravado
-from comprobante.afip import Afip, AfipError, AfipErrorRed, AfipErrorValidacion
+from comprobante.afip import Afip
 from decimal import Decimal
 
 from comprobante.models import ID_TIPO_COMPROBANTE_LIQUIDACION

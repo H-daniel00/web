@@ -19,7 +19,7 @@ class TestViews(TestCase):
     def test_cliente_obtiene_el_json_del_comprobante_cuando_genera_un_comprobante_asociado(self, afip_mock):
         afip = afip_mock()
         afip.consultar_proximo_numero.return_value = 14
-        response = self.client.post('/api/comprobante/crear_comprobante_asociado', {'id-comprobante-asociado': 1, 'importe': 200, 'concepto': ''})
+        response = self.client.post('/api/comprobante/crear_comprobante_asociado', {'id-comprobante-asociado': 1, 'importe': 200, 'concepto': '', 'tipo': 4})
 
         comp = response.data['data']
 
@@ -29,7 +29,7 @@ class TestViews(TestCase):
         self.assertEqual(comp['tipo_comprobante']['id'], ID_TIPO_COMPROBANTE_NOTA_DE_CREDITO)
         self.assertEqual(comp['total_facturado'], '200.00')
 
-        response = self.client.post('/api/comprobante/crear_comprobante_asociado', {'id-comprobante-asociado': 1, 'importe': 200, 'concepto': 'ajustes'})
+        response = self.client.post('/api/comprobante/crear_comprobante_asociado', {'id-comprobante-asociado': 1, 'importe': 200, 'concepto': 'ajustes', 'tipo': 4})
 
         comp = response.data['data']
 
