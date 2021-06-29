@@ -178,6 +178,24 @@ class EliminarEstudiosTest(TestCase):
         self.assertEqual(Medicacion.objects.count(), cantidad_vieja_medicaciones - medicaciones_asociadas)
         self.assertEqual(Medicacion.objects.filter(estudio = medicacion.estudio).count(), 0)
 
+    def test_eliminar_medicacion_funciona(self):
+        estudio = Medicacion.objects.first().estudio
+        assert Medicacion.objects.filter(estudio = estudio).count() > 0
+
+        response = self.client.delete(f'/api/medicacion/delete_medicacion/?estudio={estudio.id}')
+
+        assert response.status_code == status.HTTP_200_OK
+        assert Medicacion.objects.filter(estudio = estudio).count() == 0
+
+    def test_eliminar_medicacion_no_lanza_error_si_no_tiene_medicacion(self):
+        estudio_id = 1
+        assert Medicacion.objects.filter(estudio_id = estudio_id).count() == 0
+
+        response = self.client.delete(f'/api/medicacion/delete_medicacion/?estudio={estudio_id}')
+
+        assert response.status_code == status.HTTP_200_OK
+        assert Medicacion.objects.filter(estudio = estudio_id).count() == 0
+
 class UpdateImportesYPagoContraFacturaTests(TestCase):
     fixtures = ['comprobantes.json', 'pacientes.json', 'medicos.json', 'practicas.json', 'obras_sociales.json',
                 'anestesistas.json', 'presentaciones.json']

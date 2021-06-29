@@ -307,3 +307,13 @@ class MedicacionViewSet(viewsets.ModelViewSet):
 
     def perform_destroy(self, instance):
         instance.delete()
+
+    @list_route(methods=['DELETE'])
+    def delete_medicacion(self, request):
+        try:
+            self.filter_queryset(self.queryset).delete()
+            response = JsonResponse({}, status=status.HTTP_200_OK)
+        except Exception as e:
+            response = JsonResponse({'error': str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
+        return response
