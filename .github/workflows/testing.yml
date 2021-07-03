@@ -30,7 +30,7 @@ jobs:
       - name: Setup settings
         run: |
           mkdir logs
-          cp settings-travis.py settings.py
+          cp settings.py.bak settings.py
   
   unit-testing:
     needs: setup
