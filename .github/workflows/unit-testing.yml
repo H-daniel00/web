@@ -31,9 +31,6 @@ jobs:
         run: |
           mkdir logs
           cp settings-travis.py settings.py
-      - name: Run migrations
-        run: |
-          python manage.py migrate
   
   unit-testing:
     needs: setup
@@ -73,6 +70,9 @@ jobs:
       - name: Run server
         run: |
           python manage.py runserver
+      - name: Run migrations
+        run: |
+          python manage.py migrate
 
   integration-test:
     needs: setup-integration-test
