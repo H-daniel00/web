@@ -54,6 +54,12 @@ jobs:
     services:
       postgres:
         image: postgres
+      env:
+        POSTGRES_USER: postgres
+        POSTGRES_PASSWORD: postgres
+        POSTGRES_DB: github_actions
+      ports:
+        - 5432:5432
     steps:
       - name: Install newman
         run: |
@@ -77,9 +83,6 @@ jobs:
   integration-test:
     needs: setup-integration-test
     runs-on: ubuntu-latest
-    services:
-      postgres:
-        image: postgres
     steps:
       - name: Run general integration test
         run: |
@@ -88,9 +91,6 @@ jobs:
   integration-test-caja:
     needs: setup-integration-test
     runs-on: ubuntu-latest
-    services:
-      postgres:
-        image: postgres
     steps:
       - name: Run caja integration test
         run: |
