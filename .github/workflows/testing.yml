@@ -36,6 +36,10 @@ jobs:
         run: |
           mkdir logs
           cp settings.py.bak settings.py
+      - name: Migrate
+        run: |
+          python manage.py migrate
+          python manage.py loaddata fixtures/*.json
       - name: Unit test
         run: |
           python manage.py test
@@ -48,15 +52,9 @@ jobs:
       - name: Create user for testing
         run: |
           python manage.py shell -c "from django.contrib.auth.models import User; User.objects.create_user('asd', 'asd@asd.com', 'asd')"          
-      - name: Migrate
-        run: |
-          python manage.py loaddata fixtures/*.json
       - name: Run server
         run: |
           python manage.py runserver
-      - name: Run migrations
-        run: |
-          python manage.py migrate
       - name: Run general integration test
         run: |
           node_modules/.bin/newman run integration_tests/cedir_web.postman_collection.json -e integration_tests/local.postman_environment.json --verbose
