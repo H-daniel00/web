@@ -146,7 +146,7 @@ class TestCrearComprobanteSerializer(TestCase):
         assert comprobante.sub_tipo == comprobante_data['sub_tipo']
         assert comprobante.nombre_cliente == comprobante_data['nombre_cliente']
 
-        lineas = LineaDeComprobante.objects.filter(comprobante=comprobante)
+        lineas = LineaDeComprobante.objects.filter(comprobante=comprobante).order_by('id')
         
         assert lineas.count() == len(comprobante_data['lineas'])
 
