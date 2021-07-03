@@ -38,6 +38,8 @@ jobs:
     steps:
       - name: Unit test
         run: |
+          pwd
+          ls
           python manage.py test
   
   linting:
@@ -46,6 +48,8 @@ jobs:
     steps:
       - name: Pylint
         run: |
+          pwd
+          ls
           pylint anestesista/ caja/ comprobante/ estudio/ medico/ medicamento/ obra_social/ paciente/ practica/ presentacion/ sala/ scripts/ security/ turno/ usuario/
         
   setup-integration-test:
