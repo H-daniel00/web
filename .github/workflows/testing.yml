@@ -34,7 +34,7 @@ jobs:
           pip install -r requirements.txt
       - name: Setup settings
         run: |
-          mkdir logs
+          mkdir logs cache
           cp settings.py.bak settings.py
       - name: Migrate
         run: |

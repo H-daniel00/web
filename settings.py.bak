@@ -18,7 +18,7 @@ BRUNETTI_CERT_PATH = "certificados/staging.crt"
 BRUNETTI_PV_PATH = "certificados/staging.csr"
 BRUNETTI_CUIT = "20118070659"
 BRUNETTI_PTO_VENTA = 6
-CACHE_PATH = "comprobante/cache/tickets/"
+CACHE_PATH = "cache"
 
 DEBUG = True
 DEFAULT_CHARSET = 'utf8'
