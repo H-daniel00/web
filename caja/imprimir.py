@@ -1,8 +1,9 @@
 from django.http import HttpResponse
 from caja.serializers import MovimientoCajaImprimirSerializer as MovimientosSerializer
-from typing import Union, List, Optional
+from typing import Union, List, Optional, Callable
 from datetime import datetime
 from decimal import Decimal
+from rest_framework.serializers import ModelSerializer
 
 from reportlab.lib.pagesizes import A4, landscape
 from reportlab.platypus.doctemplate import SimpleDocTemplate
@@ -70,7 +71,7 @@ def generar_pdf_caja(
     )
 
     elements = pdf_encabezado(fecha, monto_acumulado)
-    elements += pdf_tabla(movimientos)
+    elements += pdf_tabla(movimientos, pdf_tabla_encabezado, pdf_tabla_body)
     elements += pdf_pie(total)
 
     pdf.build(elements)
@@ -88,15 +89,15 @@ def pdf_encabezado(fecha: Optional[datetime], monto_acumulado: int) -> List[Tabl
     )]
 
 
-def pdf_tabla(movimientos: MovimientosSerializer) -> List[Table]:
+def pdf_tabla(lines: ModelSerializer, table_header: Callable, table_body: Callable) -> List[Table]:
     table_style = TableStyle(
         [('BACKGROUND', (0, 0), (-1, 0), colors.HexColor(GRIS_OSCURO))] +       # La fila con los nombres de las columnas esta con fondo gris oscuro
         [('BACKGROUND', (0, i), (-1, i), colors.HexColor(GRIS_CLARO))           # Las filas pares tienen fondo gris claro
-        for i in range(2, len(movimientos) + 1, 2)]
+        for i in range(2, len(lines) + 1, 2)]
     )
 
     return [Table(
-        pdf_tabla_encabezado() + pdf_tabla_body(movimientos),
+        table_header() + table_body(lines),
         colWidths=[columna[1] for columna in COLUMNAS],
         style=table_style,
     )]
