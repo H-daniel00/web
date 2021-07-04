@@ -237,7 +237,7 @@ class EstudioViewSet(viewsets.ModelViewSet):
 
             estudios_serializer = EstudioImprimirListadoSerializer(estudios, many=True).data
             response = HttpResponse(content_type='application/pdf')
-            response['Content-Disposition'] = f'filename="Detalle_Caja_Generado_{date.today()}.pdf"'
+            response['Content-Disposition'] = f'filename="Listado_de_estudios_generado_{date.today()}.pdf"'
 
             response = generar_pdf_estudio_list(response, estudios_serializer)
         except ValidationError as ex:
