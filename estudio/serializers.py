@@ -154,7 +154,7 @@ class EstudioImprimirListadoSerializer(serializers.ModelSerializer):
         fields = ('fecha', 'paciente', 'telefono', 'obra_social', 'practica', 'estado', 'medico')
 
     def get_fecha(self, obj):
-        return str(obj.fecha)
+        return obj.fecha.strftime("%d/%m/%Y")
 
     def get_paciente(self, obj):
         return str(obj.paciente)
