@@ -15,7 +15,7 @@ from medicamento.models import Medicamento
 from estudio.models import Estudio, Medicacion
 from presentacion.models import Presentacion
 from caja.models import MovimientoCaja
-from estudio.serializers import EstudioSerializer
+from estudio.serializers import EstudioSerializer, EstudioImprimirListadoSerializer
 
 from estudio.models import ID_SUCURSAL_CEDIR, ID_SUCURSAL_HOSPITAL_ITALIANO
 
@@ -425,3 +425,53 @@ class RetreiveEstudiosConAsociadoTest(TestCase):
                 assert estudio['movimientos_asociados'] == False
             assert estudio['obra_social']['nombre'] == obra_social
             assert estudio['practica']['id'] == practica
+
+class ImprimirEstudiosTest(TestCase):
+    fixtures = ['comprobantes.json', 'pacientes.json', 'medicos.json', 'practicas.json', 'obras_sociales.json',
+                'anestesistas.json', 'presentaciones.json', 'estudios.json', "medicamentos.json", "caja.json"]
+
+    def setUp(self):
+        self.user = User.objects.create_user(username='walter', password='xx11', is_superuser=True)
+        self.client = Client(HTTP_POST='localhost')
+        self.client.login(username='walter', password='xx11')
+    
+    def test_imprimir_listado_funciona(self):
+        fecha = Estudio.objects.first().fecha.strftime("%Y-%m-%d")
+        
+        response = self.client.get(f'/api/estudio/imprimir_listado/?fecha_desde={fecha}&fecha_hasta={fecha}')
+
+        assert response.status_code == status.HTTP_200_OK
+
+    def test_imprimir_listado_no_funciona_sin_estudios(self):
+        response = self.client.get(f'/api/estudio/imprimir_listado/?fecha_desde=2021-06-22&fecha_hasta=2021-06-21')
+
+        assert response.status_code == status.HTTP_400_BAD_REQUEST
+        assert 'error' in json.loads(response.content)
+
+    def test_imprimir_listado_serializer_muestra_correctamente_estado(self):
+        estudio = Estudio.objects.filter(presentacion__isnull=False).first()
+        estudio.presentacion.estado = Estudio.PENDIENTE
+        estudio_serializer = EstudioImprimirListadoSerializer(estudio).data
+
+        assert estudio_serializer['estado'] == Estudio.ESTADOS[0]
+
+        estudio.presentacion.estado = Estudio.COBRADO
+        estudio_serializer = EstudioImprimirListadoSerializer(estudio).data
+
+        assert estudio_serializer['estado'] == Estudio.ESTADOS[1]
+        
+        estudio.presentacion.estado = Estudio.NO_COBRADO
+        estudio_serializer = EstudioImprimirListadoSerializer(estudio).data
+
+        assert estudio_serializer['estado'] == Estudio.ESTADOS[2]
+
+        estudio.presentacion = None
+        estudio.es_pago_contra_factura = True
+        estudio_serializer = EstudioImprimirListadoSerializer(estudio).data
+
+        assert estudio_serializer['estado'] == Estudio.ESTADOS[1]
+        
+        estudio.es_pago_contra_factura = False
+        estudio_serializer = EstudioImprimirListadoSerializer(estudio).data
+
+        assert estudio_serializer['estado'] == Estudio.ESTADOS[2]

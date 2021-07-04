@@ -15,9 +15,10 @@ from estudio.models import Estudio
 from estudio.models import Medicacion
 from medicamento.models import Medicamento
 from caja.models import MovimientoCaja
-from estudio.serializers import EstudioSerializer, EstudioCreateUpdateSerializer, EstudioRetrieveSerializer, EstudioAsociadoConMovimientoSerializer
+from estudio.serializers import EstudioSerializer, EstudioCreateUpdateSerializer, EstudioRetrieveSerializer, EstudioAsociadoConMovimientoSerializer, EstudioImprimirListadoSerializer
 from estudio.serializers import MedicacionSerializer, MedicacionCreateUpdateSerializer
 from .imprimir import generar_informe
+from .imprimir_listado import generar_pdf_estudio_list
 from datetime import date
 from django.contrib.admin.models import LogEntry
 from django.contrib.contenttypes.models import ContentType
@@ -227,10 +228,29 @@ class EstudioViewSet(viewsets.ModelViewSet):
         return Response({'success': True})
 
     @list_route(methods=['GET'])
+    def imprimir_listado(self, request):
+        try:
+            estudios = self.filter_queryset(self.queryset).order_by('id')
+
+            if len(estudios) == 0:
+                raise ValidationError('Debe seleccionar al menos un estudio para imprimir')
+
+            estudios_serializer = EstudioImprimirListadoSerializer(estudios, many=True).data
+            response = HttpResponse(content_type='application/pdf')
+            response['Content-Disposition'] = f'filename="Listado_de_estudios_generado_{date.today()}.pdf"'
+
+            response = generar_pdf_estudio_list(response, estudios_serializer)
+        except ValidationError as ex:
+            response = JsonResponse({'error': str(ex)}, status=status.HTTP_400_BAD_REQUEST)
+        except Exception as ex:
+            response = JsonResponse({'error': str(ex)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+        
+        return response
+
+    @list_route(methods=['GET'])
     def get_estudios_con_asociados(self, request):
         try:
             estudios = self.filter_queryset(self.queryset)
-            cant = estudios.count()
             paginator = Paginator(estudios, self.pagination_class.page_size)
             page_number = request.GET.get('page', 1)
             estudios = paginator.page(page_number).object_list
