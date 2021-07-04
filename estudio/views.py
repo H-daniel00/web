@@ -227,6 +227,7 @@ class EstudioViewSet(viewsets.ModelViewSet):
         add_log_entry(estudio, self.request.user, CHANGE, 'ACTUALIZA IMPORTES')
         return Response({'success': True})
 
+    @list_route(methods=['GET'])
     def imprimir_listado(self, request):
         try:
             estudios = self.filter_queryset(self.queryset)
