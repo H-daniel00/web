@@ -54,7 +54,7 @@ jobs:
           python manage.py shell -c "from django.contrib.auth.models import User; User.objects.create_user('asd', 'asd@asd.com', 'asd')"          
       - name: Run general integration test
         run: |
-          python manage.py runserver & node_modules/.bin/newman run integration_tests/cedir_web.postman_collection.json -e integration_tests/local.postman_environment.json --verbose
+          python manage.py runserver & node_modules/.bin/newman run integration_tests/facturacion.postman_collection.json -e integration_tests/local.postman_environment.json --verbose
       - name: Run caja integration test
         run: |
           python manage.py runserver & node_modules/.bin/newman run integration_tests/cedir_web_caja.postman_collection.json -e integration_tests/local.postman_environment.json --verbose
