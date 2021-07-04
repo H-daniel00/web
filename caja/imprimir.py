@@ -10,7 +10,7 @@ from reportlab.platypus.doctemplate import SimpleDocTemplate
 from reportlab.lib.enums import TA_RIGHT, TA_CENTER
 from reportlab.lib.styles import getSampleStyleSheet, ParagraphStyle
 from reportlab.platypus import Table, Paragraph, TableStyle, tables
-from reportlab.lib.units import mm, cm
+from reportlab.lib.units import mm
 from reportlab.lib import colors
 
 from reportlab.pdfbase import pdfmetrics
@@ -71,7 +71,8 @@ def generar_pdf_caja(
     )
 
     elements = pdf_encabezado(fecha, monto_acumulado)
-    elements += pdf_tabla(movimientos, pdf_tabla_encabezado, pdf_tabla_body)
+    largos_columnas = [columna[1] for columna in COLUMNAS]
+    elements += pdf_tabla(movimientos, largos_columnas, pdf_tabla_encabezado, pdf_tabla_body)
     elements += pdf_pie(total)
 
     pdf.build(elements)
@@ -89,7 +90,7 @@ def pdf_encabezado(fecha: Optional[datetime], monto_acumulado: int) -> List[Tabl
     )]
 
 
-def pdf_tabla(lines: ModelSerializer, table_header: Callable, table_body: Callable) -> List[Table]:
+def pdf_tabla(lines: ModelSerializer, colWidths, table_header: Callable, table_body: Callable) -> List[Table]:
     table_style = TableStyle(
         [('BACKGROUND', (0, 0), (-1, 0), colors.HexColor(GRIS_OSCURO))] +       # La fila con los nombres de las columnas esta con fondo gris oscuro
         [('BACKGROUND', (0, i), (-1, i), colors.HexColor(GRIS_CLARO))           # Las filas pares tienen fondo gris claro
@@ -98,7 +99,7 @@ def pdf_tabla(lines: ModelSerializer, table_header: Callable, table_body: Callab
 
     return [Table(
         table_header() + table_body(lines),
-        colWidths=[columna[1] for columna in COLUMNAS],
+        colWidths=colWidths,
         style=table_style,
     )]
 

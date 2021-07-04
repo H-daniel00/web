@@ -143,6 +143,7 @@ class EstudioDePresentacionImprimirSerializer(EstudioDePresentacionRetrieveSeria
 class EstudioImprimirListadoSerializer(serializers.ModelSerializer):
     fecha = serializers.SerializerMethodField()
     paciente = serializers.SerializerMethodField()
+    telefono = serializers.SerializerMethodField()
     obra_social = serializers.SerializerMethodField()
     practica = serializers.SerializerMethodField()
     estado = serializers.SerializerMethodField()
@@ -150,13 +151,16 @@ class EstudioImprimirListadoSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Estudio
-        fields = ('fecha', 'paciente', 'obra_social', 'practica', 'estado', 'medico')
+        fields = ('fecha', 'paciente', 'telefono', 'obra_social', 'practica', 'estado', 'medico')
 
     def get_fecha(self, obj):
         return str(obj.fecha)
 
     def get_paciente(self, obj):
         return str(obj.paciente)
+
+    def get_telefono(self, obj):
+        return str(obj.paciente.telefono)
 
     def get_medico(self, obj):
         return str(obj.medico)
