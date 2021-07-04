@@ -15,7 +15,7 @@ from medicamento.models import Medicamento
 from estudio.models import Estudio, Medicacion
 from presentacion.models import Presentacion
 from caja.models import MovimientoCaja
-from estudio.serializers import EstudioSerializer
+from estudio.serializers import EstudioSerializer, EstudioImprimirListadoSerializer
 
 from estudio.models import ID_SUCURSAL_CEDIR, ID_SUCURSAL_HOSPITAL_ITALIANO
 
@@ -447,3 +447,31 @@ class ImprimirEstudiosTest(TestCase):
 
         assert response.status_code == status.HTTP_400_BAD_REQUEST
         assert 'error' in json.loads(response.content)
+
+    def test_imprimir_listado_serializer_muestra_correctamente_estado(self):
+        estudio = Estudio.objects.filter(presentacion__isnull=False).first()
+        estudio.presentacion.estado = Estudio.PENDIENTE
+        estudio_serializer = EstudioImprimirListadoSerializer(estudio).data
+
+        assert estudio_serializer['estado'] == Estudio.ESTADOS[0]
+
+        estudio.presentacion.estado = Estudio.COBRADO
+        estudio_serializer = EstudioImprimirListadoSerializer(estudio).data
+
+        assert estudio_serializer['estado'] == Estudio.ESTADOS[1]
+        
+        estudio.presentacion.estado = Estudio.NO_COBRADO
+        estudio_serializer = EstudioImprimirListadoSerializer(estudio).data
+
+        assert estudio_serializer['estado'] == Estudio.ESTADOS[2]
+
+        estudio.presentacion = None
+        estudio.es_pago_contra_factura = True
+        estudio_serializer = EstudioImprimirListadoSerializer(estudio).data
+
+        assert estudio_serializer['estado'] == Estudio.ESTADOS[1]
+        
+        estudio.es_pago_contra_factura = False
+        estudio_serializer = EstudioImprimirListadoSerializer(estudio).data
+
+        assert estudio_serializer['estado'] == Estudio.ESTADOS[2]
