@@ -338,7 +338,7 @@ class RetreiveEstudiosTest(TestCase):
         response = json.loads(self.client.get('/api/estudio/?sucursal={}'.format(ID_SUCURSAL_CEDIR), content_type='application/json').content)['results']
 
         for estudio in response:
-            self.assertEqual(results[estudio['id'] - 1].sucursal, ID_SUCURSAL_CEDIR)
+            self.assertEqual(results.get(pk=estudio['id']).sucursal, ID_SUCURSAL_CEDIR)
 
     def test_filtro_por_sucursal_funciona_si_sucursal_es_hospital_italiano(self):
         results = Estudio.objects.all()
