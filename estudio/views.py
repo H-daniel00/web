@@ -230,7 +230,7 @@ class EstudioViewSet(viewsets.ModelViewSet):
     @list_route(methods=['GET'])
     def imprimir_listado(self, request):
         try:
-            estudios = self.filter_queryset(self.queryset).order_by('id')
+            estudios = self.filter_queryset(self.queryset).order_by('paciente__apellido', 'paciente__nombre')
 
             if len(estudios) == 0:
                 raise ValidationError('Debe seleccionar al menos un estudio para imprimir')
