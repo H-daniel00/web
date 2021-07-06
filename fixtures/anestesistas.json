@@ -12,5 +12,19 @@
         "telefono": "",
         "email": ""
     }
+},
+{
+    "pk": 2,
+    "model": "anestesista.anestesista",
+    "fields": {
+        "apellido": "Anestesista",
+        "direccion": "laprida 123",
+        "porcentaje_anestesista": "0.00",
+        "matricula": "1231",
+        "localidad": "Rosario",
+        "nombre": "Daniel",
+        "telefono": "1111111111",
+        "email": "daniel@anestesista.com"
+    }
 }
 ]

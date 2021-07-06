@@ -62,5 +62,21 @@
         "nroAfiliado": "1023512",
         "email": null
     }
+},
+{
+    "model": "paciente.paciente",
+    "pk": 5,
+    "fields": {
+        "dni": 55555555,
+        "nombre": "Daniel",
+        "apellido": "Paciente",
+        "edad": 35,
+        "fechaNacimiento": null,
+        "domicilio": "",
+        "telefono": "",
+        "sexo": "Masculino",
+        "nroAfiliado": "1232123",
+        "email": null
+    }
 }
 ]
