@@ -148,5 +148,13 @@
         "descripcion": "TTO DE ESOFAGO DE BARRET POR RADIOFRECUENCIA",
         "usedLevel": 0
     }
+},
+{
+    "pk": 148,
+    "model": "practica.practica",
+    "fields": {
+        "descripcion": "CONSULTA",
+        "usedLevel": 0
+    }
 }
 ]
