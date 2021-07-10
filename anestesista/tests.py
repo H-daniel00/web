@@ -15,6 +15,15 @@ from comprobante.serializers import ComprobanteSerializer
 
 from datetime import date
 
+def modificar_estudios(estudios, edad_paciente, today, obra_social=False):
+    for estudio in estudios:
+        paciente = estudio.paciente
+        paciente.fechaNacimiento = date(today.year - edad_paciente, today.month, today.day)
+        paciente.save()
+        if obra_social:
+            estudio.obra_social = obra_social
+        estudio.save()
+
 class GenerarVistaNuevoPagoTest(TestCase):
     fixtures = ['caja.json', 'pacientes.json', 'medicos.json', 'practicas.json', 'obras_sociales.json',
         'anestesistas.json', 'presentaciones.json', 'comprobantes.json', 'estudios.json', 'medicamentos.json']
@@ -40,10 +49,7 @@ class GenerarVistaNuevoPagoTest(TestCase):
             fecha__year=self.datos['anio'],
             fecha__month=self.datos['mes'],
             sucursal=self.datos['sucursal']).order_by('fecha', 'paciente', 'obra_social')
-        for estudio in estudios:
-            paciente = estudio.paciente
-            paciente.fechaNacimiento = date(self.today.year - 80, self.today.month, self.today.day)
-            paciente.save()
+        modificar_estudios(estudios, 80, self.today)
 
         response = self.client.get('/api/anestesista/{0}/pago/{1}/{2}/?sucursal={3}'.format(
             self.datos['anestesista'].id,
@@ -84,10 +90,7 @@ class GenerarVistaNuevoPagoTest(TestCase):
             fecha__year=self.datos['anio'],
             fecha__month=self.datos['mes'],
             sucursal=self.datos['sucursal']).order_by('fecha', 'paciente', 'obra_social')
-        for estudio in estudios:
-            paciente = estudio.paciente
-            paciente.fechaNacimiento = date(self.today.year - 20, self.today.month, self.today.day)
-            paciente.save()
+        modificar_estudios(estudios, 20, self.today)
 
         response = self.client.get('/api/anestesista/{0}/pago/{1}/{2}/?sucursal={3}'.format(
             self.datos['anestesista'].id,
@@ -128,10 +131,7 @@ class GenerarVistaNuevoPagoTest(TestCase):
             fecha__year=self.datos['anio'],
             fecha__month=self.datos['mes'],
             sucursal=self.datos['sucursal']).order_by('fecha', 'paciente', 'obra_social')
-        for estudio in estudios:
-            paciente = estudio.paciente
-            paciente.fechaNacimiento = date(self.today.year - 20, self.today.month, self.today.day)
-            paciente.save()
+        modificar_estudios(estudios, 20, self.today)
 
         response = self.client.get('/api/anestesista/{0}/pago/{1}/{2}/?sucursal={3}'.format(
             self.datos['anestesista'].id,
@@ -170,10 +170,7 @@ class GenerarVistaNuevoPagoTest(TestCase):
         fecha__year=self.datos['anio'],
         fecha__month=self.datos['mes'],
         sucursal=self.datos['sucursal']).order_by('fecha', 'paciente', 'obra_social')
-        for estudio in estudios:
-            paciente = estudio.paciente
-            paciente.fechaNacimiento = date(self.today.year - 10, self.today.month, self.today.day)
-            paciente.save()
+        modificar_estudios(estudios, 10, self.today)
 
         response = self.client.get('/api/anestesista/{0}/pago/{1}/{2}/?sucursal={3}'.format(
             self.datos['anestesista'].id,
@@ -213,12 +210,7 @@ class GenerarVistaNuevoPagoTest(TestCase):
             fecha__year=self.datos['anio'],
             fecha__month=self.datos['mes'],
             sucursal=self.datos['sucursal']).order_by('fecha', 'paciente', 'obra_social')
-        for estudio in estudios:
-            paciente = estudio.paciente
-            paciente.fechaNacimiento = date(self.today.year - 10, self.today.month, self.today.day)
-            paciente.save()
-            estudio.obra_social = ObraSocial.objects.get(pk=1)
-            estudio.save()
+        modificar_estudios(estudios, 10, self.today, ObraSocial.objects.get(pk=1))
 
         response = self.client.get('/api/anestesista/{0}/pago/{1}/{2}/?sucursal={3}'.format(
             self.datos['anestesista'].id,
@@ -267,10 +259,7 @@ class GenerarVistaNuevoPagoTest(TestCase):
             movimiento.tipo = TipoMovimientoCaja.objects.get(pk=ids[1])
             movimiento.save()
             movimientos += [movimiento]
-        for estudio in estudios:
-            paciente = estudio.paciente
-            paciente.fechaNacimiento = date(self.today.year - 10, self.today.month, self.today.day)
-            paciente.save()
+        modificar_estudios(estudios, 10, self.today)
 
         response = self.client.get('/api/anestesista/{0}/pago/{1}/{2}/?sucursal={3}'.format(
             self.datos['anestesista'].id,
