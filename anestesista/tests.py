@@ -24,32 +24,39 @@ class GenerarVistaNuevoPagoTest(TestCase):
         self.client = Client(HTTP_POST='localhost')
         self.client.login(username='walter', password='xx11')
 
-        self.anestesista = Anestesista.objects.get(id = 2)
+        self.datos = {
+            'anestesista': Anestesista.objects.get(id = 2),
+            'anio': 2013,
+            'mes': 1,
+            'sucursal': 1
+        }
         self.today = date.today()
-        self.anio = 2013
-        self.sucursal = 1
 
     def test_estudios_pacientes_diferenciados_sin_complejidad(self):
-        mes = 11
+        self.datos['mes'] = 11
 
         estudios = Estudio.objects.filter(
-            anestesista=self.anestesista,
-            fecha__year=self.anio,
-            fecha__month=mes,
-            sucursal=self.sucursal).order_by('fecha','paciente','obra_social')
+            anestesista=self.datos['anestesista'],
+            fecha__year=self.datos['anio'],
+            fecha__month=self.datos['mes'],
+            sucursal=self.datos['sucursal']).order_by('fecha', 'paciente', 'obra_social')
         for estudio in estudios:
             paciente = estudio.paciente
             paciente.fechaNacimiento = date(self.today.year - 80, self.today.month, self.today.day)
             paciente.save()
 
-        response = self.client.get('/api/anestesista/{0}/pago/{1}/{2}/?sucursal={3}'.format(self.anestesista.id, self.anio, mes, self.sucursal))
+        response = self.client.get('/api/anestesista/{0}/pago/{1}/{2}/?sucursal={3}'.format(
+            self.datos['anestesista'].id,
+            self.datos['anio'],
+            self.datos['mes'],
+            self.datos['sucursal']))
         results = json.loads(response.content)
 
         assert response.status_code == status.HTTP_200_OK
         
-        assert results['anestesista'] == AnestesistaSerializer(self.anestesista).data
-        assert results['anio'] == self.anio
-        assert results['mes'] == mes
+        assert results['anestesista'] == AnestesistaSerializer(self.datos['anestesista']).data
+        assert results['anio'] == self.datos['anio']
+        assert results['mes'] == self.datos['mes']
         
         empty_fields = ['totales_ara', 'totales_no_ara', 'subtotales_no_ara', 'totales_iva_no_ara']
         for field in empty_fields:
@@ -70,25 +77,30 @@ class GenerarVistaNuevoPagoTest(TestCase):
         assert results['lineas_ARA'] == ara
 
     def test_estudios_pacientes_no_diferenciados_sin_complejidad(self):
-        mes = 10
+        self.datos['mes'] = 10
 
-        estudios = Estudio.objects.filter(anestesista=self.anestesista,
-        fecha__year=self.anio,
-        fecha__month=mes,
-        sucursal=self.sucursal).order_by('fecha','paciente','obra_social')
+        estudios = Estudio.objects.filter(
+            anestesista=self.datos['anestesista'],
+            fecha__year=self.datos['anio'],
+            fecha__month=self.datos['mes'],
+            sucursal=self.datos['sucursal']).order_by('fecha', 'paciente', 'obra_social')
         for estudio in estudios:
             paciente = estudio.paciente
             paciente.fechaNacimiento = date(self.today.year - 20, self.today.month, self.today.day)
             paciente.save()
 
-        response = self.client.get('/api/anestesista/{0}/pago/{1}/{2}/?sucursal={3}'.format(self.anestesista.id, self.anio, mes, self.sucursal))
+        response = self.client.get('/api/anestesista/{0}/pago/{1}/{2}/?sucursal={3}'.format(
+            self.datos['anestesista'].id,
+            self.datos['anio'],
+            self.datos['mes'],
+            self.datos['sucursal']))
         results = json.loads(response.content)
 
         assert response.status_code == status.HTTP_200_OK
 
-        assert results['anestesista'] == AnestesistaSerializer(self.anestesista).data
-        assert results['anio'] == self.anio
-        assert results['mes'] == mes
+        assert results['anestesista'] == AnestesistaSerializer(self.datos['anestesista']).data
+        assert results['anio'] == self.datos['anio']
+        assert results['mes'] == self.datos['mes']
 
         empty_fields = ['totales_ara', 'totales_no_ara', 'subtotales_no_ara', 'totales_iva_no_ara']
         for field in empty_fields:
@@ -109,25 +121,30 @@ class GenerarVistaNuevoPagoTest(TestCase):
         assert results['lineas_ARA'] == ara
 
     def test_estudios_pacientes_no_diferenciados_con_complejidad_ara(self):
-        mes = 9
+        self.datos['mes'] = 9
 
-        estudios = Estudio.objects.filter(anestesista=self.anestesista,
-        fecha__year=self.anio,
-        fecha__month=mes,
-        sucursal=self.sucursal).order_by('fecha','paciente','obra_social')
+        estudios = Estudio.objects.filter(
+            anestesista=self.datos['anestesista'],
+            fecha__year=self.datos['anio'],
+            fecha__month=self.datos['mes'],
+            sucursal=self.datos['sucursal']).order_by('fecha', 'paciente', 'obra_social')
         for estudio in estudios:
             paciente = estudio.paciente
             paciente.fechaNacimiento = date(self.today.year - 20, self.today.month, self.today.day)
             paciente.save()
 
-        response = self.client.get('/api/anestesista/{0}/pago/{1}/{2}/?sucursal={3}'.format(self.anestesista.id, self.anio, mes, self.sucursal))
+        response = self.client.get('/api/anestesista/{0}/pago/{1}/{2}/?sucursal={3}'.format(
+            self.datos['anestesista'].id,
+            self.datos['anio'],
+            self.datos['mes'],
+            self.datos['sucursal']))
         results = json.loads(response.content)
 
         assert response.status_code == status.HTTP_200_OK
 
-        assert results['anestesista'] == AnestesistaSerializer(self.anestesista).data
-        assert results['anio'] == self.anio
-        assert results['mes'] == mes
+        assert results['anestesista'] == AnestesistaSerializer(self.datos['anestesista']).data
+        assert results['anio'] == self.datos['anio']
+        assert results['mes'] == self.datos['mes']
 
         empty_fields = ['totales_no_ara', 'subtotales_no_ara', 'totales_iva_no_ara']
         for field in empty_fields:
@@ -147,25 +164,29 @@ class GenerarVistaNuevoPagoTest(TestCase):
         assert results['lineas_ARA'] == ara
 
     def test_estudios_pacientes_diferenciados_con_complejidad_ara(self):
-        mes = 9
+        self.datos['mes'] = 9
 
-        estudios = Estudio.objects.filter(anestesista=self.anestesista,
-        fecha__year=self.anio,
-        fecha__month=mes,
-        sucursal=self.sucursal).order_by('fecha','paciente','obra_social')
+        estudios = Estudio.objects.filter(anestesista=self.datos['anestesista'],
+        fecha__year=self.datos['anio'],
+        fecha__month=self.datos['mes'],
+        sucursal=self.datos['sucursal']).order_by('fecha', 'paciente', 'obra_social')
         for estudio in estudios:
             paciente = estudio.paciente
             paciente.fechaNacimiento = date(self.today.year - 10, self.today.month, self.today.day)
             paciente.save()
 
-        response = self.client.get('/api/anestesista/{0}/pago/{1}/{2}/?sucursal={3}'.format(self.anestesista.id, self.anio, mes, self.sucursal))
+        response = self.client.get('/api/anestesista/{0}/pago/{1}/{2}/?sucursal={3}'.format(
+            self.datos['anestesista'].id,
+            self.datos['anio'],
+            self.datos['mes'],
+            self.datos['sucursal']))
         results = json.loads(response.content)
 
         assert response.status_code == status.HTTP_200_OK
 
-        assert results['anestesista'] == AnestesistaSerializer(self.anestesista).data
-        assert results['anio'] == self.anio
-        assert results['mes'] == mes
+        assert results['anestesista'] == AnestesistaSerializer(self.datos['anestesista']).data
+        assert results['anio'] == self.datos['anio']
+        assert results['mes'] == self.datos['mes']
 
         empty_fields = ['totales_no_ara', 'subtotales_no_ara', 'totales_iva_no_ara']
         for field in empty_fields:
@@ -185,12 +206,13 @@ class GenerarVistaNuevoPagoTest(TestCase):
         assert results['lineas_ARA'] == ara
 
     def test_estudios_pacientes_diferenciados_con_complejidad_no_ara(self):
-        mes = 9
+        self.datos['mes'] = 9
 
-        estudios = Estudio.objects.filter(anestesista=self.anestesista,
-        fecha__year=self.anio,
-        fecha__month=mes,
-        sucursal=self.sucursal).order_by('fecha','paciente','obra_social')
+        estudios = Estudio.objects.filter(
+            anestesista=self.datos['anestesista'],
+            fecha__year=self.datos['anio'],
+            fecha__month=self.datos['mes'],
+            sucursal=self.datos['sucursal']).order_by('fecha', 'paciente', 'obra_social')
         for estudio in estudios:
             paciente = estudio.paciente
             paciente.fechaNacimiento = date(self.today.year - 10, self.today.month, self.today.day)
@@ -198,14 +220,18 @@ class GenerarVistaNuevoPagoTest(TestCase):
             estudio.obra_social = ObraSocial.objects.get(pk=1)
             estudio.save()
 
-        response = self.client.get('/api/anestesista/{0}/pago/{1}/{2}/?sucursal={3}'.format(self.anestesista.id, self.anio, mes, self.sucursal))
+        response = self.client.get('/api/anestesista/{0}/pago/{1}/{2}/?sucursal={3}'.format(
+            self.datos['anestesista'].id,
+            self.datos['anio'],
+            self.datos['mes'],
+            self.datos['sucursal']))
         results = json.loads(response.content)
 
         assert response.status_code == status.HTTP_200_OK
 
-        assert results['anestesista'] == AnestesistaSerializer(self.anestesista).data
-        assert results['anio'] == self.anio
-        assert results['mes'] == mes
+        assert results['anestesista'] == AnestesistaSerializer(self.datos['anestesista']).data
+        assert results['anio'] == self.datos['anio']
+        assert results['mes'] == self.datos['mes']
 
         assert results['lineas_ARA'] == []
         assert results['totales_ara'] == {}
@@ -227,12 +253,13 @@ class GenerarVistaNuevoPagoTest(TestCase):
         assert results['lineas_no_ARA'] == no_ara
 
     def test_estudios_con_complejidad_ara_con_movimientos_asociados(self):
-        mes = 9
+        self.datos['mes'] = 9
 
-        estudios = Estudio.objects.filter(anestesista=self.anestesista,
-        fecha__year=self.anio,
-        fecha__month=mes,
-        sucursal=self.sucursal).order_by('fecha','paciente','obra_social')
+        estudios = Estudio.objects.filter(
+            anestesista=self.datos['anestesista'],
+            fecha__year=self.datos['anio'],
+            fecha__month=self.datos['mes'],
+            sucursal=self.datos['sucursal']).order_by('fecha', 'paciente', 'obra_social')
         movimientos = []
         for ids in ((1, ID_COSEGURO), (3, ID_HONORARIO_ANESTESISTA)):
             movimiento = MovimientoCaja.objects.get(pk=ids[0])
@@ -245,14 +272,18 @@ class GenerarVistaNuevoPagoTest(TestCase):
             paciente.fechaNacimiento = date(self.today.year - 10, self.today.month, self.today.day)
             paciente.save()
 
-        response = self.client.get('/api/anestesista/{0}/pago/{1}/{2}/?sucursal={3}'.format(self.anestesista.id, self.anio, mes, self.sucursal))
+        response = self.client.get('/api/anestesista/{0}/pago/{1}/{2}/?sucursal={3}'.format(
+            self.datos['anestesista'].id,
+            self.datos['anio'],
+            self.datos['mes'],
+            self.datos['sucursal']))
         results = json.loads(response.content)
 
         assert response.status_code == status.HTTP_200_OK
 
-        assert results['anestesista'] == AnestesistaSerializer(self.anestesista).data
-        assert results['anio'] == self.anio
-        assert results['mes'] == mes
+        assert results['anestesista'] == AnestesistaSerializer(self.datos['anestesista']).data
+        assert results['anio'] == self.datos['anio']
+        assert results['mes'] == self.datos['mes']
 
         assert results['totales_iva_no_ara'] == {'iva00': 0.0}
         assert results['totales_no_ara'] == {'iva00': 357.18}
