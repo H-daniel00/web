@@ -68,8 +68,8 @@
     "pk": 5,
     "fields": {
         "dni": 55555555,
-        "nombre": "Coscu",
-        "apellido": "Nasheee",
+        "nombre": "Roberto",
+        "apellido": "Gomez",
         "edad": 5,
         "fechaNacimiento": "2015-05-21",
         "domicilio": "",
