@@ -41,7 +41,7 @@ class GenerarVistaNuevoPagoTest(TestCase):
         }
         self.today = date.today()
 
-    def test_estudios_pacientes_diferenciados_sin_complejidad(self):
+    def test_estudios_pacientes_diferenciados_sin_complejidad_funciona(self):
         self.datos['mes'] = 11
 
         estudios = Estudio.objects.filter(
@@ -82,7 +82,7 @@ class GenerarVistaNuevoPagoTest(TestCase):
                 }]
         assert results['lineas_ARA'] == ara
 
-    def test_estudios_pacientes_no_diferenciados_sin_complejidad(self):
+    def test_estudios_pacientes_no_diferenciados_sin_complejidad_funciona(self):
         self.datos['mes'] = 10
 
         estudios = Estudio.objects.filter(
@@ -123,7 +123,7 @@ class GenerarVistaNuevoPagoTest(TestCase):
                 }]
         assert results['lineas_ARA'] == ara
 
-    def test_estudios_pacientes_no_diferenciados_con_complejidad_ara(self):
+    def test_estudios_pacientes_no_diferenciados_con_complejidad_ara_funciona(self):
         self.datos['mes'] = 9
 
         estudios = Estudio.objects.filter(
@@ -163,7 +163,7 @@ class GenerarVistaNuevoPagoTest(TestCase):
             }]
         assert results['lineas_ARA'] == ara
 
-    def test_estudios_pacientes_diferenciados_con_complejidad_ara(self):
+    def test_estudios_pacientes_diferenciados_con_complejidad_ara_funciona(self):
         self.datos['mes'] = 9
 
         estudios = Estudio.objects.filter(anestesista=self.datos['anestesista'],
@@ -202,7 +202,7 @@ class GenerarVistaNuevoPagoTest(TestCase):
             }]
         assert results['lineas_ARA'] == ara
 
-    def test_estudios_pacientes_diferenciados_con_complejidad_no_ara(self):
+    def test_estudios_pacientes_diferenciados_con_complejidad_no_ara_funciona(self):
         self.datos['mes'] = 9
 
         estudios = Estudio.objects.filter(
@@ -244,7 +244,7 @@ class GenerarVistaNuevoPagoTest(TestCase):
             }]
         assert results['lineas_no_ARA'] == no_ara
 
-    def test_estudios_con_complejidad_ara_con_movimientos_asociados(self):
+    def test_estudios_con_complejidad_ara_con_movimientos_asociados_funciona(self):
         self.datos['mes'] = 9
 
         estudios = Estudio.objects.filter(
