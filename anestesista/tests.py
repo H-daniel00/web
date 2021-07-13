@@ -15,15 +15,6 @@ from comprobante.serializers import ComprobanteSerializer
 
 from datetime import date
 
-def modificar_estudios(estudios, edad_paciente, today, obra_social=False):
-    for estudio in estudios:
-        paciente = estudio.paciente
-        paciente.fechaNacimiento = date(today.year - edad_paciente, today.month, today.day)
-        paciente.save()
-        if obra_social:
-            estudio.obra_social = obra_social
-        estudio.save()
-
 class GenerarVistaNuevoPagoTest(TestCase):
     fixtures = ['caja.json', 'pacientes.json', 'medicos.json', 'practicas.json', 'obras_sociales.json',
         'anestesistas.json', 'presentaciones.json', 'comprobantes.json', 'estudios.json', 'medicamentos.json']
@@ -31,6 +22,15 @@ class GenerarVistaNuevoPagoTest(TestCase):
     def query_generar_nuevo_pago(self, anestesista, fecha__year, fecha__month, sucursal):
             return self.client.get('/api/anestesista/{0}/pago/{1}/{2}/?sucursal={3}'.format(
                 anestesista.id, fecha__year, fecha__month, sucursal))
+
+    def modificar_estudios(self, estudios, edad_paciente, today, obra_social=False):
+        for estudio in estudios:
+            paciente = estudio.paciente
+            paciente.fechaNacimiento = date(today.year - edad_paciente, today.month, today.day)
+            paciente.save()
+            if obra_social:
+                estudio.obra_social = obra_social
+            estudio.save()
 
     def setUp(self):
         self.user = User.objects.create_user(username='walter', password='xx11', is_superuser=True)
@@ -49,7 +49,7 @@ class GenerarVistaNuevoPagoTest(TestCase):
         self.datos['fecha__month'] = 11
 
         estudios = Estudio.objects.filter(**self.datos).order_by('fecha', 'paciente', 'obra_social')
-        modificar_estudios(estudios, 80, self.today)
+        self.modificar_estudios(estudios, 80, self.today)
 
         response = self.query_generar_nuevo_pago(**self.datos)
         results = json.loads(response.content)
@@ -82,7 +82,7 @@ class GenerarVistaNuevoPagoTest(TestCase):
         self.datos['fecha__month'] = 10
 
         estudios = Estudio.objects.filter(**self.datos).order_by('fecha', 'paciente', 'obra_social')
-        modificar_estudios(estudios, 20, self.today)
+        self.modificar_estudios(estudios, 20, self.today)
 
         response = self.query_generar_nuevo_pago(**self.datos)
         results = json.loads(response.content)
@@ -115,7 +115,7 @@ class GenerarVistaNuevoPagoTest(TestCase):
         self.datos['fecha__month'] = 9
 
         estudios = Estudio.objects.filter(**self.datos).order_by('fecha', 'paciente', 'obra_social')
-        modificar_estudios(estudios, 20, self.today)
+        self.modificar_estudios(estudios, 20, self.today)
 
         response = self.query_generar_nuevo_pago(**self.datos)
         results = json.loads(response.content)
@@ -147,7 +147,7 @@ class GenerarVistaNuevoPagoTest(TestCase):
         self.datos['fecha__month'] = 9
 
         estudios = Estudio.objects.filter(**self.datos).order_by('fecha', 'paciente', 'obra_social')
-        modificar_estudios(estudios, 10, self.today)
+        self.modificar_estudios(estudios, 10, self.today)
 
         response = self.query_generar_nuevo_pago(**self.datos)
         results = json.loads(response.content)
@@ -179,7 +179,7 @@ class GenerarVistaNuevoPagoTest(TestCase):
         self.datos['fecha__month'] = 9
 
         estudios = Estudio.objects.filter(**self.datos).order_by('fecha', 'paciente', 'obra_social')
-        modificar_estudios(estudios, 10, self.today, ObraSocial.objects.get(pk=1))
+        self.modificar_estudios(estudios, 10, self.today, ObraSocial.objects.get(pk=1))
 
         response = self.query_generar_nuevo_pago(**self.datos)
         results = json.loads(response.content)
@@ -220,7 +220,7 @@ class GenerarVistaNuevoPagoTest(TestCase):
             movimiento.tipo = TipoMovimientoCaja.objects.get(pk=ids[1])
             movimiento.save()
             movimientos += [movimiento]
-        modificar_estudios(estudios, 10, self.today)
+        self.modificar_estudios(estudios, 10, self.today)
 
         response = self.query_generar_nuevo_pago(**self.datos)
         results = json.loads(response.content)
