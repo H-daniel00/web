@@ -9,6 +9,7 @@ from reportlab.platypus import Table, Paragraph, KeepTogether
 from reportlab.platypus.doctemplate import SimpleDocTemplate
 from reportlab.platypus.flowables import Flowable
 from reportlab.lib import colors
+from common.reportlab import NumberedPageCanvas
 
 from medicamento.models import TIPOS_MEDICAMENTOS
 
@@ -41,7 +42,7 @@ def generar_pdf_presentacion(response, presentacion):
     for estudio in estudios:
         elements += estudio
     elements += [HLINE ,KeepTogether(Paragraph(f"Total: ${total_presentacion}", styles['Heading2']))]
-    pdf.build(elements)
+    pdf.build(elements, canvasmaker=NumberedPageCanvas)
     return response
 
 def pdf_encabezado(obra_social, fecha, periodo):
