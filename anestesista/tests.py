@@ -28,6 +28,10 @@ class GenerarVistaNuevoPagoTest(TestCase):
     fixtures = ['caja.json', 'pacientes.json', 'medicos.json', 'practicas.json', 'obras_sociales.json',
         'anestesistas.json', 'presentaciones.json', 'comprobantes.json', 'estudios.json', 'medicamentos.json']
 
+    def query_generar_nuevo_pago(self, anestesista, fecha__year, fecha__month, sucursal):
+            return self.client.get('/api/anestesista/{0}/pago/{1}/{2}/?sucursal={3}'.format(
+                anestesista.id, fecha__year, fecha__month, sucursal))
+
     def setUp(self):
         self.user = User.objects.create_user(username='walter', password='xx11', is_superuser=True)
         self.client = Client(HTTP_POST='localhost')
@@ -47,10 +51,7 @@ class GenerarVistaNuevoPagoTest(TestCase):
         estudios = Estudio.objects.filter(**self.datos).order_by('fecha', 'paciente', 'obra_social')
         modificar_estudios(estudios, 80, self.today)
 
-        query = self.datos.copy()
-        query['anestesista'] = query['anestesista'].id
-        response = self.client.get(
-            '/api/anestesista/{anestesista}/pago/{fecha__year}/{fecha__month}/?sucursal={sucursal}'.format(**query))
+        response = self.query_generar_nuevo_pago(**self.datos)
         results = json.loads(response.content)
 
         assert response.status_code == status.HTTP_200_OK
@@ -83,10 +84,7 @@ class GenerarVistaNuevoPagoTest(TestCase):
         estudios = Estudio.objects.filter(**self.datos).order_by('fecha', 'paciente', 'obra_social')
         modificar_estudios(estudios, 20, self.today)
 
-        query = self.datos.copy()
-        query['anestesista'] = query['anestesista'].id
-        response = self.client.get(
-            '/api/anestesista/{anestesista}/pago/{fecha__year}/{fecha__month}/?sucursal={sucursal}'.format(**query))
+        response = self.query_generar_nuevo_pago(**self.datos)
         results = json.loads(response.content)
 
         assert response.status_code == status.HTTP_200_OK
@@ -119,10 +117,7 @@ class GenerarVistaNuevoPagoTest(TestCase):
         estudios = Estudio.objects.filter(**self.datos).order_by('fecha', 'paciente', 'obra_social')
         modificar_estudios(estudios, 20, self.today)
 
-        query = self.datos.copy()
-        query['anestesista'] = query['anestesista'].id
-        response = self.client.get(
-            '/api/anestesista/{anestesista}/pago/{fecha__year}/{fecha__month}/?sucursal={sucursal}'.format(**query))
+        response = self.query_generar_nuevo_pago(**self.datos)
         results = json.loads(response.content)
 
         assert response.status_code == status.HTTP_200_OK
@@ -154,10 +149,7 @@ class GenerarVistaNuevoPagoTest(TestCase):
         estudios = Estudio.objects.filter(**self.datos).order_by('fecha', 'paciente', 'obra_social')
         modificar_estudios(estudios, 10, self.today)
 
-        query = self.datos.copy()
-        query['anestesista'] = query['anestesista'].id
-        response = self.client.get(
-            '/api/anestesista/{anestesista}/pago/{fecha__year}/{fecha__month}/?sucursal={sucursal}'.format(**query))
+        response = self.query_generar_nuevo_pago(**self.datos)
         results = json.loads(response.content)
 
         assert response.status_code == status.HTTP_200_OK
@@ -189,10 +181,7 @@ class GenerarVistaNuevoPagoTest(TestCase):
         estudios = Estudio.objects.filter(**self.datos).order_by('fecha', 'paciente', 'obra_social')
         modificar_estudios(estudios, 10, self.today, ObraSocial.objects.get(pk=1))
 
-        query = self.datos.copy()
-        query['anestesista'] = query['anestesista'].id
-        response = self.client.get(
-            '/api/anestesista/{anestesista}/pago/{fecha__year}/{fecha__month}/?sucursal={sucursal}'.format(**query))
+        response = self.query_generar_nuevo_pago(**self.datos)
         results = json.loads(response.content)
 
         assert response.status_code == status.HTTP_200_OK
@@ -233,10 +222,7 @@ class GenerarVistaNuevoPagoTest(TestCase):
             movimientos += [movimiento]
         modificar_estudios(estudios, 10, self.today)
 
-        query = self.datos.copy()
-        query['anestesista'] = query['anestesista'].id
-        response = self.client.get(
-            '/api/anestesista/{anestesista}/pago/{fecha__year}/{fecha__month}/?sucursal={sucursal}'.format(**query))
+        response = self.query_generar_nuevo_pago(**self.datos)
         results = json.loads(response.content)
 
         assert response.status_code == status.HTTP_200_OK
