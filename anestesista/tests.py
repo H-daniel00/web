@@ -32,38 +32,33 @@ class GenerarVistaNuevoPagoTest(TestCase):
         self.user = User.objects.create_user(username='walter', password='xx11', is_superuser=True)
         self.client = Client(HTTP_POST='localhost')
         self.client.login(username='walter', password='xx11')
-
+        self.a = {'anestesista': Anestesista.objects.get(id = 2)}
         self.datos = {
             'anestesista': Anestesista.objects.get(id = 2),
-            'anio': 2013,
-            'mes': 1,
+            'fecha__year': 2013,
+            'fecha__month': 1,
             'sucursal': 1
         }
         self.today = date.today()
 
     def test_estudios_pacientes_diferenciados_sin_complejidad_funciona(self):
-        self.datos['mes'] = 11
+        self.datos['fecha__month'] = 11
 
-        estudios = Estudio.objects.filter(
-            anestesista=self.datos['anestesista'],
-            fecha__year=self.datos['anio'],
-            fecha__month=self.datos['mes'],
-            sucursal=self.datos['sucursal']).order_by('fecha', 'paciente', 'obra_social')
+        estudios = Estudio.objects.filter(**self.datos).order_by('fecha', 'paciente', 'obra_social')
         modificar_estudios(estudios, 80, self.today)
 
-        response = self.client.get('/api/anestesista/{0}/pago/{1}/{2}/?sucursal={3}'.format(
-            self.datos['anestesista'].id,
-            self.datos['anio'],
-            self.datos['mes'],
-            self.datos['sucursal']))
+        query = self.datos.copy()
+        query['anestesista'] = query['anestesista'].id
+        response = self.client.get(
+            '/api/anestesista/{anestesista}/pago/{fecha__year}/{fecha__month}/?sucursal={sucursal}'.format(**query))
         results = json.loads(response.content)
 
         assert response.status_code == status.HTTP_200_OK
-        
+
         assert results['anestesista'] == AnestesistaSerializer(self.datos['anestesista']).data
-        assert results['anio'] == self.datos['anio']
-        assert results['mes'] == self.datos['mes']
-        
+        assert results['anio'] == self.datos['fecha__year']
+        assert results['mes'] == self.datos['fecha__month']
+
         empty_fields = ['totales_ara', 'totales_no_ara', 'subtotales_no_ara', 'totales_iva_no_ara']
         for field in empty_fields:
             assert results[field] == {}
@@ -83,27 +78,22 @@ class GenerarVistaNuevoPagoTest(TestCase):
         assert results['lineas_ARA'] == ara
 
     def test_estudios_pacientes_no_diferenciados_sin_complejidad_funciona(self):
-        self.datos['mes'] = 10
+        self.datos['fecha__month'] = 10
 
-        estudios = Estudio.objects.filter(
-            anestesista=self.datos['anestesista'],
-            fecha__year=self.datos['anio'],
-            fecha__month=self.datos['mes'],
-            sucursal=self.datos['sucursal']).order_by('fecha', 'paciente', 'obra_social')
+        estudios = Estudio.objects.filter(**self.datos).order_by('fecha', 'paciente', 'obra_social')
         modificar_estudios(estudios, 20, self.today)
 
-        response = self.client.get('/api/anestesista/{0}/pago/{1}/{2}/?sucursal={3}'.format(
-            self.datos['anestesista'].id,
-            self.datos['anio'],
-            self.datos['mes'],
-            self.datos['sucursal']))
+        query = self.datos.copy()
+        query['anestesista'] = query['anestesista'].id
+        response = self.client.get(
+            '/api/anestesista/{anestesista}/pago/{fecha__year}/{fecha__month}/?sucursal={sucursal}'.format(**query))
         results = json.loads(response.content)
 
         assert response.status_code == status.HTTP_200_OK
 
         assert results['anestesista'] == AnestesistaSerializer(self.datos['anestesista']).data
-        assert results['anio'] == self.datos['anio']
-        assert results['mes'] == self.datos['mes']
+        assert results['anio'] == self.datos['fecha__year']
+        assert results['mes'] == self.datos['fecha__month']
 
         empty_fields = ['totales_ara', 'totales_no_ara', 'subtotales_no_ara', 'totales_iva_no_ara']
         for field in empty_fields:
@@ -124,27 +114,22 @@ class GenerarVistaNuevoPagoTest(TestCase):
         assert results['lineas_ARA'] == ara
 
     def test_estudios_pacientes_no_diferenciados_con_complejidad_ara_funciona(self):
-        self.datos['mes'] = 9
+        self.datos['fecha__month'] = 9
 
-        estudios = Estudio.objects.filter(
-            anestesista=self.datos['anestesista'],
-            fecha__year=self.datos['anio'],
-            fecha__month=self.datos['mes'],
-            sucursal=self.datos['sucursal']).order_by('fecha', 'paciente', 'obra_social')
+        estudios = Estudio.objects.filter(**self.datos).order_by('fecha', 'paciente', 'obra_social')
         modificar_estudios(estudios, 20, self.today)
 
-        response = self.client.get('/api/anestesista/{0}/pago/{1}/{2}/?sucursal={3}'.format(
-            self.datos['anestesista'].id,
-            self.datos['anio'],
-            self.datos['mes'],
-            self.datos['sucursal']))
+        query = self.datos.copy()
+        query['anestesista'] = query['anestesista'].id
+        response = self.client.get(
+            '/api/anestesista/{anestesista}/pago/{fecha__year}/{fecha__month}/?sucursal={sucursal}'.format(**query))
         results = json.loads(response.content)
 
         assert response.status_code == status.HTTP_200_OK
 
         assert results['anestesista'] == AnestesistaSerializer(self.datos['anestesista']).data
-        assert results['anio'] == self.datos['anio']
-        assert results['mes'] == self.datos['mes']
+        assert results['anio'] == self.datos['fecha__year']
+        assert results['mes'] == self.datos['fecha__month']
 
         empty_fields = ['totales_no_ara', 'subtotales_no_ara', 'totales_iva_no_ara']
         for field in empty_fields:
@@ -164,26 +149,22 @@ class GenerarVistaNuevoPagoTest(TestCase):
         assert results['lineas_ARA'] == ara
 
     def test_estudios_pacientes_diferenciados_con_complejidad_ara_funciona(self):
-        self.datos['mes'] = 9
+        self.datos['fecha__month'] = 9
 
-        estudios = Estudio.objects.filter(anestesista=self.datos['anestesista'],
-        fecha__year=self.datos['anio'],
-        fecha__month=self.datos['mes'],
-        sucursal=self.datos['sucursal']).order_by('fecha', 'paciente', 'obra_social')
+        estudios = Estudio.objects.filter(**self.datos).order_by('fecha', 'paciente', 'obra_social')
         modificar_estudios(estudios, 10, self.today)
 
-        response = self.client.get('/api/anestesista/{0}/pago/{1}/{2}/?sucursal={3}'.format(
-            self.datos['anestesista'].id,
-            self.datos['anio'],
-            self.datos['mes'],
-            self.datos['sucursal']))
+        query = self.datos.copy()
+        query['anestesista'] = query['anestesista'].id
+        response = self.client.get(
+            '/api/anestesista/{anestesista}/pago/{fecha__year}/{fecha__month}/?sucursal={sucursal}'.format(**query))
         results = json.loads(response.content)
 
         assert response.status_code == status.HTTP_200_OK
 
         assert results['anestesista'] == AnestesistaSerializer(self.datos['anestesista']).data
-        assert results['anio'] == self.datos['anio']
-        assert results['mes'] == self.datos['mes']
+        assert results['anio'] == self.datos['fecha__year']
+        assert results['mes'] == self.datos['fecha__month']
 
         empty_fields = ['totales_no_ara', 'subtotales_no_ara', 'totales_iva_no_ara']
         for field in empty_fields:
@@ -203,27 +184,22 @@ class GenerarVistaNuevoPagoTest(TestCase):
         assert results['lineas_ARA'] == ara
 
     def test_estudios_pacientes_diferenciados_con_complejidad_no_ara_funciona(self):
-        self.datos['mes'] = 9
+        self.datos['fecha__month'] = 9
 
-        estudios = Estudio.objects.filter(
-            anestesista=self.datos['anestesista'],
-            fecha__year=self.datos['anio'],
-            fecha__month=self.datos['mes'],
-            sucursal=self.datos['sucursal']).order_by('fecha', 'paciente', 'obra_social')
+        estudios = Estudio.objects.filter(**self.datos).order_by('fecha', 'paciente', 'obra_social')
         modificar_estudios(estudios, 10, self.today, ObraSocial.objects.get(pk=1))
 
-        response = self.client.get('/api/anestesista/{0}/pago/{1}/{2}/?sucursal={3}'.format(
-            self.datos['anestesista'].id,
-            self.datos['anio'],
-            self.datos['mes'],
-            self.datos['sucursal']))
+        query = self.datos.copy()
+        query['anestesista'] = query['anestesista'].id
+        response = self.client.get(
+            '/api/anestesista/{anestesista}/pago/{fecha__year}/{fecha__month}/?sucursal={sucursal}'.format(**query))
         results = json.loads(response.content)
 
         assert response.status_code == status.HTTP_200_OK
 
         assert results['anestesista'] == AnestesistaSerializer(self.datos['anestesista']).data
-        assert results['anio'] == self.datos['anio']
-        assert results['mes'] == self.datos['mes']
+        assert results['anio'] == self.datos['fecha__year']
+        assert results['mes'] == self.datos['fecha__month']
 
         assert results['lineas_ARA'] == []
         assert results['totales_ara'] == {}
@@ -245,13 +221,9 @@ class GenerarVistaNuevoPagoTest(TestCase):
         assert results['lineas_no_ARA'] == no_ara
 
     def test_estudios_con_complejidad_ara_con_movimientos_asociados_funciona(self):
-        self.datos['mes'] = 9
+        self.datos['fecha__month'] = 9
 
-        estudios = Estudio.objects.filter(
-            anestesista=self.datos['anestesista'],
-            fecha__year=self.datos['anio'],
-            fecha__month=self.datos['mes'],
-            sucursal=self.datos['sucursal']).order_by('fecha', 'paciente', 'obra_social')
+        estudios = Estudio.objects.filter(**self.datos).order_by('fecha', 'paciente', 'obra_social')
         movimientos = []
         for ids in ((1, ID_COSEGURO), (3, ID_HONORARIO_ANESTESISTA)):
             movimiento = MovimientoCaja.objects.get(pk=ids[0])
@@ -261,18 +233,17 @@ class GenerarVistaNuevoPagoTest(TestCase):
             movimientos += [movimiento]
         modificar_estudios(estudios, 10, self.today)
 
-        response = self.client.get('/api/anestesista/{0}/pago/{1}/{2}/?sucursal={3}'.format(
-            self.datos['anestesista'].id,
-            self.datos['anio'],
-            self.datos['mes'],
-            self.datos['sucursal']))
+        query = self.datos.copy()
+        query['anestesista'] = query['anestesista'].id
+        response = self.client.get(
+            '/api/anestesista/{anestesista}/pago/{fecha__year}/{fecha__month}/?sucursal={sucursal}'.format(**query))
         results = json.loads(response.content)
 
         assert response.status_code == status.HTTP_200_OK
 
         assert results['anestesista'] == AnestesistaSerializer(self.datos['anestesista']).data
-        assert results['anio'] == self.datos['anio']
-        assert results['mes'] == self.datos['mes']
+        assert results['anio'] == self.datos['fecha__year']
+        assert results['mes'] == self.datos['fecha__month']
 
         assert results['totales_iva_no_ara'] == {'iva00': 0.0}
         assert results['totales_no_ara'] == {'iva00': 357.18}
