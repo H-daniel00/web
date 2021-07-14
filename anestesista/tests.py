@@ -20,8 +20,8 @@ class GenerarVistaNuevoPagoTest(TestCase):
         'anestesistas.json', 'presentaciones.json', 'comprobantes.json', 'estudios.json', 'medicamentos.json']
 
     def query_generar_nuevo_pago(self, anestesista, fecha__year, fecha__month, sucursal):
-            return self.client.get('/api/anestesista/{0}/pago/{1}/{2}/?sucursal={3}'.format(
-                anestesista.id, fecha__year, fecha__month, sucursal))
+        return self.client.get('/api/anestesista/{0}/pago/{1}/{2}/?sucursal={3}'.format(
+            anestesista.id, fecha__year, fecha__month, sucursal))
 
     def modificar_estudios(self, estudios, edad_paciente, today, obra_social=False):
         for estudio in estudios:
@@ -36,7 +36,7 @@ class GenerarVistaNuevoPagoTest(TestCase):
         self.user = User.objects.create_user(username='walter', password='xx11', is_superuser=True)
         self.client = Client(HTTP_POST='localhost')
         self.client.login(username='walter', password='xx11')
-        self.a = {'anestesista': Anestesista.objects.get(id = 2)}
+
         self.datos = {
             'anestesista': Anestesista.objects.get(id = 2),
             'fecha__year': 2013,
