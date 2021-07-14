@@ -44,7 +44,6 @@
 											"var moment = require('moment');",
 											"pm.collectionVariables.set('currentdate', moment().format((\"YYYY-MM-DD\")));",
 											"",
-											"console.log(typeof(pm.variables.get(\"token\", null)));",
 											"if (!pm.variables.get(\"token\", null)) {",
 											"    const echoPostRequest = {",
 											"        url: pm.environment.get(\"baseUrl\") + \"/security/auth/\",",
@@ -59,7 +58,6 @@
 											"    };",
 											"    pm.sendRequest(echoPostRequest, function (err, res) {",
 											"        pm.globals.set(\"token\", res.json().token);",
-											"        console.log(res.json());",
 											"    })",
 											"}"
 										],

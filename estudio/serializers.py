@@ -1,4 +1,4 @@
-from rest_framework import serializers
+from rest_framework import fields, serializers
 
 from estudio.models import Estudio, Medicacion
 from presentacion.models import Presentacion
@@ -139,3 +139,41 @@ class EstudioDePresentacionImprimirSerializer(EstudioDePresentacionRetrieveSeria
             medicamento['importe'] = medicacion_serializer['importe'] #Se actualiza el importe del medicamento con el importe con el que salio en el momento
             medicacion += [medicamento]
         return medicacion
+
+class EstudioImprimirListadoSerializer(serializers.ModelSerializer):
+    fecha = serializers.SerializerMethodField()
+    paciente = serializers.SerializerMethodField()
+    telefono = serializers.SerializerMethodField()
+    obra_social = serializers.SerializerMethodField()
+    practica = serializers.SerializerMethodField()
+    estado = serializers.SerializerMethodField()
+    medico = serializers.SerializerMethodField()
+
+    class Meta:
+        model = Estudio
+        fields = ('fecha', 'paciente', 'telefono', 'obra_social', 'practica', 'estado', 'medico')
+
+    def get_fecha(self, obj):
+        return obj.fecha.strftime("%d/%m/%Y")
+
+    def get_paciente(self, obj):
+        return str(obj.paciente)
+
+    def get_telefono(self, obj):
+        return str(obj.paciente.telefono)
+
+    def get_medico(self, obj):
+        return str(obj.medico)
+
+    def get_obra_social(self, obj):
+        return str(obj.obra_social)
+
+    def get_practica(self, obj):
+        return str(obj.practica)
+
+    def get_estado(self, obj):
+        if obj.presentacion_id:
+            return Estudio.ESTADOS[obj.presentacion.estado]
+        if obj.es_pago_contra_factura:
+            return Estudio.ESTADOS[Estudio.COBRADO]
+        return Estudio.ESTADOS[Estudio.NO_COBRADO]

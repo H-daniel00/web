@@ -27,6 +27,9 @@ LOGO_AFIP = PROJECT_ROOT + '/static/templates/images/comprobante/logo_afip.png'
 
 mensajes = {
     'mensaje_leyenda_honorarios': 'Este comprobante contiene honorarios por cuenta y órden de médicos.',
+    'mensaje_monotributistas': ('El credito fiscal discriminado en el presente comprobante solo ',
+                                'podra ser computado a efectos del regimen de sostenimiento ',
+                                'e inclusion para pequeños contribuyentes de la ley N° 27.618'),
     'mensaje_legal_factura_electronica': ('Pasados 30 días corridos de recibida sin \n'
                         'haberse producido el rechazo total, aceptación\n'
                         'o pago de esta FACTURA DE CREDITO\n'
@@ -64,6 +67,20 @@ responsables = {
         'mensaje': '"MÉDICO GASTROENTERÓLOGO Mat. Nro. 9314"',
     }
 }
+
+def mensaje_monotributista(canvas, mensaje):
+    top = height - 243*mm
+    box_width = width / 2 + 2*margin
+    box_height = 20*mm
+
+    canvas.saveState()
+    canvas.rect(margin, top, box_width, box_height, stroke=1, fill=0)
+    canvas.setFont(font_std, 11)
+
+    for line, i in zip(mensaje, list(range(len(mensaje)))):
+        canvas.drawString(margin * 2, top - margin - i*15 + box_height, line)
+
+    canvas.restoreState()
 
 def codigo_qr(canvas, cabecera):
     size_qr = 35*mm
@@ -323,7 +340,7 @@ def detalle_lineas(p, header, sizes, lineas):
     mw, mh = table.wrapOn(p, width, height)
     table.drawOn(p, margin, height - 99*mm - mh)
 
-def imprimir_mensaje(p, responsable, cabecera):
+def imprimir_mensaje(p, cabecera):
 
     if cabecera['id_tipo_comprobante'] != ID_TIPO_COMPROBANTE_FACTURA_CREDITO_ELECTRONICA:
         return
@@ -357,7 +374,7 @@ def detalle_iva(p, detalle):
     table.drawOn(p, width - margin - 8*cm, 55*mm)
 
 
-def pie_de_pagina(p, responsable, imprimir_leyenda_honorarios):
+def pie_de_pagina(p, imprimir_leyenda_honorarios):
     mensaje = mensajes['mensaje_leyenda_honorarios'] if imprimir_leyenda_honorarios else ''
     top = 245*mm
     ew = width - 2*margin
@@ -370,7 +387,7 @@ def pie_de_pagina(p, responsable, imprimir_leyenda_honorarios):
     p.restoreState()
 
 
-def generar_factura(response, comp, leyenda):
+def generar_factura(response, comp, leyenda, monotributista):
     # Create the PDF object, using the response object as its "file."
     p = canvas.Canvas(response, pagesize=A4)
     p.setTitle(obtener_filename(comp['responsable'], comp['cabecera']))
@@ -394,11 +411,14 @@ def generar_factura(response, comp, leyenda):
 
         detalle_lineas(p, comp['headers'], comp['sizes'], comp['lineas'])
 
-        imprimir_mensaje(p, comp['responsable'], comp['cabecera'])
+        imprimir_mensaje(p, comp['cabecera'])
 
         detalle_iva(p, comp['detalle'])
 
-        pie_de_pagina(p, comp['responsable'], leyenda)
+        pie_de_pagina(p, leyenda)
+
+        if monotributista:
+            mensaje_monotributista(p, mensajes['mensaje_monotributistas'])
 
         # Escribe código de qr
         codigo_qr(p, comp['cabecera'])

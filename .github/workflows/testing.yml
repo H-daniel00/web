@@ -1,0 +1,61 @@
+name: unit testing
+
+on:
+  push:
+    branches: [ master ]
+  pull_request:
+    branches: [ master ]
+
+jobs:
+  setup:
+    runs-on: ubuntu-latest
+    services:
+      postgres:
+        image: postgres:10.8
+        env:
+          POSTGRES_USER: postgres
+          POSTGRES_PASSWORD: postgres
+          POSTGRES_DB: github_actions
+        ports:
+          - 5432:5432
+    steps:
+      - name: Set up Python 3.7
+        uses: actions/setup-python@v2
+        with:
+          python-version: 3.7
+      - name: Install system dependencies
+        run: |
+          sudo apt-get -y install libpq-dev libjpeg-dev
+      - name: Check out repository code
+        uses: actions/checkout@v2
+      - name: Install project dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+      - name: Setup settings
+        run: |
+          mkdir logs cache
+          cp settings.py.bak settings.py
+      - name: Migrate
+        run: |
+          python manage.py migrate
+          python manage.py loaddata fixtures/*.json
+      - name: Unit test
+        run: |
+          python manage.py test
+      - name: Pylint
+        run: |
+          pylint anestesista/ caja/ comprobante/ estudio/ medico/ medicamento/ obra_social/ paciente/ practica/ presentacion/ sala/ scripts/ security/ turno/ usuario/
+      - name: Install newman
+        run: |
+          npm i newman@4.6.1
+      - name: Create user for testing
+        run: |
+          python manage.py shell -c "from django.contrib.auth.models import User; User.objects.create_user('asd', 'asd@asd.com', 'asd')"          
+      - name: Run general integration test
+        run: |
+          python manage.py runserver & node_modules/.bin/newman run integration_tests/facturacion.postman_collection.json -e integration_tests/local.postman_environment.json --verbose
+      - name: Run caja integration test
+        run: |
+          python manage.py runserver & node_modules/.bin/newman run integration_tests/cedir_web_caja.postman_collection.json -e integration_tests/local.postman_environment.json --verbose
+        

@@ -30,6 +30,21 @@
     }
 },
 {
+    "model": "medico.medico",
+    "pk": 3,
+    "fields": {
+        "nombre": "Daniel",
+        "apellido": "Doctor",
+        "domicilio": "calle falsa 123",
+        "localidad": "Funes",
+        "telefono": "12",
+        "matricula": "34",
+        "mail": "daniel@doctor.com",
+        "clave_fiscal": "123",
+        "responsabilidad_fiscal": "INSCRIPTO"
+    }
+},
+{
     "model": "medico.pagomedico",
     "pk": 1,
     "fields": {

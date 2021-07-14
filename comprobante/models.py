@@ -17,6 +17,15 @@ ID_GRAVADO_EXENTO = 1
 ID_GRAVADO_INSCRIPTO_10_5 = 2
 ID_GRAVADO_INSCRIPTO_21 = 3
 
+TIPO_COMPROBANTE_ASOCIADO = {
+    ID_TIPO_COMPROBANTE_FACTURA: ID_TIPO_COMPROBANTE_NOTA_DE_CREDITO,
+    ID_TIPO_COMPROBANTE_NOTA_DE_CREDITO: ID_TIPO_COMPROBANTE_NOTA_DE_DEBITO,
+    ID_TIPO_COMPROBANTE_NOTA_DE_DEBITO: ID_TIPO_COMPROBANTE_NOTA_DE_CREDITO,
+    ID_TIPO_COMPROBANTE_FACTURA_CREDITO_ELECTRONICA: ID_TIPO_COMPROBANTE_NOTA_DE_CREDITO_ELECTRONICA,
+    ID_TIPO_COMPROBANTE_NOTA_DE_CREDITO_ELECTRONICA: ID_TIPO_COMPROBANTE_NOTA_DE_DEBITO_ELECTRONICA,
+    ID_TIPO_COMPROBANTE_NOTA_DE_DEBITO_ELECTRONICA: ID_TIPO_COMPROBANTE_NOTA_DE_CREDITO_ELECTRONICA
+}
+
 class TipoComprobante(models.Model):
     nombre = models.CharField(max_length=128, db_column='tipoComprobante')
 
@@ -136,7 +145,7 @@ class Comprobante(models.Model):
         from comprobante.comprobante_asociado import crear_comprobante_asociado
         if self.tipo_comprobante.id != ID_TIPO_COMPROBANTE_LIQUIDACION:
             linea = LineaDeComprobante.objects.filter(comprobante=self).first()
-            nuevo_comprobante = crear_comprobante_asociado(self.id, linea.importe_neto, "Anula comprobante nro " + str(self.id))
+            nuevo_comprobante = crear_comprobante_asociado(self.id, linea.importe_neto, "Anula comprobante nro " + str(self.id), TIPO_COMPROBANTE_ASOCIADO[self.tipo_comprobante.id])
         else:
             nuevo_comprobante = None
         self.estado = Comprobante.ANULADO
