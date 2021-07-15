@@ -206,7 +206,7 @@ class GenerarVistaNuevoPagoTest(TestCase):
             'obra_social': dict(ObraSocialSerializer(estudios.first().obra_social).data),
             'estudios': estudios1,
             'comprobante': dict(ComprobanteSerializer(estudios.first().presentacion.comprobante).data),
-            'movimientos_caja': [], 'es_paciente_diferenciado': True,'formula': 'c1 + c2 - 20',
+            'movimientos_caja': [], 'es_paciente_diferenciado': True, 'formula': 'c1 + c2 - 20',
             'formula_valorizada': '2902 + 4336 - 20', 'importe': '9383.40', 'importe_con_iva': '0.00',
             'importe_iva': '0.00', 'sub_total': '6099.21', 'retencion': '3049.60', 'alicuota_iva': '21.00'
             }]

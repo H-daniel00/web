@@ -11,6 +11,10 @@ from practica.models import Practica
 
 SIN_ANESTESIA = 1
 
+EDAD_DIFERENCIADO_DESDE = 1
+EDAD_DIFERENCIADO_HASTA = 12
+EDAD_DIFERENCIADO_MAYOR_QUE = 70
+
 class Anestesista(models.Model):
     id = models.AutoField(primary_key=True, db_column="idMedicoAn")
     nombre = models.CharField("Nombre", max_length=200, db_column="nombreMedicoAn")
