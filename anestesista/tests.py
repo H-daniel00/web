@@ -197,16 +197,22 @@ class GenerarVistaNuevoPagoTest(TestCase):
         assert results['subtotales_no_ara'] == {'iva2100': 3049.61}
         assert results['totales_iva_no_ara'] == {'iva2100': 640.42}
 
+        estudios1 = list(map(lambda x: dict(x), EstudioSerializer(estudios, many=True).data))
+        for estudio in estudios1:
+            estudio['practica'] = dict(estudio['practica'])
         no_ara = [{
             'fecha': str(estudios.first().fecha),
-            'paciente': PacienteSerializer(estudios.first().paciente).data,
-            'obra_social': ObraSocialSerializer(estudios.first().obra_social).data,
-            'estudios': EstudioSerializer(estudios, many=True).data,
-            'comprobante': ComprobanteSerializer(estudios.first().presentacion.comprobante).data,
+            'paciente': dict(PacienteSerializer(estudios.first().paciente).data),
+            'obra_social': dict(ObraSocialSerializer(estudios.first().obra_social).data),
+            'estudios': estudios1,
+            'comprobante': dict(ComprobanteSerializer(estudios.first().presentacion.comprobante).data),
             'movimientos_caja': [], 'es_paciente_diferenciado': True,'formula': 'c1 + c2 - 20',
             'formula_valorizada': '2902 + 4336 - 20', 'importe': '9383.40', 'importe_con_iva': '0.00',
             'importe_iva': '0.00', 'sub_total': '6099.21', 'retencion': '3049.60', 'alicuota_iva': '21.00'
             }]
+        no_ara[0]['comprobante']['tipo_comprobante'] = dict(no_ara[0]['comprobante']['tipo_comprobante'])
+        no_ara[0]['comprobante']['gravado'] = dict(no_ara[0]['comprobante']['gravado'])
+
         assert results['lineas_no_ARA'] == no_ara
 
     def test_estudios_con_complejidad_ara_con_movimientos_asociados_funciona(self):
