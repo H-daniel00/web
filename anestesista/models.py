@@ -1,13 +1,9 @@
-
-from datetime import timedelta
-from decimal import Decimal
-
 from django.db import models
 from django.core.exceptions import ValidationError
-from comprobante.models import LineaDeComprobante
-from paciente.models import Paciente
-from obra_social.models import ObraSocial
+
 from practica.models import Practica
+
+from decimal import Decimal
 
 SIN_ANESTESIA = 1
 
