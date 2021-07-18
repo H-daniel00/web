@@ -5,6 +5,7 @@ from datetime import date
 
 from django.test import TestCase, Client
 from django.contrib.auth.models import User
+from django.db.models import Q
 from rest_framework import status
 
 from presentacion.models import Presentacion
@@ -771,11 +772,17 @@ class TestUpdatePresentacion(TestCase):
         assert estudio.arancel_anestesia == 1
         assert estudio.get_importe_total_facturado() == 8 # 9 - 1
 
-    def test_update_presentacion_cerrada_falla(self):
+    def test_update_presentacion_cobrada_falla(self):
         # Tomamos una presentacion con dos estudios, quitamos uno y agregamos otro.
         # Tambien cambiamos valores.
         presentacion = Presentacion.objects.get(pk=2)
         assert presentacion.estado == Presentacion.COBRADO
+
+        Estudio.objects.filter(Q(pk=11) | Q(pk=12)).update(
+            obra_social=presentacion.obra_social,
+            presentacion=presentacion
+        )
+
         datos = {
             "periodo": "perio3",
             "fecha": "2019-12-25",
@@ -801,7 +808,7 @@ class TestUpdatePresentacion(TestCase):
 
         response = self.client.patch('/api/presentacion/2/', data=json.dumps(datos),
                                 content_type='application/json')
-        assert response.status_code == 400
+        assert response.status_code == status.HTTP_400_BAD_REQUEST
 
     def test_update_presentacion_funciona_con_pendientes(self):
         presentacion = Presentacion.objects.get(pk=1)

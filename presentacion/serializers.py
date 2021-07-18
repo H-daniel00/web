@@ -125,6 +125,9 @@ class PresentacionUpdateSerializer(serializers.ModelSerializer):
         }
 
     def validate(self, data):
+        if self.instance.estado == Presentacion.COBRADO:
+            raise ValidationError('Las presentaciones cobradas no pueden actualizarse')
+
         for estudio_data in data['estudios']:
             estudio = Estudio.objects.get(pk=estudio_data['id'])
             if estudio.obra_social_id != self.instance.obra_social_id:
