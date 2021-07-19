@@ -1,6 +1,6 @@
 # pylint: disable=no-self-argument
 from django.db import models
-from django.db.models import Q
+
 from medico.models import Medico
 from estudio.models import Estudio
 from django.contrib.auth.models import User

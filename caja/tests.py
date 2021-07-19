@@ -1,14 +1,16 @@
 # pylint: disable=no-name-in-module, import-error
-import json
 from django.test import TestCase
 from django.test import Client
-from django.contrib.auth.models import User
 from rest_framework import status
+from django.contrib.auth.models import User
+import json
+
 from caja.models import MovimientoCaja, TipoMovimientoCaja, MontoAcumulado, ID_CONSULTORIO_1, ID_CONSULTORIO_2, ID_GENERAL
 from caja.serializers import MovimientoCajaImprimirSerializer
 from medico.models import Medico
 from estudio.models import Estudio
 from distutils.util import strtobool
+
 from datetime import datetime, date
 from decimal import Decimal
 
