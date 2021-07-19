@@ -120,10 +120,14 @@ class PresentacionUpdateSerializer(serializers.ModelSerializer):
             'obra_social_id': instance.obra_social_id,
             'sucursal': instance.sucursal,
             'periodo': instance.periodo,
+            'estado': instance.estado,
             'fecha': instance.fecha,
         }
 
     def validate(self, data):
+        if self.instance.estado == Presentacion.COBRADO:
+            raise ValidationError('Las presentaciones cobradas no pueden actualizarse')
+
         for estudio_data in data['estudios']:
             estudio = Estudio.objects.get(pk=estudio_data['id'])
             if estudio.obra_social_id != self.instance.obra_social_id:
@@ -135,12 +139,12 @@ class PresentacionUpdateSerializer(serializers.ModelSerializer):
         return data
 
     def update(self, instance, validated_data):
-        instance.periodo = validated_data.get("periodo", instance.periodo)
-        instance.fecha = validated_data.get("fecha", instance.fecha)
         estudios_data = validated_data['estudios']
+
         for estudio in instance.estudios.all():
             estudio.presentacion_id = 0
             estudio.save()
+
         for estudio_data in estudios_data:
             estudio = Estudio.objects.get(pk=estudio_data['id'])
             estudio.presentacion = instance
@@ -151,10 +155,16 @@ class PresentacionUpdateSerializer(serializers.ModelSerializer):
             estudio.importe_medicacion = estudio.get_total_medicacion()
             estudio.arancel_anestesia = estudio_data.get("arancel_anestesia", estudio.arancel_anestesia)
             estudio.save()
-        estudios = Estudio.objects.filter(id__in=[e["id"] for e in estudios_data])
-        instance.total_facturado = sum([e.get_importe_total_facturado() for e in estudios])
-        instance.save()
+
+        if instance.estado == Presentacion.ABIERTO:
+            estudios = Estudio.objects.filter(id__in=[e["id"] for e in estudios_data])
+            instance.total_facturado = sum([e.get_importe_total_facturado() for e in estudios])
+            instance.periodo = validated_data.get("periodo", instance.periodo)
+            instance.fecha = validated_data.get("fecha", instance.fecha)
+            instance.save()
+
         return instance
+
     class Meta:
         model = Presentacion
         fields = (

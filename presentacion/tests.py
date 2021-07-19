@@ -5,6 +5,7 @@ from datetime import date
 
 from django.test import TestCase, Client
 from django.contrib.auth.models import User
+from django.db.models import Q
 from rest_framework import status
 
 from presentacion.models import Presentacion
@@ -771,40 +772,17 @@ class TestUpdatePresentacion(TestCase):
         assert estudio.arancel_anestesia == 1
         assert estudio.get_importe_total_facturado() == 8 # 9 - 1
 
-    def test_update_presentacion_cerrada_falla(self):
+    def test_update_presentacion_cobrada_falla(self):
         # Tomamos una presentacion con dos estudios, quitamos uno y agregamos otro.
         # Tambien cambiamos valores.
-        presentacion = Presentacion.objects.get(pk=1)
-        assert presentacion.estado == Presentacion.PENDIENTE
-        datos = {
-            "periodo": "perio3",
-            "fecha": "2019-12-25",
-            "estudios": [
-                {
-                    "id": 11,
-                    "nro_de_orden": "FE003450603",
-                    "importe_estudio": 5,
-                    "pension": 1,
-                    "diferencia_paciente": 1,
-                    "arancel_anestesia": 1
-                },
-                {
-                    "id": 12,
-                    "nro_de_orden": "FE003450603",
-                    "importe_estudio": 5,
-                    "pension": 1,
-                    "diferencia_paciente": 1,
-                    "arancel_anestesia": 1
-                }
-            ]
-        }
-
-        response = self.client.patch('/api/presentacion/1/', data=json.dumps(datos),
-                                content_type='application/json')
-        assert response.status_code == 400
-
         presentacion = Presentacion.objects.get(pk=2)
         assert presentacion.estado == Presentacion.COBRADO
+
+        Estudio.objects.filter(Q(pk=11) | Q(pk=12)).update(
+            obra_social=presentacion.obra_social,
+            presentacion=presentacion
+        )
+
         datos = {
             "periodo": "perio3",
             "fecha": "2019-12-25",
@@ -830,7 +808,71 @@ class TestUpdatePresentacion(TestCase):
 
         response = self.client.patch('/api/presentacion/2/', data=json.dumps(datos),
                                 content_type='application/json')
-        assert response.status_code == 400
+        assert response.status_code == status.HTTP_400_BAD_REQUEST
+
+    def test_update_presentacion_funciona_con_pendientes(self):
+        presentacion = Presentacion.objects.get(pk=1)
+        assert presentacion.estado == Presentacion.PENDIENTE
+        datos = {
+            "estudios": [
+                {
+                    "id": estudio.id,
+                    "nro_de_orden": "asd123",
+                    "importe_estudio": 100,
+                    "pension": 0,
+                    "diferencia_paciente": 60,
+                    "arancel_anestesia": 12,
+                } for estudio in Estudio.objects.filter(presentacion=presentacion) ]
+        }
+
+        response = self.client.patch('/api/presentacion/1/', data=json.dumps(datos),
+                                content_type='application/json')
+        assert response.status_code == status.HTTP_200_OK
+
+        for estudio in Estudio.objects.filter(presentacion=presentacion):
+            assert estudio.nro_de_orden == 'asd123'
+            assert estudio.importe_estudio == 100
+            assert estudio.pension == 0
+            assert estudio.diferencia_paciente == 60
+            assert estudio.arancel_anestesia == 12
+
+    def test_update_presentacion_actualiza_estudio_correspondiente(self):
+        presentacion = Presentacion.objects.get(pk=1)
+        assert presentacion.estado == Presentacion.PENDIENTE
+
+        # Agregamos un estudio extra a la presentacion
+        Estudio.objects.filter(pk=2).update(presentacion=presentacion, obra_social=presentacion.obra_social)
+
+        datos = {
+            "estudios": [
+                {
+                    "id": estudio.id,
+                    "nro_de_orden": estudio.nro_de_orden,
+                    "importe_estudio": int(estudio.importe_estudio),
+                    "pension": int(estudio.pension),
+                    "diferencia_paciente": int(estudio.diferencia_paciente),
+                    "arancel_anestesia": int(estudio.arancel_anestesia),
+                } for estudio in Estudio.objects.filter(presentacion=presentacion)]
+        }
+
+        datos['estudios'][1]['importe_estudio'] += 12
+        estudio_id = datos['estudios'][1]['id']
+        importe = datos['estudios'][1]['importe_estudio']
+
+        response = self.client.patch('/api/presentacion/1/', data=json.dumps(datos),
+                                content_type='application/json')
+        assert response.status_code == status.HTTP_200_OK
+
+        assert Estudio.objects.get(pk=estudio_id).importe_estudio == importe
+        del datos['estudios'][1]
+
+        for estudio_data in datos['estudios']:
+            estudio = Estudio.objects.get(pk=estudio_data['id'])
+            assert estudio.nro_de_orden == estudio_data['nro_de_orden']
+            assert estudio.importe_estudio == estudio_data['importe_estudio']
+            assert estudio.pension == estudio_data['pension']
+            assert estudio.diferencia_paciente == estudio_data['diferencia_paciente']
+            assert estudio.arancel_anestesia == estudio_data['arancel_anestesia']
 
     def test_update_presentacion_con_estudio_obra_social_distinta_falla(self):
         estudio = Estudio.objects.get(pk=12)
