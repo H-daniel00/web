@@ -1,12 +1,9 @@
-from decimal import Decimal
 from datetime import date
 
 from rest_framework import serializers
-from rest_framework import status
 from rest_framework.serializers import ValidationError
 from presentacion.models import PagoPresentacion, Presentacion
-from obra_social.models import ObraSocial
-from comprobante.models import Comprobante, TipoComprobante, Gravado, LineaDeComprobante, ID_TIPO_COMPROBANTE_LIQUIDACION
+from comprobante.models import Comprobante
 from estudio.models import Estudio
 from estudio.serializers import EstudioDePresentacionRetrieveSerializer
 from obra_social.serializers import ObraSocialSerializer
@@ -216,6 +213,7 @@ class PresentacionRefacturarSerializer(serializers.ModelSerializer):
 class PagoPresentacionSerializer(serializers.ModelSerializer):
     presentacion_id = serializers.IntegerField()
     estudios = serializers.ListField()
+    remito = serializers.CharField(write_only=True, allow_blank=True)
 
     class Meta:
         model = PagoPresentacion

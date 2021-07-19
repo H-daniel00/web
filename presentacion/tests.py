@@ -103,7 +103,6 @@ class TestCobrarPresentacion(TestCase):
 
     def test_cobrar_presentacion_ok(self):
         presentacion = Presentacion.objects.get(pk=7)
-        pk_comprobante_viejo = presentacion.comprobante.pk
         assert presentacion.estado == Presentacion.PENDIENTE
         assert presentacion.comprobante.estado == Comprobante.NO_COBRADO
         datos = {
@@ -118,6 +117,7 @@ class TestCobrarPresentacion(TestCase):
             ],
             "retencion_impositiva": "32.00",
             "nro_recibo": 1,
+            "remito": '',
         }
         response = self.client.patch('/api/presentacion/7/cobrar/', data=json.dumps(datos),
                                      content_type='application/json')
@@ -144,6 +144,7 @@ class TestCobrarPresentacion(TestCase):
             ],
             "retencion_impositiva": "32.00",
             "nro_recibo": 1,
+            "remito": '',
         }
         response = self.client.patch('/api/presentacion/7/cobrar/', data=json.dumps(datos),
                                      content_type='application/json')
@@ -172,6 +173,7 @@ class TestCobrarPresentacion(TestCase):
             ],
             "retencion_impositiva": "32.00",
             "nro_recibo": 1,
+            "remito": '',
         }
         response = self.client.patch('/api/presentacion/7/cobrar/', data=json.dumps(datos),
                                      content_type='application/json')
@@ -191,7 +193,6 @@ class TestCobrarPresentacion(TestCase):
 
     def test_cobrar_presentacion_abierta_falla(self):
         presentacion = Presentacion.objects.get(pk=8)
-        pk_comprobante_viejo = presentacion.comprobante.pk
         assert presentacion.estado == Presentacion.ABIERTO
         datos = {
             "estudios": [
@@ -205,6 +206,7 @@ class TestCobrarPresentacion(TestCase):
             ],
             "retencion_impositiva": "32.00",
             "nro_recibo": 1,
+            "remito": '',
         }
         response = self.client.patch('/api/presentacion/8/cobrar/', data=json.dumps(datos),
                                      content_type='application/json')
@@ -215,7 +217,6 @@ class TestCobrarPresentacion(TestCase):
 
     def test_cobrar_presentacion_cobrada_falla(self):
         presentacion = Presentacion.objects.get(pk=2)
-        pk_comprobante_viejo = presentacion.comprobante.pk
         assert presentacion.estado == Presentacion.COBRADO
         datos = {
             "estudios": [
@@ -229,6 +230,7 @@ class TestCobrarPresentacion(TestCase):
             ],
             "retencion_impositiva": "32.00",
             "nro_recibo": 1,
+            "remito": '',
         }
         response = self.client.patch('/api/presentacion/2/cobrar/', data=json.dumps(datos),
                                      content_type='application/json')
@@ -240,7 +242,6 @@ class TestCobrarPresentacion(TestCase):
     def test_cobrar_presentacion_estudio_no_es_de_la_presentacion_falla(self):
         presentacion = Presentacion.objects.get(pk=7)
         estudio = Estudio.objects.get(pk=9)
-        pk_comprobante_viejo = presentacion.comprobante.pk
         assert presentacion.estado == Presentacion.PENDIENTE
         assert estudio.presentacion != presentacion
         datos = {
@@ -255,6 +256,7 @@ class TestCobrarPresentacion(TestCase):
             ],
             "retencion_impositiva": "32.00",
             "nro_recibo": 1,
+            "remito": '',
         }
         response = self.client.patch('/api/presentacion/7/cobrar/', data=json.dumps(datos),
                                      content_type='application/json')
@@ -265,13 +267,13 @@ class TestCobrarPresentacion(TestCase):
 
     def test_cobrar_presentacion_faltan_estudios_falla(self):
         presentacion = Presentacion.objects.get(pk=7)
-        pk_comprobante_viejo = presentacion.comprobante.pk
         assert presentacion.estado == Presentacion.PENDIENTE
         datos = {
             "estudios": [
             ],
             "retencion_impositiva": "32.00",
             "nro_recibo": 1,
+            "remito": '',
         }
         response = self.client.patch('/api/presentacion/7/cobrar/', data=json.dumps(datos),
                                      content_type='application/json')
@@ -419,6 +421,7 @@ class TestCobrarPresentacion(TestCase):
             ],
             "retencion_impositiva": "32.00",
             "nro_recibo": 1,
+            "remito": '',
         }
         response = self.client.patch('/api/presentacion/5/cobrar/', data=json.dumps(datos),
                                      content_type='application/json')
@@ -449,6 +452,7 @@ class TestCobrarPresentacion(TestCase):
             ],
             "retencion_impositiva": "32.00",
             "nro_recibo": 1,
+            "remito": '',
         }
         response = self.client.patch('/api/presentacion/7/cobrar/', data=json.dumps(datos),
                                      content_type='application/json')
