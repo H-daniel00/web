@@ -121,12 +121,16 @@ class PresentacionUpdateSerializer(serializers.ModelSerializer):
             'sucursal': instance.sucursal,
             'periodo': instance.periodo,
             'estado': instance.estado,
+            'remito': instance.remito,
             'fecha': instance.fecha,
         }
 
     def validate(self, data):
         if self.instance.estado == Presentacion.COBRADO:
             raise ValidationError('Las presentaciones cobradas no pueden actualizarse')
+
+        if 'remito' in data and not data['remito'].isnumeric():
+            raise ValidationError('El numero de remito debe ser numerico')
 
         for estudio_data in data['estudios']:
             estudio = Estudio.objects.get(pk=estudio_data['id'])
@@ -161,8 +165,10 @@ class PresentacionUpdateSerializer(serializers.ModelSerializer):
             instance.total_facturado = sum([e.get_importe_total_facturado() for e in estudios])
             instance.periodo = validated_data.get("periodo", instance.periodo)
             instance.fecha = validated_data.get("fecha", instance.fecha)
-            instance.save()
+        else:
+            instance.remito = validated_data.get('remito', instance.remito)
 
+        instance.save()
         return instance
 
     class Meta:
@@ -172,6 +178,7 @@ class PresentacionUpdateSerializer(serializers.ModelSerializer):
             'periodo',
             'fecha',
             'estudios',
+            'remito',
         )
 
 class PresentacionRefacturarSerializer(serializers.ModelSerializer):

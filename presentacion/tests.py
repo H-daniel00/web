@@ -967,6 +967,79 @@ class TestUpdatePresentacion(TestCase):
                                 content_type='application/json')
         assert response.status_code == 400
 
+    def test_update_presentacion_guarda_remito_en_presentaciones_pendientes(self):
+        remito = '1232'
+        presentacion = Presentacion.objects.get(pk=1)
+        assert presentacion.estado == Presentacion.PENDIENTE
+        assert presentacion.remito != remito
+
+        datos = {
+            "estudios": [
+                {
+                    "id": 12,
+                    "nro_de_orden": "FE003450603",
+                    "importe_estudio": 5,
+                    "pension": 1,
+                    "diferencia_paciente": 1,
+                    "arancel_anestesia": 1
+                }
+            ],
+            "remito": remito
+        }
+        response = self.client.patch('/api/presentacion/1/', data=json.dumps(datos),
+                                content_type='application/json')
+        
+        assert response.status_code == status.HTTP_200_OK
+        presentacion.refresh_from_db()
+        assert presentacion.remito == remito
+
+    def test_update_presentacion_no_guarda_remito_en_presentaciones_abiertas(self):
+        presentacion = Presentacion.objects.get(pk=8)
+        assert presentacion.estado == Presentacion.ABIERTO
+        assert not presentacion.remito
+
+        datos = {
+            "estudios": [
+                {
+                    "id": 12,
+                    "nro_de_orden": "FE003450603",
+                    "importe_estudio": 5,
+                    "pension": 1,
+                    "diferencia_paciente": 1,
+                    "arancel_anestesia": 1
+                }
+            ],
+            "remito": '123'
+        }
+        response = self.client.patch('/api/presentacion/1/', data=json.dumps(datos),
+                                content_type='application/json')
+        
+        assert response.status_code == status.HTTP_200_OK
+        presentacion.refresh_from_db()
+        assert not presentacion.remito
+
+    def test_update_presentacion_falla_si_remito_no_es_numerico(self):
+        presentacion = Presentacion.objects.get(pk=1)
+        assert presentacion.estado == Presentacion.PENDIENTE
+
+        datos = {
+            "estudios": [
+                {
+                    "id": 12,
+                    "nro_de_orden": "FE003450603",
+                    "importe_estudio": 5,
+                    "pension": 1,
+                    "diferencia_paciente": 1,
+                    "arancel_anestesia": 1
+                }
+            ],
+            "remito": '1asd2v'
+        }
+        response = self.client.patch('/api/presentacion/1/', data=json.dumps(datos),
+                                content_type='application/json')
+        
+        assert response.status_code == status.HTTP_400_BAD_REQUEST
+
 class TestAbrirPresentacion(TestCase):
     fixtures = ['pacientes.json', 'medicos.json', 'practicas.json', 'obras_sociales.json',
                 'anestesistas.json', 'presentaciones.json', 'comprobantes.json', 'estudios.json', "medicamentos.json"]
