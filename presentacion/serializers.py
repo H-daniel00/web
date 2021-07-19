@@ -216,11 +216,13 @@ class PresentacionRefacturarSerializer(serializers.ModelSerializer):
 class PagoPresentacionSerializer(serializers.ModelSerializer):
     presentacion_id = serializers.IntegerField()
     estudios = serializers.ListField()
+
     class Meta:
         model = PagoPresentacion
         fields = (
             'presentacion_id',
             'estudios',
+            'remito',
             'fecha',
             'retencion_impositiva',
             'nro_recibo',
@@ -230,6 +232,11 @@ class PagoPresentacionSerializer(serializers.ModelSerializer):
         presentacion = Presentacion.objects.get(pk=value)
         if presentacion.estado != Presentacion.PENDIENTE:
             raise ValidationError("La presentacion debe estar en estado PENDIENTE")
+        return value
+
+    def validate_remito(self, value):
+        if value and not value.isnumeric():
+            raise ValidationError('El numero de remito debe ser numerico')
         return value
 
     def validate_estudios(self, value):
@@ -269,6 +276,7 @@ class PagoPresentacionSerializer(serializers.ModelSerializer):
             + e.importe_medicacion_cobrado
             for e in presentacion.estudios.all()])
         presentacion.total_cobrado = total
+        presentacion.remito = validated_data['remito']
         presentacion.estado = Presentacion.COBRADO
         presentacion.comprobante.estado = Comprobante.COBRADO
         presentacion.comprobante.total_cobrado = total
