@@ -465,6 +465,34 @@ class TestCobrarPresentacion(TestCase):
         assert estudio.presentacion == presentacion
         assert estudio.fecha_cobro == str(date.today())
 
+    def test_cobrar_presentacion_actualiza_remito(self):
+        presentacion = Presentacion.objects.get(pk=7)
+        remito = '123'
+        assert presentacion.estado == Presentacion.PENDIENTE
+        assert presentacion.remito != remito
+
+        datos = {
+            "estudios": [
+                {
+                    "id": 8,
+                    "importe_cobrado_pension": "1.00",
+                    "importe_cobrado_arancel_anestesia": "1.00",
+                    "importe_estudio_cobrado": "1.00",
+                    "importe_medicacion_cobrado": "1.00",
+                },
+            ],
+            "retencion_impositiva": "32.00",
+            "nro_recibo": 1,
+            "remito": remito,
+        }
+        response = self.client.patch('/api/presentacion/7/cobrar/', data=json.dumps(datos),
+                                     content_type='application/json')
+        assert response.status_code == status.HTTP_200_OK
+
+        presentacion.refresh_from_db()
+        assert presentacion.estado == Presentacion.COBRADO
+        assert presentacion.pago != None
+        assert presentacion.remito == remito
 
 class TestEstudiosDePresentacion(TestCase):
     fixtures = ['pacientes.json', 'medicos.json', 'practicas.json', 'obras_sociales.json',
