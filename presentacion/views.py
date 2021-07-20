@@ -43,6 +43,7 @@ class PresentacionFieldsFilterBackend(BaseFilterBackend):
         obra_social_id = request.query_params.get('obraSocial')
         esta_cobrada = request.query_params.get('presentacionesCobradas', '')
         tipo_presentacion = request.query_params.get('tipoPresentacion')
+        remito = request.query_params.get('remito', None)
 
         if anio:
             queryset = queryset.filter(fecha__year=anio)
@@ -60,7 +61,11 @@ class PresentacionFieldsFilterBackend(BaseFilterBackend):
             if tipo_presentacion == 'Directa':
                 queryset = queryset.filter(obra_social__se_presenta_por_AMR='0')
             else:
-                queryset = queryset.filter(obra_social__se_presenta_por_AMR='1')   
+                queryset = queryset.filter(obra_social__se_presenta_por_AMR='1')
+
+        if remito:
+            queryset = queryset.filter(remito=remito) 
+
         return queryset
 
 class PresentacionSucursalFilterBackend(BaseFilterBackend):
