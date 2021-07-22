@@ -966,7 +966,7 @@
 								],
 								"body": {
 									"mode": "raw",
-									"raw": "{\n\t\"estudios\": [\n\t    {\n\t        \"id\": {{idEstudio}},\n\t        \"importe_cobrado_pension\": \"1.00\",\n\t        \"importe_cobrado_arancel_anestesia\": \"1.00\",\n\t        \"importe_estudio_cobrado\": \"1.00\",\n\t        \"importe_medicacion_cobrado\": \"1.00\"\n\t    }\n\t],\n    \"retencion_impositiva\": \"32.00\",\n    \"nro_recibo\": 1\n}",
+									"raw": "{\n\t\"estudios\": [\n\t    {\n\t        \"id\": {{idEstudio}},\n\t        \"importe_cobrado_pension\": \"1.00\",\n\t        \"importe_cobrado_arancel_anestesia\": \"1.00\",\n\t        \"importe_estudio_cobrado\": \"1.00\",\n\t        \"importe_medicacion_cobrado\": \"1.00\"\n\t    }\n\t],\n    \"retencion_impositiva\": \"32.00\",\n    \"nro_recibo\": 1,\n    \"remito\": \"123\"\n}",
 									"options": {
 										"raw": {
 											"language": "json"
