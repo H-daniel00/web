@@ -1,6 +1,6 @@
 # pylint: disable=no-self-argument
 from django.db import models
-from django.db.models import Q
+
 from medico.models import Medico
 from estudio.models import Estudio
 from django.contrib.auth.models import User
@@ -17,6 +17,8 @@ ID_CONSULTORIO_1 = 9
 ID_COSEGURO = 10
 ID_EGRESO = 11
 ID_CONSULTORIO_2 = 12
+ID_DEPOSITO_REINTEGRO = 13
+ID_IVA = 14
 
 def get_monto_acumulado(tipo):
     if tipo in (ID_CONSULTORIO_2, ID_CONSULTORIO_1):

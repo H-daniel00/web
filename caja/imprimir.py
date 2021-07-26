@@ -9,7 +9,7 @@ from reportlab.lib.pagesizes import A4, landscape
 from reportlab.platypus.doctemplate import SimpleDocTemplate
 from reportlab.lib.enums import TA_RIGHT, TA_CENTER
 from reportlab.lib.styles import getSampleStyleSheet, ParagraphStyle
-from reportlab.platypus import Table, Paragraph, TableStyle, tables
+from reportlab.platypus import Table, Paragraph, TableStyle
 from reportlab.lib.units import mm
 from reportlab.lib import colors
 

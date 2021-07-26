@@ -5,7 +5,7 @@ from django.contrib.auth.models import User
 
 from estudio.models import Estudio
 from medico.models import Medico
-from caja.models import MovimientoCaja, TipoMovimientoCaja, MontoAcumulado, ID_GENERAL, ID_CONSULTORIO_1, ID_CONSULTORIO_2, get_monto_acumulado
+from caja.models import MovimientoCaja, TipoMovimientoCaja, MontoAcumulado, ID_GENERAL, get_monto_acumulado
 from practica.serializers import PracticaSerializer
 from obra_social.serializers import ObraSocialSerializer
 from paciente.serializers import PacienteSerializer
