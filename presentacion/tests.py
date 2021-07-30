@@ -92,6 +92,32 @@ class TestRetrievePresentacion(TestCase):
         response = self.client.get('/api/presentacion/1/')
         assert response.status_code == 200
 
+    def test_presentaciones_ordenadas_ok(self):
+        response = self.client.get('/api/presentacion/?ordering=-obra_social')
+        presentaciones = Presentacion.objects.order_by('-obra_social')
+
+        assert response.status_code == 200
+        results = json.loads(response.content).get('results')
+
+        long = presentaciones.count()
+        assert long == len(results)
+
+        for i in range(long):
+            assert presentaciones[i].id == results[i]['id']
+
+    def test_presentaciones_ordenadas_con_filtro_ok(self):
+        response = self.client.get('/api/presentacion/?obraSocial=1&ordering=comprobante')
+        presentaciones = Presentacion.objects.filter(obra_social__id=1).order_by('comprobante')
+
+        assert response.status_code == 200
+        results = json.loads(response.content).get('results')
+        
+        long = presentaciones.count()
+        assert long == len(results)
+
+        for i in range(long):
+            assert presentaciones[i].id == results[i]['id']
+
 class TestCobrarPresentacion(TestCase):
     fixtures = ['pacientes.json', 'medicos.json', 'practicas.json', 'obras_sociales.json',
                 'anestesistas.json', 'presentaciones.json', 'comprobantes.json', 'estudios.json', "medicamentos.json"]
