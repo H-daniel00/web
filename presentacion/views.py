@@ -72,7 +72,12 @@ class PresentacionSucursalFilterBackend(BaseFilterBackend):
 class PresentacionViewSet(viewsets.ModelViewSet):
     queryset = Presentacion.objects.all().order_by('-fecha')
     serializer_class = PresentacionSerializer
-    filter_backends = (PresentacionSucursalFilterBackend, PresentacionFieldsFilterBackend, PresentacionComprobantesFilterBackend)
+    filter_backends = (
+        PresentacionSucursalFilterBackend,
+        PresentacionFieldsFilterBackend,
+        PresentacionComprobantesFilterBackend,
+        OrderingFilter
+    )
     pagination_class = StandardResultsSetPagination
     page_size = 50
 
