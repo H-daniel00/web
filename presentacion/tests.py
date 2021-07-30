@@ -9,13 +9,13 @@ from django.db.models import Q
 from rest_framework import status
 
 from presentacion.models import Presentacion
+from presentacion.obra_social_custom_code.amr_presentacion_digital import AmrRowBase
+from presentacion.obra_social_custom_code.osde_presentacion_digital import OsdeRowBase
 from obra_social.models import ObraSocial
 from estudio.models import Estudio
 from medico.models import Medico
-from comprobante.models import Comprobante, ID_TIPO_COMPROBANTE_FACTURA, ID_TIPO_COMPROBANTE_NOTA_DE_CREDITO
+from comprobante.models import Comprobante, ID_TIPO_COMPROBANTE_FACTURA
 from comprobante.afip import AfipError
-from presentacion.obra_social_custom_code.amr_presentacion_digital import AmrRowBase
-from presentacion.obra_social_custom_code.osde_presentacion_digital import OsdeRowBase
 
 class TestDetallesObrasSociales(TestCase):
     fixtures = ['pacientes.json', 'medicos.json', 'practicas.json', 'obras_sociales.json',
