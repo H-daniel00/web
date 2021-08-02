@@ -101,8 +101,9 @@ class TestRetrievePresentacion(TestCase):
 
         long = presentaciones.count()
         assert long == len(results)
-
-        for i in range(long):
+        print(presentaciones[0])
+        print(results[0])
+        for i in range(0, long):
             assert presentaciones[i].id == results[i]['id']
 
     def test_presentaciones_ordenadas_con_filtro_ok(self):
