@@ -1,5 +1,6 @@
 from decimal import Decimal
 from datetime import date
+from django.utils.dateparse import parse_time
 
 from rest_framework import serializers
 from rest_framework import status
@@ -274,3 +275,39 @@ class PagoPresentacionSerializer(serializers.ModelSerializer):
             importe=total,
             retencion_impositiva=validated_data['retencion_impositiva'],
         )
+
+class PagoPresentacionParcialSerializer(serializers.ModelSerializer):
+    presentacion_id = serializers.IntegerField()
+    estudios = serializers.ListField()
+    estudios_impagos = serializers.ListField()
+
+    class Meta:
+        model = PagoPresentacion
+        fields = (
+            'presentacion_id', 'estudios', 'estudios_impagos', 'fecha',
+            'retencion_impositiva', 'nro_recibo', 'importe'
+        )
+
+    def create(self, validated_data):
+        presentacion = Presentacion.objects.get(pk=validated_data['presentacion_id'])
+        presentacion.id = None
+        presentacion.save()
+
+        estudios_impagos = validated_data['estudios_impagos']
+        for e in estudios_impagos:
+            estudio = Estudio.objects.get(pk=e['id'])
+            if estudio.presentacion != presentacion:
+                raise ValidationError("El estudio {0} no corresponde a esta presentacion".format(e['id']))
+
+            estudio.presentacion = presentacion
+            estudio.importe_estudio_cobrado = e['importe_estudio_cobrado']
+            estudio.importe_medicacion_cobrado = e['importe_medicacion_cobrado']
+            estudio.importe_cobrado_pension = e['importe_cobrado_pension']
+            estudio.importe_cobrado_arancel_anestesia = e['importe_cobrado_arancel_anestesia']
+            estudio.fecha_cobro = date.today()
+            estudio.save()
+
+        del validated_data['estudios_impagos']
+        presentacion_serializer = PagoPresentacion(data=validated_data)
+        presentacion_serializer.is_valid(raise_exception=True)
+        return presentacion_serializer.save()
