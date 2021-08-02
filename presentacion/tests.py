@@ -102,8 +102,11 @@ class TestRetrievePresentacion(TestCase):
         long = presentaciones.count()
         assert long == len(results)
 
+        obra_social_actual = results[0]['obra_social']['id']
         for i in range(0, long):
             assert presentaciones[i].obra_social.id == results[i]['obra_social']['id']
+            assert obra_social_actual <= results[i]['obra_social']['id']
+            obra_social_actual = results[i]['obra_social']['id']
 
     def test_presentaciones_ordenadas_con_filtro_ok(self):
         response = self.client.get('/api/presentacion/?obraSocial=1&ordering=comprobante')
@@ -115,8 +118,11 @@ class TestRetrievePresentacion(TestCase):
         long = presentaciones.count()
         assert long == len(results)
 
+        comprobante_actual = results[0]['comprobante']['id']
         for i in range(0, long):
             assert presentaciones[i].comprobante.id == results[i]['comprobante']['id']
+            assert comprobante_actual <= results[i]['comprobante']['id']
+            comprobante_actual = results[i]['comprobante']['id']
 
 class TestCobrarPresentacion(TestCase):
     fixtures = ['pacientes.json', 'medicos.json', 'practicas.json', 'obras_sociales.json',
