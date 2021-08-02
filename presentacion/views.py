@@ -226,7 +226,7 @@ class PresentacionViewSet(viewsets.ModelViewSet):
             pago_serializer = PagoPresentacionParcialSerializer(data=pago_data)
             pago_serializer.is_valid(raise_exception=True)
             pago_serializer.save()
-            response = JsonResponse({}, status_code=status.HTTP_200_OK)
+            response = JsonResponse({}, status=status.HTTP_200_OK)
         except Exception as ex:
             response = JsonResponse({'error': str(ex)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 

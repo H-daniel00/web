@@ -461,6 +461,48 @@ class TestCobrarPresentacion(TestCase):
         assert estudio.presentacion == presentacion
         assert estudio.fecha_cobro == str(date.today())
 
+    def test_pago_presentacion_con_importe_funciona(self):
+        presentacion = Presentacion.objects.get(pk=5)
+        assert presentacion.estado == Presentacion.PENDIENTE
+        assert presentacion.comprobante.estado == Comprobante.NO_COBRADO
+        cantidad_presentaciones = Presentacion.objects.count()
+
+        datos = {
+            "estudios": [{
+                    "id": estudio_id,
+                    "importe_cobrado_pension": "1.00",
+                    "importe_cobrado_arancel_anestesia": "1.00",
+                    "importe_estudio_cobrado": "1.00",
+                    "importe_medicacion_cobrado": "1.00",
+                } for estudio_id in [3, 4, 5]],
+            "estudios_impagos": [
+                {
+                    "id": 6,
+                    "importe_cobrado_pension": "2.00",
+                    "importe_cobrado_arancel_anestesia": "2.00",
+                    "importe_estudio_cobrado": "2.00",
+                    "importe_medicacion_cobrado": "2.00",
+                }
+            ],
+            "retencion_impositiva": "32.00",
+            "nro_recibo": 1,
+        }
+
+        response = self.client.patch('/api/presentacion/5/cobrar_parcial/', data=json.dumps(datos),
+                                     content_type='application/json')
+
+        assert response.status_code == status.HTTP_200_OK
+        presentacion = Presentacion.objects.get(pk=5)
+        assert presentacion.estado == Presentacion.COBRADO
+        assert presentacion.comprobante.estado == Comprobante.COBRADO
+        assert presentacion.pago != None
+        
+        assert cantidad_presentaciones + 1 == Presentacion.objects.count()
+        presentacion_nueva = Presentacion.objects.last()
+        assert presentacion_nueva.obra_social == presentacion.obra_social
+        assert presentacion_nueva.sucursal == presentacion.sucursal
+        assert presentacion_nueva.comprobante == presentacion.comprobante
+        assert presentacion_nueva.total_facturado == presentacion.total_facturado
 
 class TestEstudiosDePresentacion(TestCase):
     fixtures = ['pacientes.json', 'medicos.json', 'practicas.json', 'obras_sociales.json',

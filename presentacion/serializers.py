@@ -285,7 +285,7 @@ class PagoPresentacionParcialSerializer(serializers.ModelSerializer):
         model = PagoPresentacion
         fields = (
             'presentacion_id', 'estudios', 'estudios_impagos', 'fecha',
-            'retencion_impositiva', 'nro_recibo', 'importe'
+            'retencion_impositiva', 'nro_recibo'
         )
 
     def create(self, validated_data):
@@ -296,7 +296,7 @@ class PagoPresentacionParcialSerializer(serializers.ModelSerializer):
         estudios_impagos = validated_data['estudios_impagos']
         for e in estudios_impagos:
             estudio = Estudio.objects.get(pk=e['id'])
-            if estudio.presentacion != presentacion:
+            if estudio.presentacion.id != validated_data['presentacion_id']:
                 raise ValidationError("El estudio {0} no corresponde a esta presentacion".format(e['id']))
 
             estudio.presentacion = presentacion
@@ -308,6 +308,6 @@ class PagoPresentacionParcialSerializer(serializers.ModelSerializer):
             estudio.save()
 
         del validated_data['estudios_impagos']
-        presentacion_serializer = PagoPresentacion(data=validated_data)
+        presentacion_serializer = PagoPresentacionSerializer(data=validated_data)
         presentacion_serializer.is_valid(raise_exception=True)
         return presentacion_serializer.save()
