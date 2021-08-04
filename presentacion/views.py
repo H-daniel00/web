@@ -78,6 +78,12 @@ class PresentacionViewSet(viewsets.ModelViewSet):
         PresentacionComprobantesFilterBackend,
         OrderingFilter
     )
+    ordering_fields = (
+        'id', 'fecha', 'obra_social', 'sucursal',
+        'comprobante', 'estado', 'periodo', 'iva',
+        'total_cobrado', 'total_facturado', 'comprobante__numero'
+    )
+
     pagination_class = StandardResultsSetPagination
     page_size = 50
 
