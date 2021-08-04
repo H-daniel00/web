@@ -102,15 +102,15 @@ class TestRetrievePresentacion(TestCase):
         long = presentaciones.count()
         assert long == len(results)
 
-        obra_social_actual = results[0]['obra_social']['id']
+        obra_social_actual = results[0]['obra_social']['nombre']
         for i in range(0, long):
-            assert presentaciones[i].obra_social.id == results[i]['obra_social']['id']
-            assert obra_social_actual <= results[i]['obra_social']['id']
-            obra_social_actual = results[i]['obra_social']['id']
+            assert presentaciones[i].obra_social.nombre == results[i]['obra_social']['nombre']
+            assert obra_social_actual >= results[i]['obra_social']['nombre']
+            obra_social_actual = results[i]['obra_social']['nombre']
 
     def test_presentaciones_ordenadas_con_filtro_ok(self):
-        response = self.client.get('/api/presentacion/?obraSocial=1&ordering=comprobante')
-        presentaciones = Presentacion.objects.filter(obra_social__id=1).order_by('comprobante')
+        response = self.client.get('/api/presentacion/?obraSocial=1&ordering=comprobante__numero')
+        presentaciones = Presentacion.objects.filter(obra_social__id=1).order_by('comprobante__numero')
 
         assert response.status_code == 200
         results = json.loads(response.content).get('results')
@@ -118,11 +118,11 @@ class TestRetrievePresentacion(TestCase):
         long = presentaciones.count()
         assert long == len(results)
 
-        comprobante_actual = results[0]['comprobante']['id']
+        comprobante_actual = results[0]['comprobante']['numero']
         for i in range(0, long):
-            assert presentaciones[i].comprobante.id == results[i]['comprobante']['id']
-            assert comprobante_actual <= results[i]['comprobante']['id']
-            comprobante_actual = results[i]['comprobante']['id']
+            assert presentaciones[i].comprobante.numero == results[i]['comprobante']['numero']
+            assert comprobante_actual <= results[i]['comprobante']['numero']
+            comprobante_actual = results[i]['comprobante']['numero']
 
 class TestCobrarPresentacion(TestCase):
     fixtures = ['pacientes.json', 'medicos.json', 'practicas.json', 'obras_sociales.json',
