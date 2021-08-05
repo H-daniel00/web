@@ -1,29 +1,26 @@
 # pylint: disable=no-name-in-module, import-error
 from typing import Dict
 from datetime import date
+from distutils.util import strtobool
 
 from django.http import HttpResponse, JsonResponse
 from rest_framework import viewsets, status
 from rest_framework.serializers import ValidationError
 from rest_framework.decorators import detail_route
+from rest_framework.filters import BaseFilterBackend, OrderingFilter
 from common.drf.views import StandardResultsSetPagination
 
 from presentacion.models import Presentacion
 from presentacion.serializers import PagoPresentacionSerializer, PresentacionCreateSerializer, \
     PresentacionRetrieveSerializer, PresentacionSerializer, PresentacionUpdateSerializer, \
-    PresentacionRefacturarSerializer
+    PresentacionRefacturarSerializer, PresentacionImprimirSerializer
 from presentacion.obra_social_custom_code.osde_presentacion_digital import \
     OsdeRowEstudio, OsdeRowMedicacion, OsdeRowPension, OsdeRowMaterialEspecifico
 from presentacion.obra_social_custom_code.amr_presentacion_digital import AmrRowEstudio
-from estudio.models import Estudio
+from presentacion.imprimir_presentacion import generar_pdf_presentacion
+from estudio.models import Estudio, ID_SUCURSAL_CEDIR
 from estudio.serializers import EstudioDePresentacionRetrieveSerializer
 from comprobante.serializers import crear_comprobante_serializer_factory
-from presentacion.imprimir_presentacion import generar_pdf_presentacion
-from presentacion.serializers import PresentacionImprimirSerializer
-from rest_framework.filters import BaseFilterBackend
-from presentacion.models import Presentacion
-from distutils.util import strtobool
-from estudio.models import ID_SUCURSAL_CEDIR
 
 class PresentacionComprobantesFilterBackend(BaseFilterBackend):
     def filter_queryset(self, request, queryset, view):
@@ -75,7 +72,18 @@ class PresentacionSucursalFilterBackend(BaseFilterBackend):
 class PresentacionViewSet(viewsets.ModelViewSet):
     queryset = Presentacion.objects.all().order_by('-fecha')
     serializer_class = PresentacionSerializer
-    filter_backends = (PresentacionSucursalFilterBackend, PresentacionFieldsFilterBackend, PresentacionComprobantesFilterBackend)
+    filter_backends = (
+        PresentacionSucursalFilterBackend,
+        PresentacionFieldsFilterBackend,
+        PresentacionComprobantesFilterBackend,
+        OrderingFilter
+    )
+    ordering_fields = (
+        'id', 'fecha', 'obra_social', 'sucursal',
+        'comprobante', 'estado', 'periodo', 'iva',
+        'total_cobrado', 'total_facturado', 'comprobante__numero'
+    )
+
     pagination_class = StandardResultsSetPagination
     page_size = 50
 
