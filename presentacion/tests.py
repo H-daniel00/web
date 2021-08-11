@@ -482,6 +482,7 @@ class TestCobrarPresentacion(TestCase):
             "estudios_impagos": self.estudios_data_json([6]),
             "retencion_impositiva": "32.00",
             "nro_recibo": 1,
+            "importe": "20",
         }
 
         response = self.client.patch('/api/presentacion/5/cobrar_parcial/', data=json.dumps(datos),
@@ -492,6 +493,29 @@ class TestCobrarPresentacion(TestCase):
         assert presentacion.estado == Presentacion.COBRADO
         assert presentacion.comprobante.estado == Comprobante.COBRADO
         assert presentacion.pago != None
+
+    def test_pago_presentacion_parcial_funciona(self):
+        presentacion = Presentacion.objects.get(pk=5)
+        assert presentacion.estado == Presentacion.PENDIENTE
+        assert presentacion.comprobante.estado == Comprobante.NO_COBRADO
+
+        datos = {
+            "estudios": self.estudios_data_json([3, 4, 5]),
+            "estudios_impagos": self.estudios_data_json([6]),
+            "retencion_impositiva": "32.00",
+            "nro_recibo": 1,
+            "importe": "3",
+        }
+
+        response = self.client.patch('/api/presentacion/5/cobrar_parcial/', data=json.dumps(datos),
+                                     content_type='application/json')
+
+        assert response.status_code == status.HTTP_400_BAD_REQUEST
+        datos['importe'] = '20'
+
+        response = self.client.patch('/api/presentacion/5/cobrar_parcial/', data=json.dumps(datos),
+                                     content_type='application/json')
+        assert response.status_code == status.HTTP_200_OK
 
     def test_pago_presentacion_parcial_crea_presentacion_con_estudios_impagos(self):
         presentacion = Presentacion.objects.get(pk=5)
@@ -506,6 +530,7 @@ class TestCobrarPresentacion(TestCase):
             "estudios": self.estudios_data_json(id_pagos),
             "estudios_impagos": self.estudios_data_json(id_impagos),
             "retencion_impositiva": "32.00",
+            "importe": "20",
             "nro_recibo": 1,
         }
 
