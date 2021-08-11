@@ -220,6 +220,22 @@ class PagoPresentacionSerializer(serializers.ModelSerializer):
             'nro_recibo',
         )
 
+    def update_estudios(estudios_data, presentacion, presentacion_id, fecha_cobro = None):
+        for e in estudios_data:
+            estudio = Estudio.objects.get(pk=e['id'])
+
+            if estudio.presentacion.id != presentacion_id:
+                raise ValidationError("El estudio {0} no corresponde a esta presentacion".format(e['id']))
+
+            estudio.importe_estudio_cobrado = e['importe_estudio_cobrado']
+            estudio.importe_medicacion_cobrado = e['importe_medicacion_cobrado']
+            estudio.importe_cobrado_pension = e['importe_cobrado_pension']
+            estudio.importe_cobrado_arancel_anestesia = e['importe_cobrado_arancel_anestesia']
+            estudio.presentacion = presentacion
+            estudio.fecha_cobro = fecha_cobro
+
+            estudio.save()
+
     def validate_presentacion_id(self, value):
         presentacion = Presentacion.objects.get(pk=value)
         if presentacion.estado != Presentacion.PENDIENTE:
@@ -245,17 +261,7 @@ class PagoPresentacionSerializer(serializers.ModelSerializer):
 
     def create(self, validated_data):
         presentacion = Presentacion.objects.get(pk=validated_data['presentacion_id'])
-        estudios_data = validated_data['estudios']
-        for e in estudios_data:
-            estudio = Estudio.objects.get(pk=e['id'])
-            if estudio.presentacion != presentacion:
-                raise ValidationError("El estudio {0} no corresponde a esta presentacion".format(e['id']))
-            estudio.importe_estudio_cobrado = e['importe_estudio_cobrado']
-            estudio.importe_medicacion_cobrado = e['importe_medicacion_cobrado']
-            estudio.importe_cobrado_pension = e['importe_cobrado_pension']
-            estudio.importe_cobrado_arancel_anestesia = e['importe_cobrado_arancel_anestesia']
-            estudio.fecha_cobro = date.today()
-            estudio.save()
+        PagoPresentacionSerializer.update_estudios(validated_data['estudios'], presentacion, presentacion.id, date.today())
         total = sum([
             e.importe_cobrado_pension
             + e.importe_cobrado_arancel_anestesia
@@ -289,24 +295,15 @@ class PagoPresentacionParcialSerializer(serializers.ModelSerializer):
         )
 
     def create(self, validated_data):
-        presentacion = Presentacion.objects.get(pk=validated_data['presentacion_id'])
+        # Creamos una presentacion extra compartiendo todos los datos
+        presentacion_id = validated_data['presentacion_id']
+        presentacion = Presentacion.objects.get(pk=presentacion_id)
         presentacion.id = None
         presentacion.save()
 
-        estudios_impagos = validated_data['estudios_impagos']
-        for e in estudios_impagos:
-            estudio = Estudio.objects.get(pk=e['id'])
-            if estudio.presentacion.id != validated_data['presentacion_id']:
-                raise ValidationError("El estudio {0} no corresponde a esta presentacion".format(e['id']))
+        PagoPresentacionSerializer.update_estudios(validated_data['estudios_impagos'], presentacion, presentacion_id)
 
-            estudio.presentacion = presentacion
-            estudio.importe_estudio_cobrado = e['importe_estudio_cobrado']
-            estudio.importe_medicacion_cobrado = e['importe_medicacion_cobrado']
-            estudio.importe_cobrado_pension = e['importe_cobrado_pension']
-            estudio.importe_cobrado_arancel_anestesia = e['importe_cobrado_arancel_anestesia']
-            estudio.fecha_cobro = date.today()
-            estudio.save()
-
+        # Pagamos la presentacion anterior
         del validated_data['estudios_impagos']
         presentacion_serializer = PagoPresentacionSerializer(data=validated_data)
         presentacion_serializer.is_valid(raise_exception=True)
