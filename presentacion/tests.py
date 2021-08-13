@@ -526,7 +526,7 @@ class TestCobrarPresentacion(TestCase):
         assert presentacion.comprobante.estado == Comprobante.COBRADO
         assert presentacion.pago != None
 
-    def test_pago_presentacion_parcial_funciona(self):
+    def test_pago_presentacion_parcial_no_funciona_si_importe_no_es_suficiente(self):
         presentacion = Presentacion.objects.get(pk=5)
         assert presentacion.estado == Presentacion.PENDIENTE
         assert presentacion.comprobante.estado == Comprobante.NO_COBRADO
@@ -579,6 +579,44 @@ class TestCobrarPresentacion(TestCase):
         assert Estudio.objects.filter(presentacion=presentacion_nueva).count() == 2
         for estudio_id in id_impagos:
             assert Estudio.objects.get(pk=estudio_id).presentacion == presentacion_nueva
+
+    def test_pago_presentacion_parcial_utiliza_saldo_positivo(self):
+        presentacion = Presentacion.objects.get(pk=5)
+        assert presentacion.estado == Presentacion.PENDIENTE
+        assert presentacion.comprobante.estado == Comprobante.NO_COBRADO
+
+        id_pagos = [3, 6]
+        id_impagos = [4, 5]
+
+        importe = 10
+
+        datos = {
+            "estudios": self.estudios_data_json(id_pagos),
+            "estudios_impagos": self.estudios_data_json(id_impagos),
+            "retencion_impositiva": "32.00",
+            "importe": importe,
+            "nro_recibo": 1,
+        }
+
+        response = self.client.patch('/api/presentacion/5/cobrar_parcial/', data=json.dumps(datos),
+                                     content_type='application/json')
+        assert response.status_code == status.HTTP_200_OK
+
+        presentacion.refresh_from_db()
+        assert presentacion.estado == Presentacion.COBRADO
+        assert Presentacion.objects.last().saldo_positivo == importe - 4 * len(id_pagos)
+
+        presentacion = Presentacion.objects.last()
+
+        datos['estudios'] = self.estudios_data_json(id_impagos)
+        datos['estudios_impagos'] = []
+        datos['importe'] = 4*len(id_impagos) + importe - 4 * len(id_pagos)
+        response = self.client.patch(f'/api/presentacion/{presentacion.id}/cobrar_parcial/', data=json.dumps(datos),
+                                     content_type='application/json')
+
+        assert response.status_code == status.HTTP_200_OK
+        presentacion.refresh_from_db()
+        assert presentacion.estado == Presentacion.COBRADO
 
 class TestEstudiosDePresentacion(TestCase):
     fixtures = ['pacientes.json', 'medicos.json', 'practicas.json', 'obras_sociales.json',
