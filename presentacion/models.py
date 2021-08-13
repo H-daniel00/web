@@ -29,6 +29,7 @@ class Presentacion(models.Model):
     iva = models.DecimalField(max_digits=16, decimal_places=2)
     total_cobrado = models.DecimalField(db_column='total', max_digits=16, decimal_places=2, default=Decimal('0.00'))
     total_facturado = models.DecimalField(db_column='totalFacturado', max_digits=16, decimal_places=2, default=Decimal('0.00'))
+    saldo_positivo = models.DecimalField(max_digits=16, decimal_places=2, default=Decimal('0.00'))
 
     class Meta:
         db_table = 'tblFacturacion'
