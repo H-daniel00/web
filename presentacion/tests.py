@@ -9,13 +9,13 @@ from django.db.models import Q
 from rest_framework import status
 
 from presentacion.models import Presentacion
+from presentacion.obra_social_custom_code.amr_presentacion_digital import AmrRowBase
+from presentacion.obra_social_custom_code.osde_presentacion_digital import OsdeRowBase
 from obra_social.models import ObraSocial
 from estudio.models import Estudio
 from medico.models import Medico
-from comprobante.models import Comprobante, ID_TIPO_COMPROBANTE_FACTURA, ID_TIPO_COMPROBANTE_NOTA_DE_CREDITO
+from comprobante.models import Comprobante, ID_TIPO_COMPROBANTE_FACTURA
 from comprobante.afip import AfipError
-from presentacion.obra_social_custom_code.amr_presentacion_digital import AmrRowBase
-from presentacion.obra_social_custom_code.osde_presentacion_digital import OsdeRowBase
 
 class TestDetallesObrasSociales(TestCase):
     fixtures = ['pacientes.json', 'medicos.json', 'practicas.json', 'obras_sociales.json',
@@ -91,6 +91,38 @@ class TestRetrievePresentacion(TestCase):
     def test_detalles_presentacion_ok(self):
         response = self.client.get('/api/presentacion/1/')
         assert response.status_code == 200
+
+    def test_presentaciones_ordenadas_ok(self):
+        response = self.client.get('/api/presentacion/?ordering=-obra_social')
+        presentaciones = Presentacion.objects.order_by('-obra_social')
+
+        assert response.status_code == 200
+        results = json.loads(response.content).get('results')
+
+        long = presentaciones.count()
+        assert long == len(results)
+
+        obra_social_actual = results[0]['obra_social']['nombre']
+        for i in range(0, long):
+            assert presentaciones[i].obra_social.nombre == results[i]['obra_social']['nombre']
+            assert obra_social_actual >= results[i]['obra_social']['nombre']
+            obra_social_actual = results[i]['obra_social']['nombre']
+
+    def test_presentaciones_ordenadas_con_filtro_ok(self):
+        response = self.client.get('/api/presentacion/?obraSocial=1&ordering=comprobante__numero')
+        presentaciones = Presentacion.objects.filter(obra_social__id=1).order_by('comprobante__numero')
+
+        assert response.status_code == 200
+        results = json.loads(response.content).get('results')
+        
+        long = presentaciones.count()
+        assert long == len(results)
+
+        comprobante_actual = results[0]['comprobante']['numero']
+        for i in range(0, long):
+            assert presentaciones[i].comprobante.numero == results[i]['comprobante']['numero']
+            assert comprobante_actual <= results[i]['comprobante']['numero']
+            comprobante_actual = results[i]['comprobante']['numero']
 
 class TestCobrarPresentacion(TestCase):
     fixtures = ['pacientes.json', 'medicos.json', 'practicas.json', 'obras_sociales.json',
