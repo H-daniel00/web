@@ -279,9 +279,7 @@ class PagoPresentacionSerializer(serializers.ModelSerializer):
             retencion_impositiva=validated_data['retencion_impositiva'],
         )
 
-class PagoPresentacionParcialSerializer(serializers.ModelSerializer):
-    presentacion_id = serializers.IntegerField()
-    estudios = serializers.ListField()
+class PagoPresentacionParcialSerializer(PagoPresentacionSerializer):
     estudios_impagos = serializers.ListField()
     importe = serializers.DecimalField(16, 2)
 
@@ -291,6 +289,10 @@ class PagoPresentacionParcialSerializer(serializers.ModelSerializer):
             'presentacion_id', 'estudios', 'estudios_impagos', 'fecha',
             'retencion_impositiva', 'nro_recibo', 'importe'
         )
+
+    def validate_estudios(self, estudios):
+        super().validate_estudios(estudios + self.initial_data['estudios_impagos'])
+        return estudios
 
     def create(self, validated_data):
         # Traemos la presentacion
