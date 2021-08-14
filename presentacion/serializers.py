@@ -217,7 +217,7 @@ class PagoPresentacionSerializer(serializers.ModelSerializer):
             'nro_recibo',
         )
 
-    def update_estudios(estudios_data, presentacion, presentacion_id, fecha_cobro = None):
+    def update_estudios(self, estudios_data, presentacion, presentacion_id, fecha_cobro = None):
         for e in estudios_data:
             estudio = Estudio.objects.get(pk=e['id'])
 
@@ -258,7 +258,7 @@ class PagoPresentacionSerializer(serializers.ModelSerializer):
 
     def create(self, validated_data):
         presentacion = Presentacion.objects.get(pk=validated_data['presentacion_id'])
-        PagoPresentacionSerializer.update_estudios(validated_data['estudios'], presentacion, presentacion.id, date.today())
+        self.update_estudios(validated_data['estudios'], presentacion, presentacion.id, date.today())
         total = sum([
             e.importe_cobrado_pension
             + e.importe_cobrado_arancel_anestesia
@@ -320,7 +320,7 @@ class PagoPresentacionParcialSerializer(PagoPresentacionSerializer):
             presentacion.saldo_positivo = validated_data['importe'] # Ya que validate_importe devuelve el saldo
             presentacion.save()
 
-            PagoPresentacionSerializer.update_estudios(validated_data['estudios_impagos'], presentacion, presentacion_id)
+            self.update_estudios(validated_data['estudios_impagos'], presentacion, presentacion_id)
 
         # Pagamos la presentacion anterior
         del validated_data['estudios_impagos']
