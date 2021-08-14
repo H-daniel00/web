@@ -294,27 +294,27 @@ class PagoPresentacionParcialSerializer(PagoPresentacionSerializer):
         super().validate_estudios(estudios + self.initial_data['estudios_impagos'])
         return estudios
 
-    def create(self, validated_data):
-        # Traemos la presentacion
-        presentacion_id = validated_data['presentacion_id']
-        presentacion = Presentacion.objects.get(pk=presentacion_id)
-
-        # Calculamos el importe total de la presentacion y el saldo restante
+    def validate_importe(self, importe):
         importe_total = sum([Decimal(e['importe_estudio_cobrado'])
             + Decimal(e['importe_medicacion_cobrado'])
             + Decimal(e['importe_cobrado_pension'])
             + Decimal(e['importe_cobrado_arancel_anestesia'])
             for e in self.initial_data['estudios']])
 
-        importe = validated_data['importe'] + presentacion.saldo_positivo
-        saldo = Decimal(importe - importe_total).quantize(Decimal('.01'), ROUND_UP)
+        saldo = Presentacion.objects.get(pk=self.initial_data['presentacion_id']).saldo_positivo
+        importe_cobrado = importe + saldo
 
-        if saldo < 0:
+        if importe_cobrado < importe_total:
             raise ValidationError('El importe ingresado no es suficiente para pagar los estudios seleccionados')
 
+        return importe_cobrado - importe_total
+
+    def create(self, validated_data):
         # Creamos una presentacion extra compartiendo todos los datos
+        presentacion_id = validated_data['presentacion_id']
+        presentacion = Presentacion.objects.get(pk=presentacion_id)
         presentacion.id = None
-        presentacion.saldo_positivo = saldo
+        presentacion.saldo_positivo = validated_data['importe'] # Ya que validate_importe devuelve el saldo
         presentacion.save()
 
         # Se actualizan los estudios impagos y se los asocia a la nueva presentacion
