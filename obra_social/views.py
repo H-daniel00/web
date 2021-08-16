@@ -1,9 +1,10 @@
 from django.http import JsonResponse
-from rest_framework import filters, viewsets, generics
+from rest_framework import filters, viewsets
 from rest_framework.decorators import detail_route
+
 from estudio.models import Estudio, ID_SUCURSAL_CEDIR
-from obra_social.models import ObraSocial
 from estudio.serializers import EstudioSinPresentarSerializer
+from obra_social.models import ObraSocial
 from obra_social.serializers import ObraSocialSerializer
 
 class ObraSocialNombreFilterBackend(filters.BaseFilterBackend):
@@ -24,6 +25,17 @@ class ObraSocialViewSet(viewsets.ModelViewSet):
     serializer_class = ObraSocialSerializer
     filter_backends = (ObraSocialNombreFilterBackend, )
     pagination_class = None
+
+    @detail_route(methods=['get'])
+    def observaciones(self, request, pk=None):
+        try:
+            obra_social = ObraSocial.objects.get(pk=pk)
+            response = JsonResponse({'observaciones': obra_social.observaciones}, status=200)
+        except ObraSocial.DoesNotExist as ex:
+            response = JsonResponse({'error': str(ex)}, status=400)
+        except Exception as ex:
+            response = JsonResponse({'error': str(ex)}, status=500)
+        return response        
 
     @detail_route(methods=['get'])
     def estudios_sin_presentar(self, request, pk=None):
