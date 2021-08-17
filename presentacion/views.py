@@ -13,7 +13,7 @@ from common.drf.views import StandardResultsSetPagination
 from presentacion.models import Presentacion
 from presentacion.serializers import PagoPresentacionSerializer, PresentacionCreateSerializer, \
     PresentacionRetrieveSerializer, PresentacionSerializer, PresentacionUpdateSerializer, \
-    PresentacionRefacturarSerializer, PresentacionImprimirSerializer
+    PresentacionRefacturarSerializer, PagoPresentacionParcialSerializer, PresentacionImprimirSerializer
 from presentacion.obra_social_custom_code.osde_presentacion_digital import \
     OsdeRowEstudio, OsdeRowMedicacion, OsdeRowPension, OsdeRowMaterialEspecifico
 from presentacion.obra_social_custom_code.amr_presentacion_digital import AmrRowEstudio
@@ -223,6 +223,23 @@ class PresentacionViewSet(viewsets.ModelViewSet):
             response = JsonResponse({'error': str(ex)}, status=400)
         except Exception as ex:
             response = JsonResponse({'error': str(ex)}, status=500)
+        return response
+
+    @detail_route(methods=['patch'])
+    def cobrar_parcial(self, request, pk=None):
+        try:
+            pago_data = request.data
+            pago_data['presentacion_id'] = pk
+            pago_data['fecha'] = date.today()
+            pago_serializer = PagoPresentacionParcialSerializer(data=pago_data)
+            pago_serializer.is_valid(raise_exception=True)
+            pago_serializer.save()
+            response = JsonResponse({}, status=status.HTTP_200_OK)
+        except ValidationError as ex:
+            response = JsonResponse({'error': str(ex)}, status=status.HTTP_400_BAD_REQUEST)
+        except Exception as ex:
+            response = JsonResponse({'error': str(ex)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
         return response
 
     @detail_route(methods=['get'])

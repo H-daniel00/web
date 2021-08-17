@@ -128,6 +128,17 @@ class TestCobrarPresentacion(TestCase):
     fixtures = ['pacientes.json', 'medicos.json', 'practicas.json', 'obras_sociales.json',
                 'anestesistas.json', 'presentaciones.json', 'comprobantes.json', 'estudios.json', "medicamentos.json"]
 
+    def estudios_data_json(self, ids):
+        return [
+            {
+                "id": estudio_id,
+                "importe_cobrado_pension": "1.00",
+                "importe_cobrado_arancel_anestesia": "1.00",
+                "importe_estudio_cobrado": "1.00",
+                "importe_medicacion_cobrado": "1.00",
+            } for estudio_id in ids
+        ]
+
     def setUp(self):
         self.user = User.objects.create_user(username='test', password='test', is_superuser=True)
         self.client = Client(HTTP_GET='localhost')
@@ -493,6 +504,119 @@ class TestCobrarPresentacion(TestCase):
         assert estudio.presentacion == presentacion
         assert estudio.fecha_cobro == str(date.today())
 
+    def test_pago_presentacion_parcial_funciona(self):
+        presentacion = Presentacion.objects.get(pk=5)
+        assert presentacion.estado == Presentacion.PENDIENTE
+        assert presentacion.comprobante.estado == Comprobante.NO_COBRADO
+
+        datos = {
+            "estudios": self.estudios_data_json([3, 4, 5]),
+            "estudios_impagos": self.estudios_data_json([6]),
+            "retencion_impositiva": "32.00",
+            "nro_recibo": 1,
+            "importe": "20",
+        }
+
+        response = self.client.patch('/api/presentacion/5/cobrar_parcial/', data=json.dumps(datos),
+                                     content_type='application/json')
+
+        assert response.status_code == status.HTTP_200_OK
+        presentacion = Presentacion.objects.get(pk=5)
+        assert presentacion.estado == Presentacion.COBRADO
+        assert presentacion.comprobante.estado == Comprobante.COBRADO
+        assert presentacion.pago != None
+
+    def test_pago_presentacion_parcial_no_funciona_si_importe_no_es_suficiente(self):
+        presentacion = Presentacion.objects.get(pk=5)
+        assert presentacion.estado == Presentacion.PENDIENTE
+        assert presentacion.comprobante.estado == Comprobante.NO_COBRADO
+
+        datos = {
+            "estudios": self.estudios_data_json([3, 4, 5]),
+            "estudios_impagos": self.estudios_data_json([6]),
+            "retencion_impositiva": "32.00",
+            "nro_recibo": 1,
+            "importe": "3",
+        }
+
+        response = self.client.patch('/api/presentacion/5/cobrar_parcial/', data=json.dumps(datos),
+                                     content_type='application/json')
+
+        assert response.status_code == status.HTTP_400_BAD_REQUEST
+        datos['importe'] = '20'
+
+        response = self.client.patch('/api/presentacion/5/cobrar_parcial/', data=json.dumps(datos),
+                                     content_type='application/json')
+        assert response.status_code == status.HTTP_200_OK
+
+    def test_pago_presentacion_parcial_crea_presentacion_con_estudios_impagos(self):
+        presentacion = Presentacion.objects.get(pk=5)
+        assert presentacion.estado == Presentacion.PENDIENTE
+        assert presentacion.comprobante.estado == Comprobante.NO_COBRADO
+        cantidad_presentaciones = Presentacion.objects.count()
+
+        id_pagos = [3, 6]
+        id_impagos = [4, 5]
+
+        datos = {
+            "estudios": self.estudios_data_json(id_pagos),
+            "estudios_impagos": self.estudios_data_json(id_impagos),
+            "retencion_impositiva": "32.00",
+            "importe": "20",
+            "nro_recibo": 1,
+        }
+
+        response = self.client.patch('/api/presentacion/5/cobrar_parcial/', data=json.dumps(datos),
+                                     content_type='application/json')
+
+        assert response.status_code == status.HTTP_200_OK
+        assert cantidad_presentaciones + 1 == Presentacion.objects.count()
+        presentacion_nueva = Presentacion.objects.last()
+        assert presentacion_nueva.obra_social == presentacion.obra_social
+        assert presentacion_nueva.sucursal == presentacion.sucursal
+        assert presentacion_nueva.comprobante == presentacion.comprobante
+        assert presentacion_nueva.total_facturado == presentacion.total_facturado
+        assert Estudio.objects.filter(presentacion=presentacion_nueva).count() == 2
+        for estudio_id in id_impagos:
+            assert Estudio.objects.get(pk=estudio_id).presentacion == presentacion_nueva
+
+    def test_pago_presentacion_parcial_utiliza_saldo_positivo(self):
+        presentacion = Presentacion.objects.get(pk=5)
+        assert presentacion.estado == Presentacion.PENDIENTE
+        assert presentacion.comprobante.estado == Comprobante.NO_COBRADO
+
+        id_pagos = [3, 6]
+        id_impagos = [4, 5]
+
+        importe = 10
+
+        datos = {
+            "estudios": self.estudios_data_json(id_pagos),
+            "estudios_impagos": self.estudios_data_json(id_impagos),
+            "retencion_impositiva": "32.00",
+            "importe": importe,
+            "nro_recibo": 1,
+        }
+
+        response = self.client.patch('/api/presentacion/5/cobrar_parcial/', data=json.dumps(datos),
+                                     content_type='application/json')
+        assert response.status_code == status.HTTP_200_OK
+
+        presentacion.refresh_from_db()
+        assert presentacion.estado == Presentacion.COBRADO
+        assert Presentacion.objects.last().saldo_positivo == importe - 4 * len(id_pagos)
+
+        presentacion = Presentacion.objects.last()
+
+        datos['estudios'] = self.estudios_data_json(id_impagos)
+        datos['estudios_impagos'] = []
+        datos['importe'] = 4*len(id_impagos) + importe - 4 * len(id_pagos)
+        response = self.client.patch(f'/api/presentacion/{presentacion.id}/cobrar_parcial/', data=json.dumps(datos),
+                                     content_type='application/json')
+
+        assert response.status_code == status.HTTP_200_OK
+        presentacion.refresh_from_db()
+        assert presentacion.estado == Presentacion.COBRADO
 
 class TestEstudiosDePresentacion(TestCase):
     fixtures = ['pacientes.json', 'medicos.json', 'practicas.json', 'obras_sociales.json',

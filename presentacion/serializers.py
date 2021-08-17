@@ -1,12 +1,10 @@
-from decimal import Decimal
+from decimal import Decimal, ROUND_UP
 from datetime import date
 
 from rest_framework import serializers
-from rest_framework import status
 from rest_framework.serializers import ValidationError
 from presentacion.models import PagoPresentacion, Presentacion
-from obra_social.models import ObraSocial
-from comprobante.models import Comprobante, TipoComprobante, Gravado, LineaDeComprobante, ID_TIPO_COMPROBANTE_LIQUIDACION
+from comprobante.models import Comprobante
 from estudio.models import Estudio
 from estudio.serializers import EstudioDePresentacionRetrieveSerializer
 from obra_social.serializers import ObraSocialSerializer
@@ -219,6 +217,22 @@ class PagoPresentacionSerializer(serializers.ModelSerializer):
             'nro_recibo',
         )
 
+    def update_estudios(estudios_data, presentacion, presentacion_id, fecha_cobro = None):
+        for e in estudios_data:
+            estudio = Estudio.objects.get(pk=e['id'])
+
+            if estudio.presentacion.id != presentacion_id:
+                raise ValidationError("El estudio {0} no corresponde a esta presentacion".format(e['id']))
+
+            estudio.importe_estudio_cobrado = e['importe_estudio_cobrado']
+            estudio.importe_medicacion_cobrado = e['importe_medicacion_cobrado']
+            estudio.importe_cobrado_pension = e['importe_cobrado_pension']
+            estudio.importe_cobrado_arancel_anestesia = e['importe_cobrado_arancel_anestesia']
+            estudio.presentacion = presentacion
+            estudio.fecha_cobro = fecha_cobro
+
+            estudio.save()
+
     def validate_presentacion_id(self, value):
         presentacion = Presentacion.objects.get(pk=value)
         if presentacion.estado != Presentacion.PENDIENTE:
@@ -244,17 +258,7 @@ class PagoPresentacionSerializer(serializers.ModelSerializer):
 
     def create(self, validated_data):
         presentacion = Presentacion.objects.get(pk=validated_data['presentacion_id'])
-        estudios_data = validated_data['estudios']
-        for e in estudios_data:
-            estudio = Estudio.objects.get(pk=e['id'])
-            if estudio.presentacion != presentacion:
-                raise ValidationError("El estudio {0} no corresponde a esta presentacion".format(e['id']))
-            estudio.importe_estudio_cobrado = e['importe_estudio_cobrado']
-            estudio.importe_medicacion_cobrado = e['importe_medicacion_cobrado']
-            estudio.importe_cobrado_pension = e['importe_cobrado_pension']
-            estudio.importe_cobrado_arancel_anestesia = e['importe_cobrado_arancel_anestesia']
-            estudio.fecha_cobro = date.today()
-            estudio.save()
+        PagoPresentacionSerializer.update_estudios(validated_data['estudios'], presentacion, presentacion.id, date.today())
         total = sum([
             e.importe_cobrado_pension
             + e.importe_cobrado_arancel_anestesia
@@ -274,3 +278,48 @@ class PagoPresentacionSerializer(serializers.ModelSerializer):
             importe=total,
             retencion_impositiva=validated_data['retencion_impositiva'],
         )
+
+class PagoPresentacionParcialSerializer(serializers.ModelSerializer):
+    presentacion_id = serializers.IntegerField()
+    estudios = serializers.ListField()
+    estudios_impagos = serializers.ListField()
+    importe = serializers.DecimalField(16, 2)
+
+    class Meta:
+        model = PagoPresentacion
+        fields = (
+            'presentacion_id', 'estudios', 'estudios_impagos', 'fecha',
+            'retencion_impositiva', 'nro_recibo', 'importe'
+        )
+
+    def create(self, validated_data):
+        # Traemos la presentacion
+        presentacion_id = validated_data['presentacion_id']
+        presentacion = Presentacion.objects.get(pk=presentacion_id)
+
+        # Calculamos el importe total de la presentacion y el saldo restante
+        importe_total = sum([Decimal(e['importe_estudio_cobrado'])
+            + Decimal(e['importe_medicacion_cobrado'])
+            + Decimal(e['importe_cobrado_pension'])
+            + Decimal(e['importe_cobrado_arancel_anestesia'])
+            for e in self.initial_data['estudios']])
+
+        importe = validated_data['importe'] + presentacion.saldo_positivo
+        saldo = Decimal(importe - importe_total).quantize(Decimal('.01'), ROUND_UP)
+
+        if saldo < 0:
+            raise ValidationError('El importe ingresado no es suficiente para pagar los estudios seleccionados')
+
+        # Creamos una presentacion extra compartiendo todos los datos
+        presentacion.id = None
+        presentacion.saldo_positivo = saldo
+        presentacion.save()
+
+        # Se actualizan los estudios impagos y se los asocia a la nueva presentacion
+        PagoPresentacionSerializer.update_estudios(validated_data['estudios_impagos'], presentacion, presentacion_id)
+
+        # Pagamos la presentacion anterior
+        del validated_data['estudios_impagos']
+        presentacion_serializer = PagoPresentacionSerializer(data=validated_data)
+        presentacion_serializer.is_valid(raise_exception=True)
+        return presentacion_serializer.save()
