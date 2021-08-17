@@ -146,7 +146,6 @@ class TestCobrarPresentacion(TestCase):
 
     def test_cobrar_presentacion_ok(self):
         presentacion = Presentacion.objects.get(pk=7)
-        pk_comprobante_viejo = presentacion.comprobante.pk
         assert presentacion.estado == Presentacion.PENDIENTE
         assert presentacion.comprobante.estado == Comprobante.NO_COBRADO
         datos = {
@@ -161,6 +160,8 @@ class TestCobrarPresentacion(TestCase):
             ],
             "retencion_impositiva": "32.00",
             "nro_recibo": 1,
+            "estudios_impagos": [],
+            "importe": int(presentacion.total_facturado)
         }
         response = self.client.patch('/api/presentacion/7/cobrar/', data=json.dumps(datos),
                                      content_type='application/json')
@@ -187,6 +188,8 @@ class TestCobrarPresentacion(TestCase):
             ],
             "retencion_impositiva": "32.00",
             "nro_recibo": 1,
+            "estudios_impagos": [],
+            "importe": int(presentacion.total_facturado)
         }
         response = self.client.patch('/api/presentacion/7/cobrar/', data=json.dumps(datos),
                                      content_type='application/json')
@@ -215,6 +218,8 @@ class TestCobrarPresentacion(TestCase):
             ],
             "retencion_impositiva": "32.00",
             "nro_recibo": 1,
+            "estudios_impagos": [],
+            "importe": int(presentacion.total_facturado)
         }
         response = self.client.patch('/api/presentacion/7/cobrar/', data=json.dumps(datos),
                                      content_type='application/json')
@@ -248,6 +253,8 @@ class TestCobrarPresentacion(TestCase):
             ],
             "retencion_impositiva": "32.00",
             "nro_recibo": 1,
+            "estudios_impagos": [],
+            "importe": int(presentacion.total_facturado)
         }
         response = self.client.patch('/api/presentacion/8/cobrar/', data=json.dumps(datos),
                                      content_type='application/json')
@@ -272,6 +279,8 @@ class TestCobrarPresentacion(TestCase):
             ],
             "retencion_impositiva": "32.00",
             "nro_recibo": 1,
+            "estudios_impagos": [],
+            "importe": int(presentacion.total_facturado)
         }
         response = self.client.patch('/api/presentacion/2/cobrar/', data=json.dumps(datos),
                                      content_type='application/json')
@@ -298,6 +307,8 @@ class TestCobrarPresentacion(TestCase):
             ],
             "retencion_impositiva": "32.00",
             "nro_recibo": 1,
+            "estudios_impagos": [],
+            "importe": int(presentacion.total_facturado)
         }
         response = self.client.patch('/api/presentacion/7/cobrar/', data=json.dumps(datos),
                                      content_type='application/json')
@@ -315,6 +326,8 @@ class TestCobrarPresentacion(TestCase):
             ],
             "retencion_impositiva": "32.00",
             "nro_recibo": 1,
+            "estudios_impagos": [],
+            "importe": int(presentacion.total_facturado)
         }
         response = self.client.patch('/api/presentacion/7/cobrar/', data=json.dumps(datos),
                                      content_type='application/json')
@@ -462,6 +475,8 @@ class TestCobrarPresentacion(TestCase):
             ],
             "retencion_impositiva": "32.00",
             "nro_recibo": 1,
+            "estudios_impagos": [],
+            "importe": int(presentacion.total_facturado)
         }
         response = self.client.patch('/api/presentacion/5/cobrar/', data=json.dumps(datos),
                                      content_type='application/json')
@@ -492,6 +507,8 @@ class TestCobrarPresentacion(TestCase):
             ],
             "retencion_impositiva": "32.00",
             "nro_recibo": 1,
+            "estudios_impagos": [],
+            "importe": int(presentacion.total_facturado)
         }
         response = self.client.patch('/api/presentacion/7/cobrar/', data=json.dumps(datos),
                                      content_type='application/json')
@@ -517,7 +534,7 @@ class TestCobrarPresentacion(TestCase):
             "importe": "20",
         }
 
-        response = self.client.patch('/api/presentacion/5/cobrar_parcial/', data=json.dumps(datos),
+        response = self.client.patch('/api/presentacion/5/cobrar/', data=json.dumps(datos),
                                      content_type='application/json')
 
         assert response.status_code == status.HTTP_200_OK
@@ -539,13 +556,13 @@ class TestCobrarPresentacion(TestCase):
             "importe": "3",
         }
 
-        response = self.client.patch('/api/presentacion/5/cobrar_parcial/', data=json.dumps(datos),
+        response = self.client.patch('/api/presentacion/5/cobrar/', data=json.dumps(datos),
                                      content_type='application/json')
 
         assert response.status_code == status.HTTP_400_BAD_REQUEST
         datos['importe'] = '20'
 
-        response = self.client.patch('/api/presentacion/5/cobrar_parcial/', data=json.dumps(datos),
+        response = self.client.patch('/api/presentacion/5/cobrar/', data=json.dumps(datos),
                                      content_type='application/json')
         assert response.status_code == status.HTTP_200_OK
 
@@ -566,7 +583,7 @@ class TestCobrarPresentacion(TestCase):
             "nro_recibo": 1,
         }
 
-        response = self.client.patch('/api/presentacion/5/cobrar_parcial/', data=json.dumps(datos),
+        response = self.client.patch('/api/presentacion/5/cobrar/', data=json.dumps(datos),
                                      content_type='application/json')
 
         assert response.status_code == status.HTTP_200_OK
@@ -598,7 +615,7 @@ class TestCobrarPresentacion(TestCase):
             "nro_recibo": 1,
         }
 
-        response = self.client.patch('/api/presentacion/5/cobrar_parcial/', data=json.dumps(datos),
+        response = self.client.patch('/api/presentacion/5/cobrar/', data=json.dumps(datos),
                                      content_type='application/json')
         assert response.status_code == status.HTTP_200_OK
 
@@ -611,12 +628,43 @@ class TestCobrarPresentacion(TestCase):
         datos['estudios'] = self.estudios_data_json(id_impagos)
         datos['estudios_impagos'] = []
         datos['importe'] = 4*len(id_impagos) + importe - 4 * len(id_pagos)
-        response = self.client.patch(f'/api/presentacion/{presentacion.id}/cobrar_parcial/', data=json.dumps(datos),
+        response = self.client.patch(f'/api/presentacion/{presentacion.id}/cobrar/', data=json.dumps(datos),
                                      content_type='application/json')
 
         assert response.status_code == status.HTTP_200_OK
         presentacion.refresh_from_db()
         assert presentacion.estado == Presentacion.COBRADO
+
+    def test_pago_presentacion_parcial_no_crea_presentacion_si_no_envia_estudios_impagos(self):
+        cantidad_presentaciones = Presentacion.objects.count()
+        datos = {
+            "estudios": self.estudios_data_json([3, 4, 5, 6]),
+            "estudios_impagos": [],
+            "retencion_impositiva": "32.00",
+            "nro_recibo": 1,
+        }
+
+        response = self.client.patch('/api/presentacion/5/cobrar/', data=json.dumps(datos),
+                                     content_type='application/json')
+        assert response.status_code == status.HTTP_200_OK
+        assert cantidad_presentaciones == Presentacion.objects.count()
+
+    def test_pago_presentacion_parcial_se_reinicia_una_vez_cobrado(self):
+        presentacion = Presentacion.objects.get(pk=5)
+        presentacion.saldo_positivo = 10
+        presentacion.save()
+        datos = {
+            "estudios": self.estudios_data_json([3, 4, 5, 6]),
+            "estudios_impagos": [],
+            "retencion_impositiva": "32.00",
+            "nro_recibo": 1,
+        }
+
+        response = self.client.patch('/api/presentacion/5/cobrar/', data=json.dumps(datos),
+                                     content_type='application/json')
+        assert response.status_code == status.HTTP_200_OK
+        presentacion.refresh_from_db()
+        assert presentacion.saldo_positivo == Decimal(0)
 
 class TestEstudiosDePresentacion(TestCase):
     fixtures = ['pacientes.json', 'medicos.json', 'practicas.json', 'obras_sociales.json',

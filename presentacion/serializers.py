@@ -217,7 +217,7 @@ class PagoPresentacionSerializer(serializers.ModelSerializer):
             'nro_recibo',
         )
 
-    def update_estudios(estudios_data, presentacion, presentacion_id, fecha_cobro = None):
+    def update_estudios(self, estudios_data, presentacion, presentacion_id, fecha_cobro = None):
         for e in estudios_data:
             estudio = Estudio.objects.get(pk=e['id'])
 
@@ -230,35 +230,11 @@ class PagoPresentacionSerializer(serializers.ModelSerializer):
             estudio.importe_cobrado_arancel_anestesia = e['importe_cobrado_arancel_anestesia']
             estudio.presentacion = presentacion
             estudio.fecha_cobro = fecha_cobro
-
             estudio.save()
-
-    def validate_presentacion_id(self, value):
-        presentacion = Presentacion.objects.get(pk=value)
-        if presentacion.estado != Presentacion.PENDIENTE:
-            raise ValidationError("La presentacion debe estar en estado PENDIENTE")
-        return value
-
-    def validate_estudios(self, value):
-        presentacion = Presentacion.objects.get(pk=self.initial_data['presentacion_id'])
-        estudios_data = value
-        if len(estudios_data) < presentacion.estudios.count():
-            raise ValidationError("Faltan datos de estudios")
-        required_props = ['id', 'importe_cobrado_pension',
-                'importe_cobrado_arancel_anestesia', 'importe_estudio_cobrado', 'importe_medicacion_cobrado']
-        for e in estudios_data:
-            if not all([prop in list(e.keys()) for prop in required_props]):
-                raise ValidationError("Cada estudio debe tener los campos 'id', \
-                    'importe_cobrado_pension', 'importe_cobrado_arancel_anestesia', \
-                    'importe_estudio_cobrado', 'importe_medicacion_cobrado'")
-            estudio = Estudio.objects.get(pk=e['id'])
-            if estudio.presentacion != presentacion:
-                raise ValidationError("El estudio {0} no corresponde a esta presentacion".format(e['id']))
-        return value
 
     def create(self, validated_data):
         presentacion = Presentacion.objects.get(pk=validated_data['presentacion_id'])
-        PagoPresentacionSerializer.update_estudios(validated_data['estudios'], presentacion, presentacion.id, date.today())
+        self.update_estudios(validated_data['estudios'], presentacion, presentacion.id, date.today())
         total = sum([
             e.importe_cobrado_pension
             + e.importe_cobrado_arancel_anestesia
@@ -279,9 +255,7 @@ class PagoPresentacionSerializer(serializers.ModelSerializer):
             retencion_impositiva=validated_data['retencion_impositiva'],
         )
 
-class PagoPresentacionParcialSerializer(serializers.ModelSerializer):
-    presentacion_id = serializers.IntegerField()
-    estudios = serializers.ListField()
+class PagoPresentacionParcialSerializer(PagoPresentacionSerializer):
     estudios_impagos = serializers.ListField()
     importe = serializers.DecimalField(16, 2)
 
@@ -292,31 +266,62 @@ class PagoPresentacionParcialSerializer(serializers.ModelSerializer):
             'retencion_impositiva', 'nro_recibo', 'importe'
         )
 
-    def create(self, validated_data):
-        # Traemos la presentacion
-        presentacion_id = validated_data['presentacion_id']
-        presentacion = Presentacion.objects.get(pk=presentacion_id)
+    def validate_presentacion_id(self, value):
+        presentacion = Presentacion.objects.get(pk=value)
+        if presentacion.estado != Presentacion.PENDIENTE:
+            raise ValidationError("La presentacion debe estar en estado PENDIENTE")
+        return value
 
-        # Calculamos el importe total de la presentacion y el saldo restante
+    def validate_estudios(self, value):
+        presentacion = Presentacion.objects.get(pk=self.initial_data['presentacion_id'])
+        estudios_data = value + self.initial_data['estudios_impagos']
+        if len(estudios_data) < presentacion.estudios.count():
+            raise ValidationError("Faltan datos de estudios")
+        required_props = ['id', 'importe_cobrado_pension',
+                'importe_cobrado_arancel_anestesia', 'importe_estudio_cobrado', 'importe_medicacion_cobrado']
+        for e in estudios_data:
+            if not all([prop in list(e.keys()) for prop in required_props]):
+                raise ValidationError("Cada estudio debe tener los campos 'id', \
+                    'importe_cobrado_pension', 'importe_cobrado_arancel_anestesia', \
+                    'importe_estudio_cobrado', 'importe_medicacion_cobrado'")
+            estudio = Estudio.objects.get(pk=e['id'])
+            if estudio.presentacion != presentacion:
+                raise ValidationError("El estudio {0} no corresponde a esta presentacion".format(e['id']))
+        return value
+
+    def validate_importe(self, importe):
+        if importe == 0:
+            return importe
+
         importe_total = sum([Decimal(e['importe_estudio_cobrado'])
             + Decimal(e['importe_medicacion_cobrado'])
             + Decimal(e['importe_cobrado_pension'])
             + Decimal(e['importe_cobrado_arancel_anestesia'])
             for e in self.initial_data['estudios']])
 
-        importe = validated_data['importe'] + presentacion.saldo_positivo
-        saldo = Decimal(importe - importe_total).quantize(Decimal('.01'), ROUND_UP)
+        saldo = Presentacion.objects.get(pk=self.initial_data['presentacion_id']).saldo_positivo
+        importe_cobrado = importe + saldo
 
-        if saldo < 0:
+        if importe_cobrado < importe_total:
             raise ValidationError('El importe ingresado no es suficiente para pagar los estudios seleccionados')
 
-        # Creamos una presentacion extra compartiendo todos los datos
-        presentacion.id = None
-        presentacion.saldo_positivo = saldo
+        return importe_cobrado - importe_total
+
+    def create(self, validated_data):
+        # Traemos la presentacion
+        presentacion_id = validated_data['presentacion_id']
+        presentacion = Presentacion.objects.get(pk=presentacion_id)
+        presentacion.saldo_positivo = Decimal(0)
         presentacion.save()
 
-        # Se actualizan los estudios impagos y se los asocia a la nueva presentacion
-        PagoPresentacionSerializer.update_estudios(validated_data['estudios_impagos'], presentacion, presentacion_id)
+        # Si hay estudios impagos los agregamos a una nueva presentacion
+        if validated_data['estudios_impagos']:
+            # Creamos la nueva presentacion
+            presentacion.id = None
+            presentacion.saldo_positivo = validated_data['importe'] # Ya que validate_importe devuelve el saldo
+            presentacion.save()
+
+            self.update_estudios(validated_data['estudios_impagos'], presentacion, presentacion_id)
 
         # Pagamos la presentacion anterior
         del validated_data['estudios_impagos']
