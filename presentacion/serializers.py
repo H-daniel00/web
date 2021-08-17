@@ -230,31 +230,7 @@ class PagoPresentacionSerializer(serializers.ModelSerializer):
             estudio.importe_cobrado_arancel_anestesia = e['importe_cobrado_arancel_anestesia']
             estudio.presentacion = presentacion
             estudio.fecha_cobro = fecha_cobro
-
             estudio.save()
-
-    def validate_presentacion_id(self, value):
-        presentacion = Presentacion.objects.get(pk=value)
-        if presentacion.estado != Presentacion.PENDIENTE:
-            raise ValidationError("La presentacion debe estar en estado PENDIENTE")
-        return value
-
-    def validate_estudios(self, value):
-        presentacion = Presentacion.objects.get(pk=self.initial_data['presentacion_id'])
-        estudios_data = value
-        if len(estudios_data) < presentacion.estudios.count():
-            raise ValidationError("Faltan datos de estudios")
-        required_props = ['id', 'importe_cobrado_pension',
-                'importe_cobrado_arancel_anestesia', 'importe_estudio_cobrado', 'importe_medicacion_cobrado']
-        for e in estudios_data:
-            if not all([prop in list(e.keys()) for prop in required_props]):
-                raise ValidationError("Cada estudio debe tener los campos 'id', \
-                    'importe_cobrado_pension', 'importe_cobrado_arancel_anestesia', \
-                    'importe_estudio_cobrado', 'importe_medicacion_cobrado'")
-            estudio = Estudio.objects.get(pk=e['id'])
-            if estudio.presentacion != presentacion:
-                raise ValidationError("El estudio {0} no corresponde a esta presentacion".format(e['id']))
-        return value
 
     def create(self, validated_data):
         presentacion = Presentacion.objects.get(pk=validated_data['presentacion_id'])
@@ -290,11 +266,34 @@ class PagoPresentacionParcialSerializer(PagoPresentacionSerializer):
             'retencion_impositiva', 'nro_recibo', 'importe'
         )
 
-    def validate_estudios(self, estudios):
-        super().validate_estudios(estudios + self.initial_data['estudios_impagos'])
-        return estudios
+    def validate_presentacion_id(self, value):
+        presentacion = Presentacion.objects.get(pk=value)
+        if presentacion.estado != Presentacion.PENDIENTE:
+            raise ValidationError("La presentacion debe estar en estado PENDIENTE")
+        return value
+
+    def validate_estudios(self, value):
+        presentacion = Presentacion.objects.get(pk=self.initial_data['presentacion_id'])
+        estudios_data = value + self.initial_data['estudios_impagos']
+        if len(estudios_data) < presentacion.estudios.count():
+            raise ValidationError("Faltan datos de estudios")
+        required_props = ['id', 'importe_cobrado_pension',
+                'importe_cobrado_arancel_anestesia', 'importe_estudio_cobrado', 'importe_medicacion_cobrado']
+        for e in estudios_data:
+            if not all([prop in list(e.keys()) for prop in required_props]):
+                raise ValidationError("Cada estudio debe tener los campos 'id', \
+                    'importe_cobrado_pension', 'importe_cobrado_arancel_anestesia', \
+                    'importe_estudio_cobrado', 'importe_medicacion_cobrado'")
+            estudio = Estudio.objects.get(pk=e['id'])
+            if estudio.presentacion != presentacion:
+                raise ValidationError("El estudio {0} no corresponde a esta presentacion".format(e['id']))
+        return value
 
     def validate_importe(self, importe):
+        presentacion = Presentacion.objects.get(pk=self.initial_data['presentacion_id'])
+        if importe == presentacion.total_facturado:
+            return Decimal(0)
+
         importe_total = sum([Decimal(e['importe_estudio_cobrado'])
             + Decimal(e['importe_medicacion_cobrado'])
             + Decimal(e['importe_cobrado_pension'])
