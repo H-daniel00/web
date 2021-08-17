@@ -7,29 +7,7 @@ from django.test import Client
 from django.contrib.auth.models import User
 
 from estudio.models import Estudio, Medicacion, ID_SUCURSAL_CEDIR
-from obra_social.models import ArancelObraSocial, ObraSocial
-
-class TestGetObservaciones(TestCase):
-    fixtures = ['pacientes.json', 'medicos.json', 'practicas.json', 'obras_sociales.json',
-                'anestesistas.json', 'presentaciones.json', 'comprobantes.json', 'estudios.json', 'medicamentos.json']
-
-    def setUp(self):
-        self.user = User.objects.create_user(username='test', password='test', is_superuser=True)
-        self.client = Client(HTTP_GET='localhost')
-        self.client.login(username='test', password='test')
-
-    def test_get_observaciones_anda_correctamente(self):
-        observaciones = ObraSocial.objects.get(pk=1).observaciones
-
-        response = self.client.get('/api/obra_social/1/observaciones/', {})
-        assert response.status_code == status.HTTP_200_OK
-
-        results = json.loads(response.content)
-        assert results['observaciones'] == observaciones
-
-    def test_get_observaciones_falla_con_id_invalido(self):
-        response = self.client.get('/api/obra_social/-1/observaciones/', {})
-        assert response.status_code == status.HTTP_400_BAD_REQUEST
+from obra_social.models import ArancelObraSocial
 
 class TestDetallesObrasSociales(TestCase):
     fixtures = ['pacientes.json', 'medicos.json', 'practicas.json', 'obras_sociales.json',

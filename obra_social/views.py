@@ -27,17 +27,6 @@ class ObraSocialViewSet(viewsets.ModelViewSet):
     pagination_class = None
 
     @detail_route(methods=['get'])
-    def observaciones(self, request, pk=None):
-        try:
-            obra_social = ObraSocial.objects.get(pk=pk)
-            response = JsonResponse({'observaciones': obra_social.observaciones}, status=200)
-        except ObraSocial.DoesNotExist as ex:
-            response = JsonResponse({'error': str(ex)}, status=400)
-        except Exception as ex:
-            response = JsonResponse({'error': str(ex)}, status=500)
-        return response        
-
-    @detail_route(methods=['get'])
     def estudios_sin_presentar(self, request, pk=None):
         # Un estudio no presentado en realidad deberia tener presentacion=NULL
         # El legacy le pone id=0
