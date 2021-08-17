@@ -290,9 +290,8 @@ class PagoPresentacionParcialSerializer(PagoPresentacionSerializer):
         return value
 
     def validate_importe(self, importe):
-        presentacion = Presentacion.objects.get(pk=self.initial_data['presentacion_id'])
-        if importe == presentacion.total_facturado:
-            return Decimal(0)
+        if importe == 0:
+            return importe
 
         importe_total = sum([Decimal(e['importe_estudio_cobrado'])
             + Decimal(e['importe_medicacion_cobrado'])

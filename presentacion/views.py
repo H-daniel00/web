@@ -2,6 +2,7 @@
 from typing import Dict
 from datetime import date
 from distutils.util import strtobool
+from decimal import Decimal
 
 from django.http import HttpResponse, JsonResponse
 from rest_framework import viewsets, status
@@ -11,7 +12,7 @@ from rest_framework.filters import BaseFilterBackend, OrderingFilter
 from common.drf.views import StandardResultsSetPagination
 
 from presentacion.models import Presentacion
-from presentacion.serializers import PagoPresentacionSerializer, PresentacionCreateSerializer, \
+from presentacion.serializers import PresentacionCreateSerializer, \
     PresentacionRetrieveSerializer, PresentacionSerializer, PresentacionUpdateSerializer, \
     PresentacionRefacturarSerializer, PagoPresentacionParcialSerializer, PresentacionImprimirSerializer
 from presentacion.obra_social_custom_code.osde_presentacion_digital import \
@@ -210,6 +211,7 @@ class PresentacionViewSet(viewsets.ModelViewSet):
             pago_data = request.data
             pago_data['presentacion_id'] = pk
             pago_data['fecha'] = date.today()
+            pago_data['importe'] = pago_data.get('importe', 0)
             pago_serializer = PagoPresentacionParcialSerializer(data=pago_data)
             pago_serializer.is_valid(raise_exception=True)
             pago = pago_serializer.save()
