@@ -7,7 +7,7 @@ from django.test import Client
 from django.contrib.auth.models import User
 
 from estudio.models import Estudio, Medicacion, ID_SUCURSAL_CEDIR
-from obra_social.models import ArancelObraSocial
+from obra_social.models import ArancelObraSocial, ObraSocial
 
 class TestDetallesObrasSociales(TestCase):
     fixtures = ['pacientes.json', 'medicos.json', 'practicas.json', 'obras_sociales.json',
@@ -53,3 +53,14 @@ class TestDetallesObrasSociales(TestCase):
         estudio_response["importe_estudio"] == arancel.precio
         estudio_response["importe_medicacion"] == 2
 
+    def test_estudios_sin_presentar_falla_obra_social_invalida(self):
+        response = self.client.get('/api/obra_social/-1/estudios_sin_presentar/?sucursal={}'.format(ID_SUCURSAL_CEDIR), content_type='application/json')
+        assert response.status_code == status.HTTP_400_BAD_REQUEST
+
+    def test_estudios_sin_presentar_envia_observaciones(self):
+        observaciones = ObraSocial.objects.get(pk=1).observaciones
+        response = self.client.get('/api/obra_social/1/estudios_sin_presentar/?sucursal={}'.format(ID_SUCURSAL_CEDIR), content_type='application/json')
+        assert response.status_code == status.HTTP_200_OK
+
+        content = json.loads(response.content)
+        assert observaciones == content['observaciones']
