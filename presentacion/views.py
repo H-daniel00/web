@@ -212,6 +212,7 @@ class PresentacionViewSet(viewsets.ModelViewSet):
             pago_data['presentacion_id'] = pk
             pago_data['fecha'] = date.today()
             pago_data['importe'] = pago_data.get('importe', 0)
+            pago_data['estudios_impagos'] = pago_data.get('estudios_impagos', [])
             pago_serializer = PagoPresentacionParcialSerializer(data=pago_data)
             pago_serializer.is_valid(raise_exception=True)
             pago = pago_serializer.save()
