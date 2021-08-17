@@ -649,6 +649,23 @@ class TestCobrarPresentacion(TestCase):
         assert response.status_code == status.HTTP_200_OK
         assert cantidad_presentaciones == Presentacion.objects.count()
 
+    def test_pago_presentacion_parcial_se_reinicia_una_vez_cobrado(self):
+        presentacion = Presentacion.objects.get(pk=5)
+        presentacion.saldo_positivo = 10
+        presentacion.save()
+        datos = {
+            "estudios": self.estudios_data_json([3, 4, 5, 6]),
+            "estudios_impagos": [],
+            "retencion_impositiva": "32.00",
+            "nro_recibo": 1,
+        }
+
+        response = self.client.patch('/api/presentacion/5/cobrar/', data=json.dumps(datos),
+                                     content_type='application/json')
+        assert response.status_code == status.HTTP_200_OK
+        presentacion.refresh_from_db()
+        assert presentacion.saldo_positivo == Decimal(0)
+
 class TestEstudiosDePresentacion(TestCase):
     fixtures = ['pacientes.json', 'medicos.json', 'practicas.json', 'obras_sociales.json',
     'anestesistas.json', 'presentaciones.json', 'comprobantes.json', 'estudios.json', "medicamentos.json"]

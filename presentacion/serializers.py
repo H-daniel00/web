@@ -308,12 +308,14 @@ class PagoPresentacionParcialSerializer(PagoPresentacionSerializer):
         return importe_cobrado - importe_total
 
     def create(self, validated_data):
+        # Traemos la presentacion
+        presentacion_id = validated_data['presentacion_id']
+        presentacion = Presentacion.objects.get(pk=presentacion_id)
+        presentacion.saldo_positivo = Decimal(0)
+        presentacion.save()
+
         # Si hay estudios impagos los agregamos a una nueva presentacion
         if validated_data['estudios_impagos']:
-            # Traemos la presentacion
-            presentacion_id = validated_data['presentacion_id']
-            presentacion = Presentacion.objects.get(pk=presentacion_id)
-
             # Creamos la nueva presentacion
             presentacion.id = None
             presentacion.saldo_positivo = validated_data['importe'] # Ya que validate_importe devuelve el saldo
