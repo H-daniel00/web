@@ -1,6 +1,7 @@
 from django.http import JsonResponse
 from rest_framework import filters, viewsets
 from rest_framework.decorators import detail_route
+from rest_framework.serializers import ValidationError
 
 from estudio.models import Estudio, ID_SUCURSAL_CEDIR
 from estudio.serializers import EstudioSinPresentarSerializer
@@ -32,16 +33,24 @@ class ObraSocialViewSet(viewsets.ModelViewSet):
         # El legacy le pone id=0
         # Como aca presentacion es FK (como corresponde), esto esta bastante DUDOSO por ahora y complica despues el serializer
         # Cuando el legacy arregle eso (o lo tiremos) esto deberia cambiar para buscar presentacion=None
-        sucursal = request.query_params.get('sucursal', default=ID_SUCURSAL_CEDIR)
-        estudios = Estudio.objects.filter(
-            obra_social__pk=pk,
-            es_pago_contra_factura=0,
-            presentacion_id=0,
-            fecha__year__gt=2017,
-            sucursal=sucursal,
-        ).order_by('fecha', 'id')
         try:
-            response = JsonResponse(EstudioSinPresentarSerializer(estudios, many=True).data, status=200, safe=False)
+            sucursal = request.query_params.get('sucursal', default=ID_SUCURSAL_CEDIR)
+            estudios = Estudio.objects.filter(
+                obra_social__pk=pk,
+                es_pago_contra_factura=0,
+                presentacion_id=0,
+                fecha__year__gt=2017,
+                sucursal=sucursal,
+            ).order_by('fecha', 'id')
+            datos = { 
+                'estudios': EstudioSinPresentarSerializer(estudios, many=True).data,
+                'observaciones': ObraSocial.objects.get(pk=pk).observaciones
+            }
+            response = JsonResponse(datos, status=200, safe=False)
+        except ValidationError as ex:
+            response = JsonResponse({'error': str(ex)}, status=400)
+        except ObraSocial.DoesNotExist as ex:
+            response = JsonResponse({'error': str(ex)}, status=400)
         except Exception as ex:
             response = JsonResponse({'error': str(ex)}, status=500)
         return response
