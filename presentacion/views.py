@@ -210,7 +210,7 @@ class PresentacionViewSet(viewsets.ModelViewSet):
             pago_data = request.data
             pago_data['presentacion_id'] = pk
             pago_data['fecha'] = date.today()
-            pago_serializer = PagoPresentacionSerializer(data=pago_data)
+            pago_serializer = PagoPresentacionParcialSerializer(data=pago_data)
             pago_serializer.is_valid(raise_exception=True)
             pago = pago_serializer.save()
             diferencia_facturada = pago.presentacion.total_facturado - pago.importe
@@ -223,23 +223,6 @@ class PresentacionViewSet(viewsets.ModelViewSet):
             response = JsonResponse({'error': str(ex)}, status=400)
         except Exception as ex:
             response = JsonResponse({'error': str(ex)}, status=500)
-        return response
-
-    @detail_route(methods=['patch'])
-    def cobrar_parcial(self, request, pk=None):
-        try:
-            pago_data = request.data
-            pago_data['presentacion_id'] = pk
-            pago_data['fecha'] = date.today()
-            pago_serializer = PagoPresentacionParcialSerializer(data=pago_data)
-            pago_serializer.is_valid(raise_exception=True)
-            pago_serializer.save()
-            response = JsonResponse({}, status=status.HTTP_200_OK)
-        except ValidationError as ex:
-            response = JsonResponse({'error': str(ex)}, status=status.HTTP_400_BAD_REQUEST)
-        except Exception as ex:
-            response = JsonResponse({'error': str(ex)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
-
         return response
 
     @detail_route(methods=['get'])
