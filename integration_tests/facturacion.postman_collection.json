@@ -422,7 +422,7 @@
 								"id": "79424391-7b35-46e3-9c7e-c882c4c929eb",
 								"exec": [
 									"res = pm.response;",
-									"estudios = res.json()",
+									"estudios = res.json()['estudios']",
 									"pm.test(\"estudios_sin_presentar status test\", function () {",
 									"    pm.expect(res).to.have.status(200);",
 									"});",
@@ -733,7 +733,7 @@
 											"    pm.expect(res).to.have.status(200);",
 											"});",
 											"pm.test(\"Presentacion incluye estudio\", function () {",
-											"    pm.expect(res.json().some((e) => e.id == pm.collectionVariables.get(\"idEstudio\")));",
+											"    pm.expect(res.json()['estudios'].some((e) => e.id == pm.collectionVariables.get(\"idEstudio\")));",
 											"});",
 											"if (\"error\" in pm.response.json()) {",
 											"    console.error(pm.response.json().error)",
