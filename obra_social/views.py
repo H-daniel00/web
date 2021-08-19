@@ -50,7 +50,7 @@ class ObraSocialViewSet(viewsets.ModelViewSet):
         except ValidationError as ex:
             response = JsonResponse({'error': str(ex)}, status=400)
         except ObraSocial.DoesNotExist as ex:
-            response = JsonResponse({'error': str(ex)}, status=400)
+            response = JsonResponse({'error': 'Obra social invalida'}, status=400)
         except Exception as ex:
             response = JsonResponse({'error': str(ex)}, status=500)
         return response

@@ -151,7 +151,7 @@ class PresentacionViewSet(viewsets.ModelViewSet):
         except ValidationError as ex:
             response = JsonResponse({'error': str(ex)}, status=400)
         except Presentacion.DoesNotExist as ex:
-            response = JsonResponse({'error': str(ex)}, status=400)
+            response = JsonResponse({'error': 'Presentacion invalida'}, status=400)
         except Exception as ex:
             response = JsonResponse({'error': str(ex)}, status=500)
         return response
