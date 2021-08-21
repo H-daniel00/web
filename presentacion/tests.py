@@ -683,13 +683,27 @@ class TestEstudiosDePresentacion(TestCase):
         estudio.pension = 6
         estudio.arancel_anestesia = 7
         estudio.save()
+
         response = self.client.get('/api/presentacion/1/estudios/')
-        estudios_response = json.loads(response.content)
-        estudio_data = [e for e in estudios_response if e["id"] == 1][0]
+        assert response.status_code == status.HTTP_200_OK
+
+        content = json.loads(response.content)
+        estudio_data = [e for e in content['estudios'] if e["id"] == 1][0]
         assert Decimal(estudio_data["importe_estudio"]) == 4
         assert Decimal(estudio_data["pension"]) == 6
         assert Decimal(estudio_data["arancel_anestesia"]) == 7
 
+    def test_get_estudios_devuelve_observaciones(self):
+        presentacion = Presentacion.objects.get(pk=1)
+        response = self.client.get('/api/presentacion/1/estudios/')
+        assert response.status_code == status.HTTP_200_OK
+
+        content = json.loads(response.content)
+        assert content['observaciones'] == presentacion.obra_social.observaciones
+
+    def test_get_estudios_falla_con_id_invalido(self):
+        response = self.client.get('/api/presentacion/-1/estudios/')
+        assert response.status_code == status.HTTP_400_BAD_REQUEST
 
 class TestCrearPresentacion(TestCase):
     fixtures = ['pacientes.json', 'medicos.json', 'practicas.json', 'obras_sociales.json',

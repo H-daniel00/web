@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 import json
+from rest_framework import status
 
 from django.test import TestCase
 from django.test import Client
@@ -21,9 +22,12 @@ class TestDetallesObrasSociales(TestCase):
         estudio = Estudio.objects.get(pk=12)
         assert estudio.presentacion_id == 0
         assert estudio.obra_social.pk == 1
+
         response = self.client.get('/api/obra_social/1/estudios_sin_presentar/?sucursal={}'.format(ID_SUCURSAL_CEDIR), content_type='application/json')
-        estudios_response = json.loads(response.content)
-        assert any([e["id"] == 12 for e in estudios_response])
+
+        assert response.status_code == status.HTTP_200_OK
+        content = json.loads(response.content)
+        assert any([e["id"] == 12 for e in content['estudios']])
 
     def test_estudios_sin_presentar_sugiere_importes(self):
         estudio = Estudio.objects.get(pk=12)
@@ -41,8 +45,22 @@ class TestDetallesObrasSociales(TestCase):
         assert mat_esp.medicamento.tipo == "Mat Esp"
         assert mat_esp.importe == 1
         assert len(estudio.estudioXmedicamento.all()) == 2
+
         response = self.client.get('/api/obra_social/1/estudios_sin_presentar/?sucursal={}'.format(ID_SUCURSAL_CEDIR), content_type='application/json')
-        estudio_response = [e for e in json.loads(response.content) if e["id"] == 12][0]
+        assert response.status_code == status.HTTP_200_OK
+
+        estudio_response = [e for e in json.loads(response.content)['estudios'] if e["id"] == 12][0]
         estudio_response["importe_estudio"] == arancel.precio
         estudio_response["importe_medicacion"] == 2
 
+    def test_estudios_sin_presentar_falla_obra_social_invalida(self):
+        response = self.client.get('/api/obra_social/-1/estudios_sin_presentar/?sucursal={}'.format(ID_SUCURSAL_CEDIR), content_type='application/json')
+        assert response.status_code == status.HTTP_400_BAD_REQUEST
+
+    def test_estudios_sin_presentar_envia_observaciones(self):
+        observaciones = ObraSocial.objects.get(pk=1).observaciones
+        response = self.client.get('/api/obra_social/1/estudios_sin_presentar/?sucursal={}'.format(ID_SUCURSAL_CEDIR), content_type='application/json')
+        assert response.status_code == status.HTTP_200_OK
+
+        content = json.loads(response.content)
+        assert observaciones == content['observaciones']

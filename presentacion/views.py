@@ -140,11 +140,19 @@ class PresentacionViewSet(viewsets.ModelViewSet):
 
     @detail_route(methods=['get'])
     def estudios(self, request, pk=None):
-        presentacion = Presentacion.objects.get(pk=pk)
-        sucursal = request
-        estudios = presentacion.estudios.all().order_by('fecha', 'id')
         try:
-            response = JsonResponse(EstudioDePresentacionRetrieveSerializer(estudios, many=True).data, safe=False)
+            presentacion = Presentacion.objects.get(pk=pk)
+            sucursal = request
+            estudios = presentacion.estudios.all().order_by('fecha', 'id')
+            content = {
+                'estudios': EstudioDePresentacionRetrieveSerializer(estudios, many=True).data,
+                'observaciones': presentacion.obra_social.observaciones
+            }
+            response = JsonResponse(content, safe=False)
+        except ValidationError as ex:
+            response = JsonResponse({'error': str(ex)}, status=400)
+        except Presentacion.DoesNotExist as ex:
+            response = JsonResponse({'error': 'Presentacion invalida'}, status=400)
         except Exception as ex:
             response = JsonResponse({'error': str(ex)}, status=500)
         return response

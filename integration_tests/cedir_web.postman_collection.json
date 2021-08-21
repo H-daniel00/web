@@ -1,6 +1,6 @@
 {
 	"info": {
-		"_postman_id": "41aed9f6-c245-44d3-a193-e9292c243803",
+		"_postman_id": "a9798de8-fce9-4977-a364-a7319629c373",
 		"name": "CEDIR Collection",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
 	},
@@ -14,7 +14,6 @@
 						{
 							"listen": "test",
 							"script": {
-								"id": "646f4c90-d040-4c17-8685-e467d6d67755",
 								"exec": [
 									"res = pm.response;",
 									"pm.test(\"Retrieve OS status test\", function () {",
@@ -31,7 +30,6 @@
 						{
 							"listen": "prerequest",
 							"script": {
-								"id": "ac6edb71-190a-4b5e-a125-e315199e0b3a",
 								"exec": [
 									"if (pm.variables.get(\"token\", null) === undefined) {",
 									"      console.log(\"no\");",
@@ -72,8 +70,7 @@
 							"variable": [
 								{
 									"key": "id",
-									"value": "{{idObraSocial}}",
-									"type": "string"
+									"value": "{{idObraSocial}}"
 								}
 							]
 						}
@@ -125,7 +122,6 @@
 						{
 							"listen": "test",
 							"script": {
-								"id": "028846d8-dd20-4e04-9c72-94f58e9dc50b",
 								"exec": [
 									"res = pm.response;",
 									"pm.test(\"Detalle AMR status test\", function () {",
@@ -168,13 +164,51 @@
 							"variable": [
 								{
 									"key": "id",
-									"value": "{{idObraSocial}}",
-									"type": "string"
+									"value": "{{idObraSocial}}"
 								}
 							]
 						}
 					},
 					"response": [
+						{
+							"name": "String en formato de AMR.",
+							"originalRequest": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "Token bb4a5ac45c80ff1f71076a6147f8c8eedfc82db8"
+									}
+								],
+								"url": {
+									"raw": "{{baseUrl}}/presentacion/:id/get_detalle_amr",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"presentacion",
+										":id",
+										"get_detalle_amr"
+									],
+									"variable": [
+										{
+											"key": "id"
+										}
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "text",
+							"header": [
+								{
+									"key": "Content-Type",
+									"value": "text/plain"
+								}
+							],
+							"cookie": [],
+							"body": "<string>"
+						},
 						{
 							"name": "Detalle para AMR",
 							"originalRequest": {
@@ -234,45 +268,6 @@
 							],
 							"cookie": [],
 							"body": "\n           00001311       13542701PLAN400TIBALDI, SIMON                033666373FE0032020190701420101 MCONSULTA                      00001012882RAINOLDI, FEDERICO            000000003270000000000000000100100N012882RAINOLDI, FEDERICO                       0000000000000"
-						},
-						{
-							"name": "String en formato de AMR.",
-							"originalRequest": {
-								"method": "GET",
-								"header": [
-									{
-										"key": "Authorization",
-										"value": "Token bb4a5ac45c80ff1f71076a6147f8c8eedfc82db8"
-									}
-								],
-								"url": {
-									"raw": "{{baseUrl}}/presentacion/:id/get_detalle_amr",
-									"host": [
-										"{{baseUrl}}"
-									],
-									"path": [
-										"presentacion",
-										":id",
-										"get_detalle_amr"
-									],
-									"variable": [
-										{
-											"key": "id"
-										}
-									]
-								}
-							},
-							"status": "OK",
-							"code": 200,
-							"_postman_previewlanguage": "text",
-							"header": [
-								{
-									"key": "Content-Type",
-									"value": "text/plain"
-								}
-							],
-							"cookie": [],
-							"body": "<string>"
 						}
 					]
 				},
@@ -282,7 +277,6 @@
 						{
 							"listen": "test",
 							"script": {
-								"id": "e4f18a31-9ae8-46ba-88d2-84f090f5002d",
 								"exec": [
 									"res = pm.response;",
 									"pm.test(\"Detalle OSDE status test\", function () {",
@@ -310,13 +304,51 @@
 							"variable": [
 								{
 									"key": "id",
-									"value": "{{idPresentacion}}",
-									"type": "string"
+									"value": "{{idPresentacion}}"
 								}
 							]
 						}
 					},
 					"response": [
+						{
+							"name": "String en formato de OSDE.",
+							"originalRequest": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "Token bb4a5ac45c80ff1f71076a6147f8c8eedfc82db8"
+									}
+								],
+								"url": {
+									"raw": "{{baseUrl}}/presentacion/:id/get_detalle_osde",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"presentacion",
+										":id",
+										"get_detalle_osde"
+									],
+									"variable": [
+										{
+											"key": "id"
+										}
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "text",
+							"header": [
+								{
+									"key": "Content-Type",
+									"value": "text/plain"
+								}
+							],
+							"cookie": [],
+							"body": "<string>"
+						},
 						{
 							"name": "Detalle para OSDE",
 							"originalRequest": {
@@ -371,45 +403,6 @@
 							],
 							"cookie": [],
 							"body": "\n 051861   13542701PLA   4201011           001   010719   00   000000   0   000000000032700   M   0000012882   S   M   0000012882   S   FE0032   000000"
-						},
-						{
-							"name": "String en formato de OSDE.",
-							"originalRequest": {
-								"method": "GET",
-								"header": [
-									{
-										"key": "Authorization",
-										"value": "Token bb4a5ac45c80ff1f71076a6147f8c8eedfc82db8"
-									}
-								],
-								"url": {
-									"raw": "{{baseUrl}}/presentacion/:id/get_detalle_osde",
-									"host": [
-										"{{baseUrl}}"
-									],
-									"path": [
-										"presentacion",
-										":id",
-										"get_detalle_osde"
-									],
-									"variable": [
-										{
-											"key": "id"
-										}
-									]
-								}
-							},
-							"status": "OK",
-							"code": 200,
-							"_postman_previewlanguage": "text",
-							"header": [
-								{
-									"key": "Content-Type",
-									"value": "text/plain"
-								}
-							],
-							"cookie": [],
-							"body": "<string>"
 						}
 					]
 				},
@@ -419,10 +412,9 @@
 						{
 							"listen": "test",
 							"script": {
-								"id": "79424391-7b35-46e3-9c7e-c882c4c929eb",
 								"exec": [
 									"res = pm.response;",
-									"estudios = res.json()",
+									"estudios = res.json()['estudios']",
 									"pm.test(\"estudios_sin_presentar status test\", function () {",
 									"    pm.expect(res).to.have.status(200);",
 									"});",
@@ -440,7 +432,6 @@
 						{
 							"listen": "prerequest",
 							"script": {
-								"id": "a7e17bc7-0299-4a18-9ca4-9dafeeca5241",
 								"exec": [
 									""
 								],
@@ -485,8 +476,7 @@
 							"variable": [
 								{
 									"key": "id",
-									"value": "{{idObraSocial}}",
-									"type": "string"
+									"value": "{{idObraSocial}}"
 								}
 							]
 						}
@@ -549,8 +539,7 @@
 						}
 					]
 				}
-			],
-			"protocolProfileBehavior": {}
+			]
 		},
 		{
 			"name": "presentacion",
@@ -564,7 +553,6 @@
 								{
 									"listen": "test",
 									"script": {
-										"id": "9d1aa95b-82ec-4ba1-8d63-83d10d3f72b7",
 										"exec": [
 											"res = pm.response;",
 											"pm.test(\"Retrieve presentacion status test\", function () {",
@@ -609,8 +597,7 @@
 									"variable": [
 										{
 											"key": "id",
-											"value": "{{idPresentacion}}",
-											"type": "string"
+											"value": "{{idPresentacion}}"
 										}
 									]
 								}
@@ -716,7 +703,6 @@
 								{
 									"listen": "prerequest",
 									"script": {
-										"id": "8db72d24-da3a-4d9b-9f87-ad685daa226d",
 										"exec": [
 											""
 										],
@@ -726,19 +712,18 @@
 								{
 									"listen": "test",
 									"script": {
-										"id": "717aa1ba-6b2e-4aaf-9b70-2187f5946e34",
 										"exec": [
 											"res = pm.response;",
 											"pm.test(\"Detalle estudios de presentacion status test\", function () {",
 											"    pm.expect(res).to.have.status(200);",
 											"});",
 											"pm.test(\"Presentacion incluye estudio\", function () {",
-											"    pm.expect(res.json().some((e) => e.id == pm.collectionVariables.get(\"idEstudio\")));",
+											"    pm.expect(res.json()['estudios'].some((e) => e.id == pm.collectionVariables.get(\"idEstudio\")));",
 											"});",
 											"if (\"error\" in pm.response.json()) {",
 											"    console.error(pm.response.json().error)",
 											"}",
-											"postman.setNextRequest('Cerrar Presentacion')"
+											"postman.setNextRequest('Update Presentacion')"
 										],
 										"type": "text/javascript"
 									}
@@ -775,8 +760,7 @@
 									"variable": [
 										{
 											"key": "id",
-											"value": "{{idPresentacion}}",
-											"type": "string"
+											"value": "{{idPresentacion}}"
 										}
 									]
 								}
@@ -884,188 +868,11 @@
 							]
 						},
 						{
-							"name": "Cerrar Presentacion",
-							"event": [
-								{
-									"listen": "test",
-									"script": {
-										"id": "e74cc611-d218-4de3-bcfa-7153955903c1",
-										"exec": [
-											"res = pm.response;",
-											"pm.test(\"Cerrar presentacion status test\", function () {",
-											"    pm.expect(res).to.have.status(200);",
-											"});",
-											"if (\"error\" in pm.response.json()) {",
-											"    console.error(pm.response.json().error)",
-											"}",
-											"postman.setNextRequest('Abrir Presentacion')"
-										],
-										"type": "text/javascript"
-									}
-								}
-							],
-							"request": {
-								"auth": {
-									"type": "apikey",
-									"apikey": [
-										{
-											"key": "value",
-											"value": "Token {{token}}",
-											"type": "string"
-										},
-										{
-											"key": "key",
-											"value": "Authorization",
-											"type": "string"
-										}
-									]
-								},
-								"method": "PATCH",
-								"header": [],
-								"body": {
-									"mode": "raw",
-									"raw": "{\n    \"tipo_comprobante_id\": 1,\n    \"sub_tipo\": \"A\",\n    \"responsable\": \"Cedir\",\n    \"gravado_id\": 1\n}",
-									"options": {
-										"raw": {
-											"language": "json"
-										}
-									}
-								},
-								"url": {
-									"raw": "{{baseUrl}}/presentacion/:id/cerrar/",
-									"host": [
-										"{{baseUrl}}"
-									],
-									"path": [
-										"presentacion",
-										":id",
-										"cerrar",
-										""
-									],
-									"variable": [
-										{
-											"key": "id",
-											"value": "{{idPresentacion}}",
-											"type": "string"
-										}
-									]
-								},
-								"description": "Finaliza una Presentacion, pasando el estado de ABIERTO a PENDIENTE y emitiendo el Comprobante."
-							},
-							"response": [
-								{
-									"name": "El JSON de la presentacion.",
-									"originalRequest": {
-										"method": "PATCH",
-										"header": [
-											{
-												"key": "Authorization",
-												"value": "Token bb4a5ac45c80ff1f71076a6147f8c8eedfc82db8"
-											}
-										],
-										"url": {
-											"raw": "{{baseUrl}}/presentacion/:id/cerrar",
-											"host": [
-												"{{baseUrl}}"
-											],
-											"path": [
-												"presentacion",
-												":id",
-												"cerrar"
-											],
-											"variable": [
-												{
-													"key": "id"
-												}
-											]
-										}
-									},
-									"status": "OK",
-									"code": 200,
-									"_postman_previewlanguage": "json",
-									"header": [
-										{
-											"key": "Content-Type",
-											"value": "application/json"
-										}
-									],
-									"cookie": [],
-									"body": "{\n \"id\": 1,\n \"obra_social\": {\n  \"id\": 1,\n  \"nombre\": \"Obra Social de los Trabajadores de la Obra Social de Springfield\"\n },\n \"comprobante\": {\n  \"id\": 1,\n  \"nombre_cliente\": \"Obra Social de los Trabajadores de la Obra Social de Springfield\",\n  \"sub_tipo\": \"A\",\n  \"numero\": 1,\n  \"nro_terminal\": 17,\n  \"total_facturado\": 5,\n  \"total_cobrado\": 5,\n  \"fecha_emision\": \"2019-08-22\",\n  \"tipo_comprobante\": {\n   \"id\": 1,\n   \"nombre\": \"Factura\"\n  },\n  \"gravado\": {\n   \"id\": 1,\n   \"descripcion\": \"IVA Inscripto 21\",\n   \"porcentaje\": 21\n  },\n  \"lineas\": {\n   \"id\": 1,\n   \"concepto\": \"varios\",\n   \"sub_total\": 5,\n   \"iva\": 1,\n   \"importe_neto\": 4\n  }\n },\n \"fecha\": \"2019-08-22\",\n \"estado\": \"COBRADO\",\n \"periodo\": \"periodo\",\n \"iva\": 1,\n \"total\": 1,\n \"total_facturado\": 1\n}"
-								},
-								{
-									"name": "Cerrar Presentacion",
-									"originalRequest": {
-										"method": "PATCH",
-										"header": [],
-										"body": {
-											"mode": "raw",
-											"raw": "{\n    \"tipo_comprobante_id\": 1,\n    \"nro_terminal\": 99,\n    \"sub_tipo\": \"A\",\n    \"responsable\": \"Cedir\",\n    \"gravado_id\": 1,\n    \"periodo\": \"Mayo 1968\"\n}",
-											"options": {
-												"raw": {
-													"language": "json"
-												}
-											}
-										},
-										"url": {
-											"raw": "{{baseUrl}}/presentacion/:id/cerrar/",
-											"host": [
-												"{{baseUrl}}"
-											],
-											"path": [
-												"presentacion",
-												":id",
-												"cerrar",
-												""
-											],
-											"variable": [
-												{
-													"key": "id",
-													"value": "16181"
-												}
-											]
-										}
-									},
-									"status": "OK",
-									"code": 200,
-									"_postman_previewlanguage": "json",
-									"header": [
-										{
-											"key": "Date",
-											"value": "Sat, 21 Mar 2020 22:41:38 GMT"
-										},
-										{
-											"key": "Server",
-											"value": "WSGIServer/0.1 Python/2.7.16"
-										},
-										{
-											"key": "Vary",
-											"value": "Accept"
-										},
-										{
-											"key": "X-Frame-Options",
-											"value": "SAMEORIGIN"
-										},
-										{
-											"key": "Content-Type",
-											"value": "application/json"
-										},
-										{
-											"key": "Allow",
-											"value": "PATCH, OPTIONS"
-										}
-									],
-									"cookie": [],
-									"body": "{\n    \"id\": 16181,\n    \"obra_social\": {\n        \"id\": 5,\n        \"nombre\": \"ACA SALUD\"\n    },\n    \"comprobante\": {\n        \"id\": 20942,\n        \"nombre_cliente\": \"ACA SALUD\",\n        \"sub_tipo\": \"A\",\n        \"numero\": 6,\n        \"nro_terminal\": 99,\n        \"total_facturado\": \"5.00\",\n        \"total_cobrado\": null,\n        \"fecha_emision\": \"2020-03-21\",\n        \"tipo_comprobante\": {\n            \"id\": 1,\n            \"nombre\": \"Factura\"\n        },\n        \"gravado\": {\n            \"id\": 1,\n            \"descripcion\": \"Excento\",\n            \"porcentaje\": \"0.00\"\n        },\n        \"lineas\": [\n            {\n                \"id\": 26154,\n                \"concepto\": \"FACTURACION CORRESPONDIENTE A Mayo 1968\",\n                \"sub_total\": \"5.00\",\n                \"iva\": \"0.00\",\n                \"importe_neto\": \"5.00\"\n            }\n        ]\n    },\n    \"estado\": \"Pendiente\",\n    \"fecha\": \"2019-12-25\",\n    \"periodo\": \"SEPTIEMBRE 2019\",\n    \"iva\": \"0.00\",\n    \"total\": \"5.00\",\n    \"total_facturado\": \"5.00\"\n}"
-								}
-							]
-						},
-						{
 							"name": "Cerrar Presentacion (Liquidacion)",
 							"event": [
 								{
 									"listen": "test",
 									"script": {
-										"id": "b1da0edf-4b22-495d-b242-046b7426a8fd",
 										"exec": [
 											"res = pm.response;",
 											"pm.test(\"Cerrar presentacion liquidacion status test\", function () {",
@@ -1121,277 +928,13 @@
 									"variable": [
 										{
 											"key": "id",
-											"value": "{{idPresentacion}}",
-											"type": "string"
+											"value": "{{idPresentacion}}"
 										}
 									]
 								},
 								"description": "Finaliza una Presentacion, pasando el estado de ABIERTO a PENDIENTE y emitiendo el Comprobante."
 							},
-							"response": [
-								{
-									"name": "Cerrar Presentacion",
-									"originalRequest": {
-										"method": "PATCH",
-										"header": [],
-										"body": {
-											"mode": "raw",
-											"raw": "{\n    \"tipo_comprobante_id\": 1,\n    \"nro_terminal\": 99,\n    \"sub_tipo\": \"A\",\n    \"responsable\": \"Cedir\",\n    \"gravado_id\": 1,\n    \"periodo\": \"Mayo 1968\"\n}",
-											"options": {
-												"raw": {
-													"language": "json"
-												}
-											}
-										},
-										"url": {
-											"raw": "{{baseUrl}}/presentacion/:id/cerrar/",
-											"host": [
-												"{{baseUrl}}"
-											],
-											"path": [
-												"presentacion",
-												":id",
-												"cerrar",
-												""
-											],
-											"variable": [
-												{
-													"key": "id",
-													"value": "16181"
-												}
-											]
-										}
-									},
-									"status": "OK",
-									"code": 200,
-									"_postman_previewlanguage": "json",
-									"header": [
-										{
-											"key": "Date",
-											"value": "Sat, 21 Mar 2020 22:41:38 GMT"
-										},
-										{
-											"key": "Server",
-											"value": "WSGIServer/0.1 Python/2.7.16"
-										},
-										{
-											"key": "Vary",
-											"value": "Accept"
-										},
-										{
-											"key": "X-Frame-Options",
-											"value": "SAMEORIGIN"
-										},
-										{
-											"key": "Content-Type",
-											"value": "application/json"
-										},
-										{
-											"key": "Allow",
-											"value": "PATCH, OPTIONS"
-										}
-									],
-									"cookie": [],
-									"body": "{\n    \"id\": 16181,\n    \"obra_social\": {\n        \"id\": 5,\n        \"nombre\": \"ACA SALUD\"\n    },\n    \"comprobante\": {\n        \"id\": 20942,\n        \"nombre_cliente\": \"ACA SALUD\",\n        \"sub_tipo\": \"A\",\n        \"numero\": 6,\n        \"nro_terminal\": 99,\n        \"total_facturado\": \"5.00\",\n        \"total_cobrado\": null,\n        \"fecha_emision\": \"2020-03-21\",\n        \"tipo_comprobante\": {\n            \"id\": 1,\n            \"nombre\": \"Factura\"\n        },\n        \"gravado\": {\n            \"id\": 1,\n            \"descripcion\": \"Excento\",\n            \"porcentaje\": \"0.00\"\n        },\n        \"lineas\": [\n            {\n                \"id\": 26154,\n                \"concepto\": \"FACTURACION CORRESPONDIENTE A Mayo 1968\",\n                \"sub_total\": \"5.00\",\n                \"iva\": \"0.00\",\n                \"importe_neto\": \"5.00\"\n            }\n        ]\n    },\n    \"estado\": \"Pendiente\",\n    \"fecha\": \"2019-12-25\",\n    \"periodo\": \"SEPTIEMBRE 2019\",\n    \"iva\": \"0.00\",\n    \"total\": \"5.00\",\n    \"total_facturado\": \"5.00\"\n}"
-								},
-								{
-									"name": "El JSON de la presentacion.",
-									"originalRequest": {
-										"method": "PATCH",
-										"header": [
-											{
-												"key": "Authorization",
-												"value": "Token bb4a5ac45c80ff1f71076a6147f8c8eedfc82db8"
-											}
-										],
-										"url": {
-											"raw": "{{baseUrl}}/presentacion/:id/cerrar",
-											"host": [
-												"{{baseUrl}}"
-											],
-											"path": [
-												"presentacion",
-												":id",
-												"cerrar"
-											],
-											"variable": [
-												{
-													"key": "id"
-												}
-											]
-										}
-									},
-									"status": "OK",
-									"code": 200,
-									"_postman_previewlanguage": "json",
-									"header": [
-										{
-											"key": "Content-Type",
-											"value": "application/json"
-										}
-									],
-									"cookie": [],
-									"body": "{\n \"id\": 1,\n \"obra_social\": {\n  \"id\": 1,\n  \"nombre\": \"Obra Social de los Trabajadores de la Obra Social de Springfield\"\n },\n \"comprobante\": {\n  \"id\": 1,\n  \"nombre_cliente\": \"Obra Social de los Trabajadores de la Obra Social de Springfield\",\n  \"sub_tipo\": \"A\",\n  \"numero\": 1,\n  \"nro_terminal\": 17,\n  \"total_facturado\": 5,\n  \"total_cobrado\": 5,\n  \"fecha_emision\": \"2019-08-22\",\n  \"tipo_comprobante\": {\n   \"id\": 1,\n   \"nombre\": \"Factura\"\n  },\n  \"gravado\": {\n   \"id\": 1,\n   \"descripcion\": \"IVA Inscripto 21\",\n   \"porcentaje\": 21\n  },\n  \"lineas\": {\n   \"id\": 1,\n   \"concepto\": \"varios\",\n   \"sub_total\": 5,\n   \"iva\": 1,\n   \"importe_neto\": 4\n  }\n },\n \"fecha\": \"2019-08-22\",\n \"estado\": \"COBRADO\",\n \"periodo\": \"periodo\",\n \"iva\": 1,\n \"total\": 1,\n \"total_facturado\": 1\n}"
-								}
-							]
-						},
-						{
-							"name": "Abrir Presentacion",
-							"event": [
-								{
-									"listen": "test",
-									"script": {
-										"id": "42a1c533-f890-4462-b16d-a6d76623312b",
-										"exec": [
-											"res = pm.response;",
-											"pm.test(\"Abrrir presentacion status test\", function () {",
-											"    pm.expect(res).to.have.status(200);",
-											"});",
-											"if (\"error\" in pm.response.json()) {",
-											"    console.error(pm.response.json().error)",
-											"}",
-											"postman.setNextRequest('Update Presentacion')"
-										],
-										"type": "text/javascript"
-									}
-								}
-							],
-							"request": {
-								"auth": {
-									"type": "apikey",
-									"apikey": [
-										{
-											"key": "value",
-											"value": "Token {{token}}",
-											"type": "string"
-										},
-										{
-											"key": "key",
-											"value": "Authorization",
-											"type": "string"
-										}
-									]
-								},
-								"method": "PATCH",
-								"header": [],
-								"url": {
-									"raw": "{{baseUrl}}/presentacion/:id/abrir/",
-									"host": [
-										"{{baseUrl}}"
-									],
-									"path": [
-										"presentacion",
-										":id",
-										"abrir",
-										""
-									],
-									"variable": [
-										{
-											"key": "id",
-											"value": "{{idPresentacion}}",
-											"type": "string"
-										}
-									]
-								},
-								"description": "Abre una Presentación que está en estado PENDIENTE y pasa a ABIERTO.\nAnula el comprobante."
-							},
-							"response": [
-								{
-									"name": "El JSON de la presentacion.",
-									"originalRequest": {
-										"method": "PATCH",
-										"header": [
-											{
-												"key": "Authorization",
-												"value": "Token bb4a5ac45c80ff1f71076a6147f8c8eedfc82db8"
-											}
-										],
-										"url": {
-											"raw": "{{baseUrl}}/presentacion/:id/cerrar",
-											"host": [
-												"{{baseUrl}}"
-											],
-											"path": [
-												"presentacion",
-												":id",
-												"cerrar"
-											],
-											"variable": [
-												{
-													"key": "id"
-												}
-											]
-										}
-									},
-									"status": "OK",
-									"code": 200,
-									"_postman_previewlanguage": "json",
-									"header": [
-										{
-											"key": "Content-Type",
-											"value": "application/json"
-										}
-									],
-									"cookie": [],
-									"body": "{\n \"id\": 1,\n \"obra_social\": {\n  \"id\": 1,\n  \"nombre\": \"Obra Social de los Trabajadores de la Obra Social de Springfield\"\n },\n \"comprobante\": {\n  \"id\": 1,\n  \"nombre_cliente\": \"Obra Social de los Trabajadores de la Obra Social de Springfield\",\n  \"sub_tipo\": \"A\",\n  \"numero\": 1,\n  \"nro_terminal\": 17,\n  \"total_facturado\": 5,\n  \"total_cobrado\": 5,\n  \"fecha_emision\": \"2019-08-22\",\n  \"tipo_comprobante\": {\n   \"id\": 1,\n   \"nombre\": \"Factura\"\n  },\n  \"gravado\": {\n   \"id\": 1,\n   \"descripcion\": \"IVA Inscripto 21\",\n   \"porcentaje\": 21\n  },\n  \"lineas\": {\n   \"id\": 1,\n   \"concepto\": \"varios\",\n   \"sub_total\": 5,\n   \"iva\": 1,\n   \"importe_neto\": 4\n  }\n },\n \"fecha\": \"2019-08-22\",\n \"estado\": \"COBRADO\",\n \"periodo\": \"periodo\",\n \"iva\": 1,\n \"total\": 1,\n \"total_facturado\": 1\n}"
-								},
-								{
-									"name": "Abrir Presentacion",
-									"originalRequest": {
-										"method": "PATCH",
-										"header": [],
-										"url": {
-											"raw": "{{baseUrl}}/presentacion/:id/abrir/",
-											"host": [
-												"{{baseUrl}}"
-											],
-											"path": [
-												"presentacion",
-												":id",
-												"abrir",
-												""
-											],
-											"variable": [
-												{
-													"key": "id",
-													"value": "16181"
-												}
-											]
-										}
-									},
-									"status": "OK",
-									"code": 200,
-									"_postman_previewlanguage": "json",
-									"header": [
-										{
-											"key": "Date",
-											"value": "Sat, 21 Mar 2020 22:42:34 GMT"
-										},
-										{
-											"key": "Server",
-											"value": "WSGIServer/0.1 Python/2.7.16"
-										},
-										{
-											"key": "Vary",
-											"value": "Accept"
-										},
-										{
-											"key": "X-Frame-Options",
-											"value": "SAMEORIGIN"
-										},
-										{
-											"key": "Content-Type",
-											"value": "application/json"
-										},
-										{
-											"key": "Allow",
-											"value": "PATCH, OPTIONS"
-										}
-									],
-									"cookie": [],
-									"body": "{\n    \"id\": 16181,\n    \"obra_social\": {\n        \"id\": 5,\n        \"nombre\": \"ACA SALUD\"\n    },\n    \"comprobante\": null,\n    \"estado\": \"Abierto\",\n    \"fecha\": \"2019-12-25\",\n    \"periodo\": \"SEPTIEMBRE 2019\",\n    \"iva\": \"0.00\",\n    \"total\": \"5.00\",\n    \"total_facturado\": \"5.00\"\n}"
-								}
-							]
+							"response": []
 						},
 						{
 							"name": "Cobrar Presentacion",
@@ -1399,7 +942,6 @@
 								{
 									"listen": "test",
 									"script": {
-										"id": "89fbf719-0481-49b2-9367-cc2b2bf19034",
 										"exec": [
 											"res = pm.response;",
 											"pm.test(\"Cobrar presentacion status test\", function () {",
@@ -1445,8 +987,7 @@
 									"variable": [
 										{
 											"key": "id",
-											"value": "{{idPresentacion}}",
-											"type": "string"
+											"value": "{{idPresentacion}}"
 										}
 									]
 								},
@@ -1494,9 +1035,7 @@
 								}
 							]
 						}
-					],
-					"protocolProfileBehavior": {},
-					"_postman_isSubFolder": true
+					]
 				},
 				{
 					"name": "Crear una nueva Presentacion",
@@ -1504,7 +1043,6 @@
 						{
 							"listen": "test",
 							"script": {
-								"id": "f32c94ca-e626-4309-becb-93fee7597d99",
 								"exec": [
 									"res = pm.response;",
 									"pm.test(\"Create presentacion status test\", function () {",
@@ -1525,7 +1063,6 @@
 						{
 							"listen": "prerequest",
 							"script": {
-								"id": "863aef7e-a686-46a5-b461-f389ee885704",
 								"exec": [
 									""
 								],
@@ -1636,7 +1173,6 @@
 						{
 							"listen": "test",
 							"script": {
-								"id": "bacd0781-7dce-4ffc-ab54-a35fb46ada6c",
 								"exec": [
 									"res = pm.response;",
 									"pm.test(\"Update presentacion status test\", function () {",
@@ -1653,7 +1189,6 @@
 						{
 							"listen": "prerequest",
 							"script": {
-								"id": "5912200a-a342-45c2-9aa5-3eefbbda76c4",
 								"exec": [
 									""
 								],
@@ -1708,8 +1243,7 @@
 							"variable": [
 								{
 									"key": "id",
-									"value": "{{idPresentacion}}",
-									"type": "string"
+									"value": "{{idPresentacion}}"
 								}
 							]
 						}
@@ -1794,7 +1328,6 @@
 						{
 							"listen": "test",
 							"script": {
-								"id": "4c093534-9229-4cc5-ba89-f3dc3b4d3725",
 								"exec": [
 									"res = pm.response;",
 									"presentaciones = res.json()",
@@ -1885,8 +1418,7 @@
 						}
 					]
 				}
-			],
-			"protocolProfileBehavior": {}
+			]
 		},
 		{
 			"name": "comprobante",
@@ -1897,7 +1429,6 @@
 						{
 							"listen": "test",
 							"script": {
-								"id": "75bfa4ad-7a96-48f9-a03f-565ea1f702a0",
 								"exec": [
 									"if (\"error\" in pm.response.json()) {",
 									"    console.error(pm.response.json().error)",
@@ -1930,8 +1461,7 @@
 							"variable": [
 								{
 									"key": "id",
-									"value": "1",
-									"type": "string"
+									"value": "1"
 								}
 							]
 						}
@@ -1983,7 +1513,6 @@
 						{
 							"listen": "test",
 							"script": {
-								"id": "fbd7729b-addc-46da-8973-3f7bad9d5415",
 								"exec": [
 									"if (\"error\" in pm.response.json()) {",
 									"    console.error(pm.response.json().error)",
@@ -2031,10 +1560,7 @@
 									"key": "id-tipo",
 									"value": 3
 								}
-							],
-							"options": {
-								"formdata": {}
-							}
+							]
 						},
 						"url": {
 							"raw": "{{baseUrl}}/comprobante/crear_comprobante_asociado",
@@ -2105,8 +1631,7 @@
 						}
 					]
 				}
-			],
-			"protocolProfileBehavior": {}
+			]
 		},
 		{
 			"name": "estudios",
@@ -2117,7 +1642,6 @@
 						{
 							"listen": "test",
 							"script": {
-								"id": "8b7660e6-182d-4cc5-9417-a9d3754d051a",
 								"exec": [
 									"res = pm.response;",
 									"pm.test(\"Create estudio status test\", function () {",
@@ -2164,7 +1688,6 @@
 						{
 							"listen": "test",
 							"script": {
-								"id": "71a3b1b4-f346-4fb3-8840-cc1dfa210235",
 								"exec": [
 									"res = pm.response;",
 									"pm.test(\"Realizar pago contra factura status test\", function () {",
@@ -2226,7 +1749,6 @@
 						{
 							"listen": "test",
 							"script": {
-								"id": "9f90d9be-1842-45c8-88c0-3e91035a05ec",
 								"exec": [
 									"res = pm.response;",
 									"pm.test(\"Anular pago contra factura status test\", function () {",
@@ -2266,8 +1788,7 @@
 					},
 					"response": []
 				}
-			],
-			"protocolProfileBehavior": {}
+			]
 		},
 		{
 			"name": "Consultar un Paciente",
@@ -2275,7 +1796,6 @@
 				{
 					"listen": "test",
 					"script": {
-						"id": "bdd4d6aa-ab48-4be7-8a1e-5e509fb17ebe",
 						"exec": [
 							"res = pm.response;",
 							"pm.test(\"Retrieve paciente status test\", function () {",
@@ -2292,7 +1812,6 @@
 				{
 					"listen": "prerequest",
 					"script": {
-						"id": "da30a009-a450-4212-b3df-3205af98b333",
 						"exec": [
 							""
 						],
@@ -2330,8 +1849,7 @@
 					"variable": [
 						{
 							"key": "id",
-							"value": "{{idPaciente}}",
-							"type": "string"
+							"value": "{{idPaciente}}"
 						}
 					]
 				}
@@ -2383,7 +1901,6 @@
 				{
 					"listen": "test",
 					"script": {
-						"id": "1da9fe40-83a3-4713-8d3e-c142d8bf1bee",
 						"exec": [
 							"res = pm.response;",
 							"pm.test(\"Retrieve practica status test\", function () {",
@@ -2428,8 +1945,7 @@
 					"variable": [
 						{
 							"key": "id",
-							"value": "{{idPractica}}",
-							"type": "string"
+							"value": "{{idPractica}}"
 						}
 					]
 				}
@@ -2481,7 +1997,6 @@
 				{
 					"listen": "test",
 					"script": {
-						"id": "a134f5c4-3b91-4362-9ff2-46c7ffccd4a1",
 						"exec": [
 							"res = pm.response;",
 							"pm.test(\"Retrieve medico status test\", function () {",
@@ -2526,8 +2041,7 @@
 					"variable": [
 						{
 							"key": "id",
-							"value": "{{idMedico}}",
-							"type": "string"
+							"value": "{{idMedico}}"
 						}
 					]
 				}
@@ -2579,7 +2093,6 @@
 				{
 					"listen": "test",
 					"script": {
-						"id": "5d306c7d-7ad9-4d5c-862e-ad3119824a05",
 						"exec": [
 							"res = pm.response;",
 							"pm.test(\"Retrieve anestesista status test\", function () {",
@@ -2624,8 +2137,7 @@
 					"variable": [
 						{
 							"key": "id",
-							"value": "1",
-							"type": "string"
+							"value": "1"
 						}
 					]
 				}
@@ -2677,7 +2189,6 @@
 				{
 					"listen": "test",
 					"script": {
-						"id": "d18d8bb4-a81b-4e12-971d-57626ff0a8d0",
 						"exec": [
 							"res = pm.response;",
 							"pm.test(\"Retrieve anestesista status test\", function () {",
@@ -2722,8 +2233,7 @@
 					"variable": [
 						{
 							"key": "id",
-							"value": "{{idAnestesista}}",
-							"type": "string"
+							"value": "{{idAnestesista}}"
 						}
 					]
 				}
@@ -2775,7 +2285,6 @@
 				{
 					"listen": "test",
 					"script": {
-						"id": "cab124ad-0088-41df-bdf1-05aefc056a49",
 						"exec": [
 							"res = pm.response;",
 							"pm.test(\"Retrieve anestesista status test\", function () {",
@@ -2829,6 +2338,48 @@
 				}
 			},
 			"response": [
+				{
+					"name": "Una LISTA de lineas de informe.",
+					"originalRequest": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Token bb4a5ac45c80ff1f71076a6147f8c8eedfc82db8"
+							}
+						],
+						"url": {
+							"raw": "{{baseUrl}}/comprobantes?mes=11&anio=2018",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"comprobantes"
+							],
+							"query": [
+								{
+									"key": "mes",
+									"value": "11"
+								},
+								{
+									"key": "anio",
+									"value": "2018"
+								}
+							]
+						}
+					},
+					"status": "OK",
+					"code": 200,
+					"_postman_previewlanguage": "json",
+					"header": [
+						{
+							"key": "Content-Type",
+							"value": "application/json"
+						}
+					],
+					"cookie": [],
+					"body": "{\n \"id\": 1,\n \"nombre_cliente\": \"Obra Social de los Trabajadores de la Obra Social de Springfield\",\n \"sub_tipo\": \"A\",\n \"numero\": 1,\n \"nro_terminal\": 17,\n \"total_facturado\": 5,\n \"total_cobrado\": 5,\n \"fecha_emision\": \"2019-08-22\",\n \"tipo_comprobante\": {\n  \"id\": 1,\n  \"nombre\": \"Factura\"\n },\n \"gravado\": {\n  \"id\": 1,\n  \"descripcion\": \"IVA Inscripto 21\",\n  \"porcentaje\": 21\n },\n \"lineas\": {\n  \"id\": 1,\n  \"concepto\": \"varios\",\n  \"sub_total\": 5,\n  \"iva\": 1,\n  \"importe_neto\": 4\n },\n \"responsable\": \"CEDIR\",\n \"nro_cuit\": 3030303030,\n \"neto\": 10,\n \"iva\": 2,\n \"honorarios_medicos\": 1,\n \"honorarios_solicitantes\": 1,\n \"uso_de_materiales\": 1,\n \"retencion_cedir\": 1,\n \"retencion_impositiva\": 1,\n \"sala_recuperacion\": 1,\n \"honorarios_anestesistas\": 1,\n \"retencion_anestesia\": 1,\n \"total_medicamentos\": 1,\n \"total_material_especifico\": 1\n}"
+				},
 				{
 					"name": "Informe mensual de Comprobantes.",
 					"originalRequest": {
@@ -2890,48 +2441,6 @@
 					],
 					"cookie": [],
 					"body": "[\n    {\n        \"id\": 20737,\n        \"numero\": 555,\n        \"responsable\": \"Cedir\",\n        \"fecha_emision\": \"2019-10-01\",\n        \"nombre_cliente\": \"U N R\",\n        \"nro_cuit\": \"30629908176\",\n        \"tipo_comprobante\": {\n            \"id\": 4,\n            \"nombre\": \"Nota De Credito\"\n        },\n        \"sub_tipo\": \"A\",\n        \"nro_terminal\": 91,\n        \"neto\": -1020.49,\n        \"iva\": -107.15,\n        \"gravado\": {\n            \"id\": 2,\n            \"descripcion\": \"IVA Inscripto 10.5\",\n            \"porcentaje\": \"10.50\"\n        },\n        \"total_facturado\": -1127.64,\n        \"honorarios_medicos\": 0,\n        \"honorarios_solicitantes\": 0,\n        \"uso_de_materiales\": 0,\n        \"retencion_cedir\": 0,\n        \"retencion_impositiva\": 0,\n        \"sala_recuperacion\": 0,\n        \"honorarios_anestesistas\": 0,\n        \"retencion_anestesia\": 0,\n        \"total_medicamentos\": 0,\n        \"total_material_especifico\": 0\n    },\n    {\n        \"id\": 20738,\n        \"numero\": 556,\n        \"responsable\": \"Cedir\",\n        \"fecha_emision\": \"2019-10-01\",\n        \"nombre_cliente\": \"U N R\",\n        \"nro_cuit\": \"30629908176\",\n        \"tipo_comprobante\": {\n            \"id\": 4,\n            \"nombre\": \"Nota De Credito\"\n        },\n        \"sub_tipo\": \"A\",\n        \"nro_terminal\": 91,\n        \"neto\": -7437.67,\n        \"iva\": 0,\n        \"gravado\": {\n            \"id\": 1,\n            \"descripcion\": \"Excento\",\n            \"porcentaje\": \"0.00\"\n        },\n        \"total_facturado\": -7437.67,\n        \"honorarios_medicos\": 0,\n        \"honorarios_solicitantes\": 0,\n        \"uso_de_materiales\": 0,\n        \"retencion_cedir\": 0,\n        \"retencion_impositiva\": 0,\n        \"sala_recuperacion\": 0,\n        \"honorarios_anestesistas\": 0,\n        \"retencion_anestesia\": 0,\n        \"total_medicamentos\": 0,\n        \"total_material_especifico\": 0\n    },\n    {\n        \"id\": 20739,\n        \"numero\": 1767,\n        \"responsable\": \"Cedir\",\n        \"fecha_emision\": \"2019-10-01\",\n        \"nombre_cliente\": \"PRIMORDIAL  SA \",\n        \"nro_cuit\": \"33-67398890-9\",\n        \"tipo_comprobante\": {\n            \"id\": 1,\n            \"nombre\": \"Factura\"\n        },\n        \"sub_tipo\": \"A\",\n        \"nro_terminal\": 91,\n        \"neto\": 11841,\n        \"iva\": 0,\n        \"gravado\": {\n            \"id\": 1,\n            \"descripcion\": \"Excento\",\n            \"porcentaje\": \"0.00\"\n        },\n        \"total_facturado\": 11841,\n        \"honorarios_medicos\": 0,\n        \"honorarios_solicitantes\": 0,\n        \"uso_de_materiales\": 0,\n        \"retencion_cedir\": 0,\n        \"retencion_impositiva\": 0,\n        \"sala_recuperacion\": 0,\n        \"honorarios_anestesistas\": 0,\n        \"retencion_anestesia\": 0,\n        \"total_medicamentos\": 0,\n        \"total_material_especifico\": 0\n    },\n    {\n        \"id\": 20740,\n        \"numero\": 1282,\n        \"responsable\": \"Cedir\",\n        \"fecha_emision\": \"2019-10-02\",\n        \"nombre_cliente\": \"LATTANZIO, DANIEL\",\n        \"nro_cuit\": \"12823736\",\n        \"tipo_comprobante\": {\n            \"id\": 1,\n            \"nombre\": \"Factura\"\n        },\n        \"sub_tipo\": \"B\",\n        \"nro_terminal\": 91,\n        \"neto\": 3000,\n        \"iva\": 630,\n        \"gravado\": {\n            \"id\": 3,\n            \"descripcion\": \"IVA Inscripto 21\",\n            \"porcentaje\": \"21.00\"\n        },\n        \"total_facturado\": 3630,\n        \"honorarios_medicos\": 0,\n        \"honorarios_solicitantes\": 0,\n        \"uso_de_materiales\": 0,\n        \"retencion_cedir\": 0,\n        \"retencion_impositiva\": 0,\n        \"sala_recuperacion\": 0,\n        \"honorarios_anestesistas\": 0,\n        \"retencion_anestesia\": 0,\n        \"total_medicamentos\": 0,\n        \"total_material_especifico\": 0\n    },\n    {\n        \"id\": 20741,\n        \"numero\": 99,\n        \"responsable\": \"Brunetti\",\n        \"fecha_emision\": \"2019-10-03\",\n        \"nombre_cliente\": \"C.E.DI.R. - CENTRO DE ENDOSCOPIA DIGESTIVA DE ROSARIO\",\n        \"nro_cuit\": \"30-70930015-2\",\n        \"tipo_comprobante\": {\n            \"id\": 1,\n            \"nombre\": \"Factura\"\n        },\n        \"sub_tipo\": \"A\",\n        \"nro_terminal\": 3,\n        \"neto\": 3000,\n        \"iva\": 630,\n        \"gravado\": {\n            \"id\": 3,\n            \"descripcion\": \"IVA Inscripto 21\",\n            \"porcentaje\": \"21.00\"\n        },\n        \"total_facturado\": 3630,\n        \"honorarios_medicos\": 0,\n        \"honorarios_solicitantes\": 0,\n        \"uso_de_materiales\": 0,\n        \"retencion_cedir\": 0,\n        \"retencion_impositiva\": 0,\n        \"sala_recuperacion\": 0,\n        \"honorarios_anestesistas\": 0,\n        \"retencion_anestesia\": 0,\n        \"total_medicamentos\": 0,\n        \"total_material_especifico\": 0\n    },\n    {\n        \"id\": 20742,\n        \"numero\": 1768,\n        \"responsable\": \"Cedir\",\n        \"fecha_emision\": \"2019-10-03\",\n        \"nombre_cliente\": \"A.P.R.E.P.A\",\n        \"nro_cuit\": \"30601079905\",\n        \"tipo_comprobante\": {\n            \"id\": 1,\n            \"nombre\": \"Factura\"\n        },\n        \"sub_tipo\": \"A\",\n        \"nro_terminal\": 91,\n        \"neto\": 19643,\n        \"iva\": 2062.51,\n        \"gravado\": {\n            \"id\": 2,\n            \"descripcion\": \"IVA Inscripto 10.5\",\n            \"porcentaje\": \"10.50\"\n        },\n        \"total_facturado\": 21705.52,\n        \"honorarios_medicos\": 10640.45,\n        \"honorarios_solicitantes\": 0,\n        \"uso_de_materiales\": 500,\n        \"retencion_cedir\": 2432.3,\n        \"retencion_impositiva\": 4910.75,\n        \"sala_recuperacion\": 1159.5,\n        \"honorarios_anestesistas\": 0,\n        \"retencion_anestesia\": 0,\n        \"total_medicamentos\": 0,\n        \"total_material_especifico\": 0\n    },\n    {\n        \"id\": 20743,\n        \"numero\": 1769,\n        \"responsable\": \"Cedir\",\n        \"fecha_emision\": \"2019-10-03\",\n        \"nombre_cliente\": \"OMINT\",\n        \"nro_cuit\": \"30550245309\",\n        \"tipo_comprobante\": {\n            \"id\": 1,\n            \"nombre\": \"Factura\"\n        },\n        \"sub_tipo\": \"A\",\n        \"nro_terminal\": 91,\n        \"neto\": 8259,\n        \"iva\": 0,\n        \"gravado\": {\n            \"id\": 1,\n            \"descripcion\": \"Excento\",\n            \"porcentaje\": \"0.00\"\n        },\n        \"total_facturado\": 8259,\n        \"honorarios_medicos\": 5025.08,\n        \"honorarios_solicitantes\": 567.12,\n        \"uso_de_materiales\": 0,\n        \"retencion_cedir\": 602.07,\n        \"retencion_impositiva\": 2064.75,\n        \"sala_recuperacion\": 0,\n        \"honorarios_anestesistas\": 0,\n        \"retencion_anestesia\": 0,\n        \"total_medicamentos\": 0,\n        \"total_material_especifico\": 0\n    },\n    {\n        \"id\": 20744,\n        \"numero\": 1770,\n        \"responsable\": \"Cedir\",\n        \"fecha_emision\": \"2019-10-03\",\n        \"nombre_cliente\": \"DI COSCO WALTER\",\n        \"nro_cuit\": \"20176687577\",\n        \"tipo_comprobante\": {\n            \"id\": 1,\n            \"nombre\": \"Factura\"\n        },\n        \"sub_tipo\": \"A\",\n        \"nro_terminal\": 91,\n        \"neto\": 3675,\n        \"iva\": 771.75,\n        \"gravado\": {\n            \"id\": 3,\n            \"descripcion\": \"IVA Inscripto 21\",\n            \"porcentaje\": \"21.00\"\n        },\n        \"total_facturado\": 4446.75,\n        \"honorarios_medicos\": 0,\n        \"honorarios_solicitantes\": 0,\n        \"uso_de_materiales\": 0,\n        \"retencion_cedir\": 0,\n        \"retencion_impositiva\": 0,\n        \"sala_recuperacion\": 0,\n        \"honorarios_anestesistas\": 0,\n        \"retencion_anestesia\": 0,\n        \"total_medicamentos\": 0,\n        \"total_material_especifico\": 0\n    },\n    {\n        \"id\": 20745,\n        \"numero\": 1283,\n        \"responsable\": \"Cedir\",\n        \"fecha_emision\": \"2019-10-03\",\n        \"nombre_cliente\": \"AMELLONG, ANA JULIA- HC 4251\",\n        \"nro_cuit\": \"37073350\",\n        \"tipo_comprobante\": {\n            \"id\": 1,\n            \"nombre\": \"Factura\"\n        },\n        \"sub_tipo\": \"B\",\n        \"nro_terminal\": 91,\n        \"neto\": 700,\n        \"iva\": 147,\n        \"gravado\": {\n            \"id\": 3,\n            \"descripcion\": \"IVA Inscripto 21\",\n            \"porcentaje\": \"21.00\"\n        },\n        \"total_facturado\": 847,\n        \"honorarios_medicos\": 0,\n        \"honorarios_solicitantes\": 0,\n        \"uso_de_materiales\": 0,\n        \"retencion_cedir\": 0,\n        \"retencion_impositiva\": 0,\n        \"sala_recuperacion\": 0,\n        \"honorarios_anestesistas\": 0,\n        \"retencion_anestesia\": 0,\n        \"total_medicamentos\": 0,\n        \"total_material_especifico\": 0\n    },\n    {\n        \"id\": 20746,\n        \"numero\": 1771,\n        \"responsable\": \"Cedir\",\n        \"fecha_emision\": \"2019-10-04\",\n        \"nombre_cliente\": \"OMINT ( GENESIS - CARTILLA 1 Y 2 )\",\n        \"nro_cuit\": \"30550245309\",\n        \"tipo_comprobante\": {\n            \"id\": 1,\n            \"nombre\": \"Factura\"\n        },\n        \"sub_tipo\": \"A\",\n        \"nro_terminal\": 91,\n        \"neto\": 1532,\n        \"iva\": 0,\n        \"gravado\": {\n            \"id\": 1,\n            \"descripcion\": \"Excento\",\n            \"porcentaje\": \"0.00\"\n        },\n        \"total_facturado\": 1532,\n        \"honorarios_medicos\": 1149,\n        \"honorarios_solicitantes\": 0,\n        \"uso_de_materiales\": 0,\n        \"retencion_cedir\": 0,\n        \"retencion_impositiva\": 383,\n        \"sala_recuperacion\": 0,\n        \"honorarios_anestesistas\": 0,\n        \"retencion_anestesia\": 0,\n        \"total_medicamentos\": 0,\n        \"total_material_especifico\": 0\n    },\n    {\n        \"id\": 20747,\n        \"numero\": 1772,\n        \"responsable\": \"Cedir\",\n        \"fecha_emision\": \"2019-10-04\",\n        \"nombre_cliente\": \"OMINT ( GENESIS - CARTILLA 1 Y 2 )\",\n        \"nro_cuit\": \"30550245309\",\n        \"tipo_comprobante\": {\n            \"id\": 1,\n            \"nombre\": \"Factura\"\n        },\n        \"sub_tipo\": \"A\",\n        \"nro_terminal\": 91,\n        \"neto\": 16073,\n        \"iva\": 1687.66,\n        \"gravado\": {\n            \"id\": 2,\n            \"descripcion\": \"IVA Inscripto 10.5\",\n            \"porcentaje\": \"10.50\"\n        },\n        \"total_facturado\": 17760.67,\n        \"honorarios_medicos\": 8571.65,\n        \"honorarios_solicitantes\": 0,\n        \"uso_de_materiales\": 500,\n        \"retencion_cedir\": 1783.85,\n        \"retencion_impositiva\": 4018.25,\n        \"sala_recuperacion\": 0,\n        \"honorarios_anestesistas\": 0,\n        \"retencion_anestesia\": 0,\n        \"total_medicamentos\": 1199.25,\n        \"total_material_especifico\": 0\n    },\n    {\n        \"id\": 20748,\n        \"numero\": 1284,\n        \"responsable\": \"Cedir\",\n        \"fecha_emision\": \"2019-10-04\",\n        \"nombre_cliente\": \"S.M.A.T.A. - ASOCIACION MUTUAL ROSARIO METALMECANICA Y AFINES\",\n        \"nro_cuit\": \"30709745383\",\n        \"tipo_comprobante\": {\n            \"id\": 1,\n            \"nombre\": \"Factura\"\n        },\n        \"sub_tipo\": \"B\",\n        \"nro_terminal\": 91,\n        \"neto\": 59928.83,\n        \"iva\": 0,\n        \"gravado\": {\n            \"id\": 1,\n            \"descripcion\": \"Excento\",\n            \"porcentaje\": \"0.00\"\n        },\n        \"total_facturado\": 59928.83,\n        \"honorarios_medicos\": 19902.55,\n        \"honorarios_solicitantes\": 0,\n        \"uso_de_materiales\": 1000,\n        \"retencion_cedir\": 4678.45,\n        \"retencion_impositiva\": 14982.21,\n        \"sala_recuperacion\": 4605,\n        \"honorarios_anestesistas\": 0,\n        \"retencion_anestesia\": 0,\n        \"total_medicamentos\": 12111.56,\n        \"total_material_especifico\": 2649.08\n    },\n    {\n        \"id\": 20749,\n        \"numero\": 1285,\n        \"responsable\": \"Cedir\",\n        \"fecha_emision\": \"2019-10-04\",\n        \"nombre_cliente\": \"OSIAD SALUD\",\n        \"nro_cuit\": \"30-58331882-4\",\n        \"tipo_comprobante\": {\n            \"id\": 1,\n            \"nombre\": \"Factura\"\n        },\n        \"sub_tipo\": \"B\",\n        \"nro_terminal\": 91,\n        \"neto\": 6907.04,\n        \"iva\": 0,\n        \"gravado\": {\n            \"id\": 1,\n            \"descripcion\": \"Excento\",\n            \"porcentaje\": \"0.00\"\n        },\n        \"total_facturado\": 6907.04,\n        \"honorarios_medicos\": 1864.8,\n        \"honorarios_solicitantes\": 0,\n        \"uso_de_materiales\": 0,\n        \"retencion_cedir\": 397.95,\n        \"retencion_impositiva\": 1726.76,\n        \"sala_recuperacion\": 645.75,\n        \"honorarios_anestesistas\": 0,\n        \"retencion_anestesia\": 0,\n        \"total_medicamentos\": 2271.78,\n        \"total_material_especifico\": 0\n    },\n    {\n        \"id\": 20750,\n        \"numero\": 1773,\n        \"responsable\": \"Cedir\",\n        \"fecha_emision\": \"2019-10-04\",\n        \"nombre_cliente\": \"MEDIFE\",\n        \"nro_cuit\": \"30682737650\",\n        \"tipo_comprobante\": {\n            \"id\": 1,\n            \"nombre\": \"Factura\"\n        },\n        \"sub_tipo\": \"A\",\n        \"nro_terminal\": 91,\n        \"neto\": 36889.04,\n        \"iva\": 0,\n        \"gravado\": {\n            \"id\": 1,\n            \"descripcion\": \"Excento\",\n            \"porcentaje\": \"0.00\"\n        },\n        \"total_facturado\": 36889.04,\n        \"honorarios_medicos\": 11632.98,\n        \"honorarios_solicitantes\": 0,\n        \"uso_de_materiales\": 0,\n        \"retencion_cedir\": 2628.57,\n        \"retencion_impositiva\": 9222.26,\n        \"sala_recuperacion\": 2656.5,\n        \"honorarios_anestesistas\": 0,\n        \"retencion_anestesia\": 0,\n        \"total_medicamentos\": 10748.73,\n        \"total_material_especifico\": 0\n    },\n    {\n        \"id\": 20751,\n        \"numero\": 1774,\n        \"responsable\": \"Cedir\",\n        \"fecha_emision\": \"2019-10-04\",\n        \"nombre_cliente\": \"IMA - INSTITUTO MEDICO ASISTENCIAL\",\n        \"nro_cuit\": \"30540609086\",\n        \"tipo_comprobante\": {\n            \"id\": 1,\n            \"nombre\": \"Factura\"\n        },\n        \"sub_tipo\": \"A\",\n        \"nro_terminal\": 91,\n        \"neto\": 5476,\n        \"iva\": 574.98,\n        \"gravado\": {\n            \"id\": 2,\n            \"descripcion\": \"IVA Inscripto 10.5\",\n            \"porcentaje\": \"10.50\"\n        },\n        \"total_facturado\": 6050.98,\n        \"honorarios_medicos\": 2039.7,\n        \"honorarios_solicitantes\": 0,\n        \"uso_de_materiales\": 0,\n        \"retencion_cedir\": 436.8,\n        \"retencion_impositiva\": 1369,\n        \"sala_recuperacion\": 527.25,\n        \"honorarios_anestesistas\": 0,\n        \"retencion_anestesia\": 0,\n        \"total_medicamentos\": 1103.25,\n        \"total_material_especifico\": 0\n    },\n    {\n        \"id\": 20752,\n        \"numero\": 1775,\n        \"responsable\": \"Cedir\",\n        \"fecha_emision\": \"2019-10-04\",\n        \"nombre_cliente\": \"OMINT\",\n        \"nro_cuit\": \"30550245309\",\n        \"tipo_comprobante\": {\n            \"id\": 1,\n            \"nombre\": \"Factura\"\n        },\n        \"sub_tipo\": \"A\",\n        \"nro_terminal\": 91,\n        \"neto\": 2031,\n        \"iva\": 213.25,\n        \"gravado\": {\n            \"id\": 2,\n            \"descripcion\": \"IVA Inscripto 10.5\",\n            \"porcentaje\": \"10.50\"\n        },\n        \"total_facturado\": 2244.26,\n        \"honorarios_medicos\": 1523.25,\n        \"honorarios_solicitantes\": 0,\n        \"uso_de_materiales\": 0,\n        \"retencion_cedir\": 0,\n        \"retencion_impositiva\": 507.75,\n        \"sala_recuperacion\": 0,\n        \"honorarios_anestesistas\": 0,\n        \"retencion_anestesia\": 0,\n        \"total_medicamentos\": 0,\n        \"total_material_especifico\": 0\n    },\n    {\n        \"id\": 20753,\n        \"numero\": 1776,\n        \"responsable\": \"Cedir\",\n        \"fecha_emision\": \"2019-10-04\",\n        \"nombre_cliente\": \"GALENO ARGENTINA S.A\",\n        \"nro_cuit\": \"30522428163\",\n        \"tipo_comprobante\": {\n            \"id\": 1,\n            \"nombre\": \"Factura\"\n        },\n        \"sub_tipo\": \"A\",\n        \"nro_terminal\": 91,\n        \"neto\": 539,\n        \"iva\": 0,\n        \"gravado\": {\n            \"id\": 1,\n            \"descripcion\": \"Excento\",\n            \"porcentaje\": \"0.00\"\n        },\n        \"total_facturado\": 539,\n        \"honorarios_medicos\": 282.98,\n        \"honorarios_solicitantes\": 40.43,\n        \"uso_de_materiales\": 0,\n        \"retencion_cedir\": 80.85,\n        \"retencion_impositiva\": 134.75,\n        \"sala_recuperacion\": 0,\n        \"honorarios_anestesistas\": 0,\n        \"retencion_anestesia\": 0,\n        \"total_medicamentos\": 0,\n        \"total_material_especifico\": 0\n    },\n    {\n        \"id\": 20754,\n        \"numero\": 1777,\n        \"responsable\": \"Cedir\",\n        \"fecha_emision\": \"2019-10-04\",\n        \"nombre_cliente\": \"GALENO ARGENTINA S.A\",\n        \"nro_cuit\": \"30522428163\",\n        \"tipo_comprobante\": {\n            \"id\": 1,\n            \"nombre\": \"Factura\"\n        },\n        \"sub_tipo\": \"A\",\n        \"nro_terminal\": 91,\n        \"neto\": 7194,\n        \"iva\": 755.37,\n        \"gravado\": {\n            \"id\": 2,\n            \"descripcion\": \"IVA Inscripto 10.5\",\n            \"porcentaje\": \"10.50\"\n        },\n        \"total_facturado\": 7949.37,\n        \"honorarios_medicos\": 3776.85,\n        \"honorarios_solicitantes\": 539.55,\n        \"uso_de_materiales\": 0,\n        \"retencion_cedir\": 1079.1,\n        \"retencion_impositiva\": 1798.5,\n        \"sala_recuperacion\": 0,\n        \"honorarios_anestesistas\": 0,\n        \"retencion_anestesia\": 0,\n        \"total_medicamentos\": 0,\n        \"total_material_especifico\": 0\n    },\n    {\n        \"id\": 20755,\n        \"numero\": 1778,\n        \"responsable\": \"Cedir\",\n        \"fecha_emision\": \"2019-10-04\",\n        \"nombre_cliente\": \"GALENO ARGENTINA S.A\",\n        \"nro_cuit\": \"30522428163\",\n        \"tipo_comprobante\": {\n            \"id\": 1,\n            \"nombre\": \"Factura\"\n        },\n        \"sub_tipo\": \"A\",\n        \"nro_terminal\": 91,\n        \"neto\": 39266.38,\n        \"iva\": 4122.96,\n        \"gravado\": {\n            \"id\": 2,\n            \"descripcion\": \"IVA Inscripto 10.5\",\n            \"porcentaje\": \"10.50\"\n        },\n        \"total_facturado\": 43389.35,\n        \"honorarios_medicos\": 20030.58,\n        \"honorarios_solicitantes\": 504.84,\n        \"uso_de_materiales\": 0,\n        \"retencion_cedir\": 3894.21,\n        \"retencion_impositiva\": 9816.6,\n        \"sala_recuperacion\": 0,\n        \"honorarios_anestesistas\": 0,\n        \"retencion_anestesia\": 0,\n        \"total_medicamentos\": 5020.2,\n        \"total_material_especifico\": 0\n    },\n    {\n        \"id\": 20756,\n        \"numero\": 1779,\n        \"responsable\": \"Cedir\",\n        \"fecha_emision\": \"2019-10-04\",\n        \"nombre_cliente\": \"GALENO ARGENTINA S.A\",\n        \"nro_cuit\": \"30522428163\",\n        \"tipo_comprobante\": {\n            \"id\": 1,\n            \"nombre\": \"Factura\"\n        },\n        \"sub_tipo\": \"A\",\n        \"nro_terminal\": 91,\n        \"neto\": 14027.09,\n        \"iva\": 0,\n        \"gravado\": {\n            \"id\": 1,\n            \"descripcion\": \"Excento\",\n            \"porcentaje\": \"0.00\"\n        },\n        \"total_facturado\": 14027.09,\n        \"honorarios_medicos\": 6710.9,\n        \"honorarios_solicitantes\": 163.52,\n        \"uso_de_materiales\": 0,\n        \"retencion_cedir\": 1135.83,\n        \"retencion_impositiva\": 3506.78,\n        \"sala_recuperacion\": 0,\n        \"honorarios_anestesistas\": 0,\n        \"retencion_anestesia\": 0,\n        \"total_medicamentos\": 2510.1,\n        \"total_material_especifico\": 0\n    },\n    {\n        \"id\": 20757,\n        \"numero\": 1286,\n        \"responsable\": \"Cedir\",\n        \"fecha_emision\": \"2019-10-04\",\n        \"nombre_cliente\": \"ASOCIACION MUTUAL ARGENTINA - MEDYCIN S.A.\",\n        \"nro_cuit\": \"30709416223\",\n        \"tipo_comprobante\": {\n            \"id\": 1,\n            \"nombre\": \"Factura\"\n        },\n        \"sub_tipo\": \"B\",\n        \"nro_terminal\": 91,\n        \"neto\": 19600.25,\n        \"iva\": 0,\n        \"gravado\": {\n            \"id\": 1,\n            \"descripcion\": \"Excento\",\n            \"porcentaje\": \"0.00\"\n        },\n        \"total_facturado\": 19600.25,\n        \"honorarios_medicos\": 3761.91,\n        \"honorarios_solicitantes\": 2281.44,\n        \"uso_de_materiales\": 0,\n        \"retencion_cedir\": 1425.9,\n        \"retencion_impositiva\": 4900.07,\n        \"sala_recuperacion\": 1119,\n        \"honorarios_anestesistas\": 3386.48,\n        \"retencion_anestesia\": 376.28,\n        \"total_medicamentos\": 2349.19,\n        \"total_material_especifico\": 0\n    },\n    {\n        \"id\": 20758,\n        \"numero\": 1780,\n        \"responsable\": \"Cedir\",\n        \"fecha_emision\": \"2019-10-04\",\n        \"nombre_cliente\": \"EMPRESA PROVINCIAL DE LA ENERGIA ( SMAI )\",\n        \"nro_cuit\": \"30545788167\",\n        \"tipo_comprobante\": {\n            \"id\": 1,\n            \"nombre\": \"Factura\"\n        },\n        \"sub_tipo\": \"A\",\n        \"nro_terminal\": 91,\n        \"neto\": 4069,\n        \"iva\": 854.49,\n        \"gravado\": {\n            \"id\": 3,\n            \"descripcion\": \"IVA Inscripto 21\",\n            \"porcentaje\": \"21.00\"\n        },\n        \"total_facturado\": 4923.49,\n        \"honorarios_medicos\": 2222.7,\n        \"honorarios_solicitantes\": 0,\n        \"uso_de_materiales\": 0,\n        \"retencion_cedir\": 829.05,\n        \"retencion_impositiva\": 1017.25,\n        \"sala_recuperacion\": 0,\n        \"honorarios_anestesistas\": 0,\n        \"retencion_anestesia\": 0,\n        \"total_medicamentos\": 0,\n        \"total_material_especifico\": 0\n    },\n    {\n        \"id\": 20759,\n        \"numero\": 1287,\n        \"responsable\": \"Cedir\",\n        \"fecha_emision\": \"2019-10-04\",\n        \"nombre_cliente\": \"MUTUAL PROVINCIAL LUZ Y FUERZA STA. FE\",\n        \"nro_cuit\": \"30699896701\",\n        \"tipo_comprobante\": {\n            \"id\": 1,\n            \"nombre\": \"Factura\"\n        },\n        \"sub_tipo\": \"B\",\n        \"nro_terminal\": 91,\n        \"neto\": 38249.7,\n        \"iva\": 0,\n        \"gravado\": {\n            \"id\": 1,\n            \"descripcion\": \"Excento\",\n            \"porcentaje\": \"0.00\"\n        },\n        \"total_facturado\": 38249.7,\n        \"honorarios_medicos\": 12487.2,\n        \"honorarios_solicitantes\": 0,\n        \"uso_de_materiales\": 0,\n        \"retencion_cedir\": 2831.55,\n        \"retencion_impositiva\": 9562.43,\n        \"sala_recuperacion\": 3624.75,\n        \"honorarios_anestesistas\": 0,\n        \"retencion_anestesia\": 0,\n        \"total_medicamentos\": 7620.09,\n        \"total_material_especifico\": 2123.7\n    },\n    {\n        \"id\": 20760,\n        \"numero\": 1288,\n        \"responsable\": \"Cedir\",\n        \"fecha_emision\": \"2019-10-05\",\n        \"nombre_cliente\": \"FEDERACION MEDICA (OSAM)\",\n        \"nro_cuit\": \"30711418195\",\n        \"tipo_comprobante\": {\n            \"id\": 1,\n            \"nombre\": \"Factura\"\n        },\n        \"sub_tipo\": \"B\",\n        \"nro_terminal\": 91,\n        \"neto\": 13679.26,\n        \"iva\": 1436.32,\n        \"gravado\": {\n            \"id\": 2,\n            \"descripcion\": \"IVA Inscripto 10.5\",\n            \"porcentaje\": \"10.50\"\n        },\n        \"total_facturado\": 15115.58,\n        \"honorarios_medicos\": 4661.4,\n        \"honorarios_solicitantes\": 0,\n        \"uso_de_materiales\": 0,\n        \"retencion_cedir\": 1165.35,\n        \"retencion_impositiva\": 3419.82,\n        \"sala_recuperacion\": 914.25,\n        \"honorarios_anestesistas\": 0,\n        \"retencion_anestesia\": 0,\n        \"total_medicamentos\": 2636.57,\n        \"total_material_especifico\": 881.89\n    },\n    {\n        \"id\": 20761,\n        \"numero\": 1289,\n        \"responsable\": \"Cedir\",\n        \"fecha_emision\": \"2019-10-05\",\n        \"nombre_cliente\": \"FEDERACION MEDICA (S.O.S.-ASOCIACIÓN MUTULA MÉDICA VILLA MARÍA)\",\n        \"nro_cuit\": \"30638604279\",\n        \"tipo_comprobante\": {\n            \"id\": 1,\n            \"nombre\": \"Factura\"\n        },\n        \"sub_tipo\": \"B\",\n        \"nro_terminal\": 91,\n        \"neto\": 65156.09,\n        \"iva\": 6841.38,\n        \"gravado\": {\n            \"id\": 2,\n            \"descripcion\": \"IVA Inscripto 10.5\",\n            \"porcentaje\": \"10.50\"\n        },\n        \"total_facturado\": 71997.48,\n        \"honorarios_medicos\": 14645,\n        \"honorarios_solicitantes\": 0,\n        \"uso_de_materiales\": 3500,\n        \"retencion_cedir\": 3581.75,\n        \"retencion_impositiva\": 16289.03,\n        \"sala_recuperacion\": 914.25,\n        \"honorarios_anestesistas\": 0,\n        \"retencion_anestesia\": 0,\n        \"total_medicamentos\": 4806.07,\n        \"total_material_especifico\": 21420\n    },\n    {\n        \"id\": 20762,\n        \"numero\": 1290,\n        \"responsable\": \"Cedir\",\n        \"fecha_emision\": \"2019-10-05\",\n        \"nombre_cliente\": \"FEDERACION MEDICA (MUTUAL MEDICA RIO IV)\",\n        \"nro_cuit\": \"30683986603\",\n        \"tipo_comprobante\": {\n            \"id\": 1,\n            \"nombre\": \"Factura\"\n        },\n        \"sub_tipo\": \"B\",\n        \"nro_terminal\": 91,\n        \"neto\": 681,\n        \"iva\": 71.5,\n        \"gravado\": {\n            \"id\": 2,\n            \"descripcion\": \"IVA Inscripto 10.5\",\n            \"porcentaje\": \"10.50\"\n        },\n        \"total_facturado\": 752.51,\n        \"honorarios_medicos\": 472.2,\n        \"honorarios_solicitantes\": 0,\n        \"uso_de_materiales\": 0,\n        \"retencion_cedir\": 38.55,\n        \"retencion_impositiva\": 170.25,\n        \"sala_recuperacion\": 0,\n        \"honorarios_anestesistas\": 0,\n        \"retencion_anestesia\": 0,\n        \"total_medicamentos\": 0,\n        \"total_material_especifico\": 0\n    },\n    {\n        \"id\": 20763,\n        \"numero\": 1291,\n        \"responsable\": \"Cedir\",\n        \"fecha_emision\": \"2019-10-05\",\n        \"nombre_cliente\": \"MUTUAL PROVINCIAL LUZ Y FUERZA STA. FE\",\n        \"nro_cuit\": \"30699896701\",\n        \"tipo_comprobante\": {\n            \"id\": 1,\n            \"nombre\": \"Factura\"\n        },\n        \"sub_tipo\": \"B\",\n        \"nro_terminal\": 91,\n        \"neto\": 1705.04,\n        \"iva\": 0,\n        \"gravado\": {\n            \"id\": 1,\n            \"descripcion\": \"Excento\",\n            \"porcentaje\": \"0.00\"\n        },\n        \"total_facturado\": 1705.04,\n        \"honorarios_medicos\": 895.15,\n        \"honorarios_solicitantes\": 127.88,\n        \"uso_de_materiales\": 0,\n        \"retencion_cedir\": 255.76,\n        \"retencion_impositiva\": 426.26,\n        \"sala_recuperacion\": 0,\n        \"honorarios_anestesistas\": 0,\n        \"retencion_anestesia\": 0,\n        \"total_medicamentos\": 0,\n        \"total_material_especifico\": 0\n    },\n    {\n        \"id\": 20764,\n        \"numero\": 1292,\n        \"responsable\": \"Cedir\",\n        \"fecha_emision\": \"2019-10-05\",\n        \"nombre_cliente\": \"OBRA SOCIAL DE RELOJEROS, JOYEROS Y AFINES DE LA REPUPLICA ARGENTINA .\",\n        \"nro_cuit\": \"30691011395\",\n        \"tipo_comprobante\": {\n            \"id\": 1,\n            \"nombre\": \"Factura\"\n        },\n        \"sub_tipo\": \"B\",\n        \"nro_terminal\": 91,\n        \"neto\": 48648.8,\n        \"iva\": 0,\n        \"gravado\": {\n            \"id\": 1,\n            \"descripcion\": \"Excento\",\n            \"porcentaje\": \"0.00\"\n        },\n        \"total_facturado\": 48648.8,\n        \"honorarios_medicos\": 17309,\n        \"honorarios_solicitantes\": 0,\n        \"uso_de_materiales\": 500,\n        \"retencion_cedir\": 4039.25,\n        \"retencion_impositiva\": 12162.2,\n        \"sala_recuperacion\": 3412.5,\n        \"honorarios_anestesistas\": 0,\n        \"retencion_anestesia\": 0,\n        \"total_medicamentos\": 7480.11,\n        \"total_material_especifico\": 3745.74\n    },\n    {\n        \"id\": 20765,\n        \"numero\": 1293,\n        \"responsable\": \"Cedir\",\n        \"fecha_emision\": \"2019-10-05\",\n        \"nombre_cliente\": \"SARACENI , RAUL\",\n        \"nro_cuit\": \"6124559\",\n        \"tipo_comprobante\": {\n            \"id\": 1,\n            \"nombre\": \"Factura\"\n        },\n        \"sub_tipo\": \"B\",\n        \"nro_terminal\": 91,\n        \"neto\": 413.22,\n        \"iva\": 86.78,\n        \"gravado\": {\n            \"id\": 3,\n            \"descripcion\": \"IVA Inscripto 21\",\n            \"porcentaje\": \"21.00\"\n        },\n        \"total_facturado\": 500,\n        \"honorarios_medicos\": 0,\n        \"honorarios_solicitantes\": 0,\n        \"uso_de_materiales\": 0,\n        \"retencion_cedir\": 0,\n        \"retencion_impositiva\": 0,\n        \"sala_recuperacion\": 0,\n        \"honorarios_anestesistas\": 0,\n        \"retencion_anestesia\": 0,\n        \"total_medicamentos\": 0,\n        \"total_material_especifico\": 0\n    },\n    {\n        \"id\": 20766,\n        \"numero\": 1294,\n        \"responsable\": \"Cedir\",\n        \"fecha_emision\": \"2019-10-05\",\n        \"nombre_cliente\": \"RODRIGUEZ, OMAR\",\n        \"nro_cuit\": \"12162654\",\n        \"tipo_comprobante\": {\n            \"id\": 1,\n            \"nombre\": \"Factura\"\n        },\n        \"sub_tipo\": \"B\",\n        \"nro_terminal\": 91,\n        \"neto\": 27450.41,\n        \"iva\": 5764.59,\n        \"gravado\": {\n            \"id\": 3,\n            \"descripcion\": \"IVA Inscripto 21\",\n            \"porcentaje\": \"21.00\"\n        },\n        \"total_facturado\": 33215,\n        \"honorarios_medicos\": 0,\n        \"honorarios_solicitantes\": 0,\n        \"uso_de_materiales\": 0,\n        \"retencion_cedir\": 0,\n        \"retencion_impositiva\": 0,\n        \"sala_recuperacion\": 0,\n        \"honorarios_anestesistas\": 0,\n        \"retencion_anestesia\": 0,\n        \"total_medicamentos\": 0,\n        \"total_material_especifico\": 0\n    },\n    {\n        \"id\": 20767,\n        \"numero\": 1781,\n        \"responsable\": \"Cedir\",\n        \"fecha_emision\": \"2019-10-07\",\n        \"nombre_cliente\": \"U N R\",\n        \"nro_cuit\": \"30629908176\",\n        \"tipo_comprobante\": {\n            \"id\": 1,\n            \"nombre\": \"Factura\"\n        },\n        \"sub_tipo\": \"A\",\n        \"nro_terminal\": 91,\n        \"neto\": 42371.62,\n        \"iva\": 4449.02,\n        \"gravado\": {\n            \"id\": 2,\n            \"descripcion\": \"IVA Inscripto 10.5\",\n            \"porcentaje\": \"10.50\"\n        },\n        \"total_facturado\": 46820.64,\n        \"honorarios_medicos\": 16908,\n        \"honorarios_solicitantes\": 0,\n        \"uso_de_materiales\": 0,\n        \"retencion_cedir\": 3559.5,\n        \"retencion_impositiva\": 10592.91,\n        \"sala_recuperacion\": 2331.3,\n        \"honorarios_anestesistas\": 0,\n        \"retencion_anestesia\": 0,\n        \"total_medicamentos\": 6506.12,\n        \"total_material_especifico\": 2473.81\n    },\n    {\n        \"id\": 20768,\n        \"numero\": 1782,\n        \"responsable\": \"Cedir\",\n        \"fecha_emision\": \"2019-10-07\",\n        \"nombre_cliente\": \"U N R\",\n        \"nro_cuit\": \"30629908176\",\n        \"tipo_comprobante\": {\n            \"id\": 1,\n            \"nombre\": \"Factura\"\n        },\n        \"sub_tipo\": \"A\",\n        \"nro_terminal\": 91,\n        \"neto\": 63838.41,\n        \"iva\": 0,\n        \"gravado\": {\n            \"id\": 1,\n            \"descripcion\": \"Excento\",\n            \"porcentaje\": \"0.00\"\n        },\n        \"total_facturado\": 63838.41,\n        \"honorarios_medicos\": 24029.4,\n        \"honorarios_solicitantes\": 0,\n        \"uso_de_materiales\": 0,\n        \"retencion_cedir\": 4919.85,\n        \"retencion_impositiva\": 15959.61,\n        \"sala_recuperacion\": 5828.25,\n        \"honorarios_anestesistas\": 0,\n        \"retencion_anestesia\": 0,\n        \"total_medicamentos\": 11019.16,\n        \"total_material_especifico\": 2082.16\n    },\n    {\n        \"id\": 20769,\n        \"numero\": 1295,\n        \"responsable\": \"Cedir\",\n        \"fecha_emision\": \"2019-10-07\",\n        \"nombre_cliente\": \"FEDERADA SALUD GRUPO1\",\n        \"nro_cuit\": \"30541592608\",\n        \"tipo_comprobante\": {\n            \"id\": 1,\n            \"nombre\": \"Factura\"\n        },\n        \"sub_tipo\": \"B\",\n        \"nro_terminal\": 91,\n        \"neto\": 88376.16,\n        \"iva\": 9279.49,\n        \"gravado\": {\n            \"id\": 2,\n            \"descripcion\": \"IVA Inscripto 10.5\",\n            \"porcentaje\": \"10.50\"\n        },\n        \"total_facturado\": 97655.66,\n        \"honorarios_medicos\": 31211.3,\n        \"honorarios_solicitantes\": 1598.4,\n        \"uso_de_materiales\": 2000,\n        \"retencion_cedir\": 8223.8,\n        \"retencion_impositiva\": 22094.04,\n        \"sala_recuperacion\": 3001.5,\n        \"honorarios_anestesistas\": 0,\n        \"retencion_anestesia\": 0,\n        \"total_medicamentos\": 16482.02,\n        \"total_material_especifico\": 3765.11\n    },\n    {\n        \"id\": 20770,\n        \"numero\": 1296,\n        \"responsable\": \"Cedir\",\n        \"fecha_emision\": \"2019-10-07\",\n        \"nombre_cliente\": \"FEDERADA SALUD GRUPO1\",\n        \"nro_cuit\": \"30541592608\",\n        \"tipo_comprobante\": {\n            \"id\": 1,\n            \"nombre\": \"Factura\"\n        },\n        \"sub_tipo\": \"B\",\n        \"nro_terminal\": 91,\n        \"neto\": 47170.62,\n        \"iva\": 0,\n        \"gravado\": {\n            \"id\": 1,\n            \"descripcion\": \"Excento\",\n            \"porcentaje\": \"0.00\"\n        },\n        \"total_facturado\": 47170.62,\n        \"honorarios_medicos\": 12394.32,\n        \"honorarios_solicitantes\": 4261.68,\n        \"uso_de_materiales\": 0,\n        \"retencion_cedir\": 3440.25,\n        \"retencion_impositiva\": 11792.66,\n        \"sala_recuperacion\": 2501.25,\n        \"honorarios_anestesistas\": 0,\n        \"retencion_anestesia\": 0,\n        \"total_medicamentos\": 9642.88,\n        \"total_material_especifico\": 3137.59\n    },\n    {\n        \"id\": 20771,\n        \"numero\": 1297,\n        \"responsable\": \"Cedir\",\n        \"fecha_emision\": \"2019-10-07\",\n        \"nombre_cliente\": \"FEDERADA SALUD GRUPO2\",\n        \"nro_cuit\": \"30541592608\",\n        \"tipo_comprobante\": {\n            \"id\": 1,\n            \"nombre\": \"Factura\"\n        },\n        \"sub_tipo\": \"B\",\n        \"nro_terminal\": 91,\n        \"neto\": 28640.46,\n        \"iva\": 0,\n        \"gravado\": {\n            \"id\": 1,\n            \"descripcion\": \"Excento\",\n            \"porcentaje\": \"0.00\"\n        },\n        \"total_facturado\": 28640.46,\n        \"honorarios_medicos\": 8838.8,\n        \"honorarios_solicitantes\": 0,\n        \"uso_de_materiales\": 500,\n        \"retencion_cedir\": 1804.7,\n        \"retencion_impositiva\": 7160.12,\n        \"sala_recuperacion\": 1500.75,\n        \"honorarios_anestesistas\": 0,\n        \"retencion_anestesia\": 0,\n        \"total_medicamentos\": 6933.13,\n        \"total_material_especifico\": 1902.99\n    },\n    {\n        \"id\": 20772,\n        \"numero\": 1298,\n        \"responsable\": \"Cedir\",\n        \"fecha_emision\": \"2019-10-07\",\n        \"nombre_cliente\": \"FEDERADA SALUD GRUPO2\",\n        \"nro_cuit\": \"30541592608\",\n        \"tipo_comprobante\": {\n            \"id\": 1,\n            \"nombre\": \"Factura\"\n        },\n        \"sub_tipo\": \"B\",\n        \"nro_terminal\": 91,\n        \"neto\": 37345.58,\n        \"iva\": 3921.28,\n        \"gravado\": {\n            \"id\": 2,\n            \"descripcion\": \"IVA Inscripto 10.5\",\n            \"porcentaje\": \"10.50\"\n        },\n        \"total_facturado\": 41266.87,\n        \"honorarios_medicos\": 13772.6,\n        \"honorarios_solicitantes\": 744.6,\n        \"uso_de_materiales\": 500,\n        \"retencion_cedir\": 2549.3,\n        \"retencion_impositiva\": 9336.4,\n        \"sala_recuperacion\": 1500.75,\n        \"honorarios_anestesistas\": 0,\n        \"retencion_anestesia\": 0,\n        \"total_medicamentos\": 7018.55,\n        \"total_material_especifico\": 1923.42\n    },\n    {\n        \"id\": 20773,\n        \"numero\": 1783,\n        \"responsable\": \"Cedir\",\n        \"fecha_emision\": \"2019-10-07\",\n        \"nombre_cliente\": \"OSDEPYM\",\n        \"nro_cuit\": \"30586661716\",\n        \"tipo_comprobante\": {\n            \"id\": 1,\n            \"nombre\": \"Factura\"\n        },\n        \"sub_tipo\": \"A\",\n        \"nro_terminal\": 91,\n        \"neto\": 4157,\n        \"iva\": 436.48,\n        \"gravado\": {\n            \"id\": 2,\n            \"descripcion\": \"IVA Inscripto 10.5\",\n            \"porcentaje\": \"10.50\"\n        },\n        \"total_facturado\": 4593.49,\n        \"honorarios_medicos\": 2221.93,\n        \"honorarios_solicitantes\": 51.42,\n        \"uso_de_materiales\": 500,\n        \"retencion_cedir\": 344.42,\n        \"retencion_impositiva\": 1039.25,\n        \"sala_recuperacion\": 0,\n        \"honorarios_anestesistas\": 0,\n        \"retencion_anestesia\": 0,\n        \"total_medicamentos\": 0,\n        \"total_material_especifico\": 0\n    },\n    {\n        \"id\": 20774,\n        \"numero\": 1784,\n        \"responsable\": \"Cedir\",\n        \"fecha_emision\": \"2019-10-07\",\n        \"nombre_cliente\": \"OSDEPYM\",\n        \"nro_cuit\": \"30586661716\",\n        \"tipo_comprobante\": {\n            \"id\": 1,\n            \"nombre\": \"Factura\"\n        },\n        \"sub_tipo\": \"A\",\n        \"nro_terminal\": 91,\n        \"neto\": 82070.72,\n        \"iva\": 0,\n        \"gravado\": {\n            \"id\": 1,\n            \"descripcion\": \"Excento\",\n            \"porcentaje\": \"0.00\"\n        },\n        \"total_facturado\": 82070.72,\n        \"honorarios_medicos\": 23977.48,\n        \"honorarios_solicitantes\": 154.24,\n        \"uso_de_materiales\": 500,\n        \"retencion_cedir\": 5310.54,\n        \"retencion_impositiva\": 20517.68,\n        \"sala_recuperacion\": 1338,\n        \"honorarios_anestesistas\": 0,\n        \"retencion_anestesia\": 0,\n        \"total_medicamentos\": 11204.49,\n        \"total_material_especifico\": 19068.33\n    },\n    {\n        \"id\": 20775,\n        \"numero\": 1299,\n        \"responsable\": \"Cedir\",\n        \"fecha_emision\": \"2019-10-07\",\n        \"nombre_cliente\": \"MUTUAL  DEL PERSONAL DEL CENTRO INDUSTRIAL ACINDAR\",\n        \"nro_cuit\": \"30546172275\",\n        \"tipo_comprobante\": {\n            \"id\": 1,\n            \"nombre\": \"Factura\"\n        },\n        \"sub_tipo\": \"B\",\n        \"nro_terminal\": 91,\n        \"neto\": 700,\n        \"iva\": 0,\n        \"gravado\": {\n            \"id\": 1,\n            \"descripcion\": \"Excento\",\n            \"porcentaje\": \"0.00\"\n        },\n        \"total_facturado\": 700,\n        \"honorarios_medicos\": 525,\n        \"honorarios_solicitantes\": 0,\n        \"uso_de_materiales\": 0,\n        \"retencion_cedir\": 0,\n        \"retencion_impositiva\": 175,\n        \"sala_recuperacion\": 0,\n        \"honorarios_anestesistas\": 0,\n        \"retencion_anestesia\": 0,\n        \"total_medicamentos\": 0,\n        \"total_material_especifico\": 0\n    },\n    {\n        \"id\": 20776,\n        \"numero\": 1785,\n        \"responsable\": \"Cedir\",\n        \"fecha_emision\": \"2019-10-08\",\n        \"nombre_cliente\": \"ALIANZA MEDICA S.A.\",\n        \"nro_cuit\": \"33716405589\",\n        \"tipo_comprobante\": {\n            \"id\": 1,\n            \"nombre\": \"Factura\"\n        },\n        \"sub_tipo\": \"A\",\n        \"nro_terminal\": 91,\n        \"neto\": 44750.64,\n        \"iva\": 0,\n        \"gravado\": {\n            \"id\": 1,\n            \"descripcion\": \"Excento\",\n            \"porcentaje\": \"0.00\"\n        },\n        \"total_facturado\": 44750.64,\n        \"honorarios_medicos\": 9404.4,\n        \"honorarios_solicitantes\": 0,\n        \"uso_de_materiales\": 0,\n        \"retencion_cedir\": 2351.1,\n        \"retencion_impositiva\": 11187.66,\n        \"sala_recuperacion\": 2694,\n        \"honorarios_anestesistas\": 9791.55,\n        \"retencion_anestesia\": 1087.95,\n        \"total_medicamentos\": 8234,\n        \"total_material_especifico\": 0\n    },\n    {\n        \"id\": 20777,\n        \"numero\": 1786,\n        \"responsable\": \"Cedir\",\n        \"fecha_emision\": \"2019-10-08\",\n        \"nombre_cliente\": \"ALIANZA MEDICA S.A.\",\n        \"nro_cuit\": \"33716405589\",\n        \"tipo_comprobante\": {\n            \"id\": 1,\n            \"nombre\": \"Factura\"\n        },\n        \"sub_tipo\": \"A\",\n        \"nro_terminal\": 91,\n        \"neto\": 169217.7,\n        \"iva\": 17767.85,\n        \"gravado\": {\n            \"id\": 2,\n            \"descripcion\": \"IVA Inscripto 10.5\",\n            \"porcentaje\": \"10.50\"\n        },\n        \"total_facturado\": 186985.56,\n        \"honorarios_medicos\": 45039.28,\n        \"honorarios_solicitantes\": 171.34,\n        \"uso_de_materiales\": 2900,\n        \"retencion_cedir\": 10843.14,\n        \"retencion_impositiva\": 42304.43,\n        \"sala_recuperacion\": 6061.5,\n        \"honorarios_anestesistas\": 30922.43,\n        \"retencion_anestesia\": 3435.83,\n        \"total_medicamentos\": 20204.77,\n        \"total_material_especifico\": 7335\n    },\n    {\n        \"id\": 20778,\n        \"numero\": 1,\n        \"responsable\": \"Cedir\",\n        \"fecha_emision\": \"2019-10-08\",\n        \"nombre_cliente\": \"SWISS MEDICAL S.A.\",\n        \"nro_cuit\": \"30654855168\",\n        \"tipo_comprobante\": {\n            \"id\": 5,\n            \"nombre\": \"Factura Electronica\"\n        },\n        \"sub_tipo\": \"A\",\n        \"nro_terminal\": 91,\n        \"neto\": 138224,\n        \"iva\": 0,\n        \"gravado\": {\n            \"id\": 1,\n            \"descripcion\": \"Excento\",\n            \"porcentaje\": \"0.00\"\n        },\n        \"total_facturado\": 138224,\n        \"honorarios_medicos\": 38975.77,\n        \"honorarios_solicitantes\": 6703.97,\n        \"uso_de_materiales\": 3500,\n        \"retencion_cedir\": 10446.17,\n        \"retencion_impositiva\": 34556,\n        \"sala_recuperacion\": 8861.85,\n        \"honorarios_anestesistas\": 0,\n        \"retencion_anestesia\": 0,\n        \"total_medicamentos\": 35180.41,\n        \"total_material_especifico\": 0\n    },\n    {\n        \"id\": 20779,\n        \"numero\": 2,\n        \"responsable\": \"Cedir\",\n        \"fecha_emision\": \"2019-10-08\",\n        \"nombre_cliente\": \"SWISS MEDICAL S.A.\",\n        \"nro_cuit\": \"30654855168\",\n        \"tipo_comprobante\": {\n            \"id\": 5,\n            \"nombre\": \"Factura Electronica\"\n        },\n        \"sub_tipo\": \"A\",\n        \"nro_terminal\": 91,\n        \"neto\": 104200.4,\n        \"iva\": 10941.04,\n        \"gravado\": {\n            \"id\": 2,\n            \"descripcion\": \"IVA Inscripto 10.5\",\n            \"porcentaje\": \"10.50\"\n        },\n        \"total_facturado\": 115141.44,\n        \"honorarios_medicos\": 31953.85,\n        \"honorarios_solicitantes\": 0,\n        \"uso_de_materiales\": 2000,\n        \"retencion_cedir\": 8262.05,\n        \"retencion_impositiva\": 26050.1,\n        \"sala_recuperacion\": 6498.69,\n        \"honorarios_anestesistas\": 0,\n        \"retencion_anestesia\": 0,\n        \"total_medicamentos\": 29435.7,\n        \"total_material_especifico\": 0\n    },\n    {\n        \"id\": 20780,\n        \"numero\": 1300,\n        \"responsable\": \"Cedir\",\n        \"fecha_emision\": \"2019-10-08\",\n        \"nombre_cliente\": \"AMUR\",\n        \"nro_cuit\": \"30567510138\",\n        \"tipo_comprobante\": {\n            \"id\": 1,\n            \"nombre\": \"Factura\"\n        },\n        \"sub_tipo\": \"B\",\n        \"nro_terminal\": 91,\n        \"neto\": 11799.65,\n        \"iva\": 1238.96,\n        \"gravado\": {\n            \"id\": 2,\n            \"descripcion\": \"IVA Inscripto 10.5\",\n            \"porcentaje\": \"10.50\"\n        },\n        \"total_facturado\": 13038.61,\n        \"honorarios_medicos\": 4617.2,\n        \"honorarios_solicitantes\": 0,\n        \"uso_de_materiales\": 500,\n        \"retencion_cedir\": 1154.3,\n        \"retencion_impositiva\": 2949.92,\n        \"sala_recuperacion\": 818.25,\n        \"honorarios_anestesistas\": 0,\n        \"retencion_anestesia\": 0,\n        \"total_medicamentos\": 1116.19,\n        \"total_material_especifico\": 643.8\n    },\n    {\n        \"id\": 20781,\n        \"numero\": 1301,\n        \"responsable\": \"Cedir\",\n        \"fecha_emision\": \"2019-10-08\",\n        \"nombre_cliente\": \"AMUR\",\n        \"nro_cuit\": \"30567510138\",\n        \"tipo_comprobante\": {\n            \"id\": 1,\n            \"nombre\": \"Factura\"\n        },\n        \"sub_tipo\": \"B\",\n        \"nro_terminal\": 91,\n        \"neto\": 36016.46,\n        \"iva\": 0,\n        \"gravado\": {\n            \"id\": 1,\n            \"descripcion\": \"Excento\",\n            \"porcentaje\": \"0.00\"\n        },\n        \"total_facturado\": 36016.46,\n        \"honorarios_medicos\": 13176.6,\n        \"honorarios_solicitantes\": 0,\n        \"uso_de_materiales\": 1500,\n        \"retencion_cedir\": 3294.15,\n        \"retencion_impositiva\": 9004.12,\n        \"sala_recuperacion\": 1636.5,\n        \"honorarios_anestesistas\": 0,\n        \"retencion_anestesia\": 0,\n        \"total_medicamentos\": 6117.5,\n        \"total_material_especifico\": 1287.6\n    },\n    {\n        \"id\": 20782,\n        \"numero\": 1302,\n        \"responsable\": \"Cedir\",\n        \"fecha_emision\": \"2019-10-08\",\n        \"nombre_cliente\": \"OSPERYHRA\",\n        \"nro_cuit\": \"30595459563\",\n        \"tipo_comprobante\": {\n            \"id\": 1,\n            \"nombre\": \"Factura\"\n        },\n        \"sub_tipo\": \"B\",\n        \"nro_terminal\": 91,\n        \"neto\": 44407.28,\n        \"iva\": 0,\n        \"gravado\": {\n            \"id\": 1,\n            \"descripcion\": \"Excento\",\n            \"porcentaje\": \"0.00\"\n        },\n        \"total_facturado\": 44407.28,\n        \"honorarios_medicos\": 12469.4,\n        \"honorarios_solicitantes\": 0,\n        \"uso_de_materiales\": 500,\n        \"retencion_cedir\": 2817.35,\n        \"retencion_impositiva\": 11101.82,\n        \"sala_recuperacion\": 1093.5,\n        \"honorarios_anestesistas\": 0,\n        \"retencion_anestesia\": 0,\n        \"total_medicamentos\": 9300.22,\n        \"total_material_especifico\": 7125\n    },\n    {\n        \"id\": 20783,\n        \"numero\": 1787,\n        \"responsable\": \"Cedir\",\n        \"fecha_emision\": \"2019-10-08\",\n        \"nombre_cliente\": \"ACEROS PARANA S.A. (O.S.A.P.)\",\n        \"nro_cuit\": \"30615873531\",\n        \"tipo_comprobante\": {\n            \"id\": 1,\n            \"nombre\": \"Factura\"\n        },\n        \"sub_tipo\": \"A\",\n        \"nro_terminal\": 91,\n        \"neto\": 764,\n        \"iva\": 80.22,\n        \"gravado\": {\n            \"id\": 2,\n            \"descripcion\": \"IVA Inscripto 10.5\",\n            \"porcentaje\": \"10.50\"\n        },\n        \"total_facturado\": 844.22,\n        \"honorarios_medicos\": 573,\n        \"honorarios_solicitantes\": 0,\n        \"uso_de_materiales\": 0,\n        \"retencion_cedir\": 0,\n        \"retencion_impositiva\": 191,\n        \"sala_recuperacion\": 0,\n        \"honorarios_anestesistas\": 0,\n        \"retencion_anestesia\": 0,\n        \"total_medicamentos\": 0,\n        \"total_material_especifico\": 0\n    },\n    {\n        \"id\": 20784,\n        \"numero\": 1788,\n        \"responsable\": \"Cedir\",\n        \"fecha_emision\": \"2019-10-08\",\n        \"nombre_cliente\": \"ACEROS PARANA S.A. (O.S.A.P.)\",\n        \"nro_cuit\": \"30615873531\",\n        \"tipo_comprobante\": {\n            \"id\": 1,\n            \"nombre\": \"Factura\"\n        },\n        \"sub_tipo\": \"A\",\n        \"nro_terminal\": 91,\n        \"neto\": 19667,\n        \"iva\": 0,\n        \"gravado\": {\n            \"id\": 1,\n            \"descripcion\": \"Excento\",\n            \"porcentaje\": \"0.00\"\n        },\n        \"total_facturado\": 19667,\n        \"honorarios_medicos\": 9717.2,\n        \"honorarios_solicitantes\": 0,\n        \"uso_de_materiales\": 500,\n        \"retencion_cedir\": 1999.55,\n        \"retencion_impositiva\": 4916.75,\n        \"sala_recuperacion\": 1124.25,\n        \"honorarios_anestesistas\": 0,\n        \"retencion_anestesia\": 0,\n        \"total_medicamentos\": 1409.25,\n        \"total_material_especifico\": 0\n    },\n    {\n        \"id\": 20785,\n        \"numero\": 1303,\n        \"responsable\": \"Cedir\",\n        \"fecha_emision\": \"2019-10-08\",\n        \"nombre_cliente\": \"OSPAC\",\n        \"nro_cuit\": \"30999011655\",\n        \"tipo_comprobante\": {\n            \"id\": 1,\n            \"nombre\": \"Factura\"\n        },\n        \"sub_tipo\": \"B\",\n        \"nro_terminal\": 91,\n        \"neto\": 175035.2,\n        \"iva\": 0,\n        \"gravado\": {\n            \"id\": 1,\n            \"descripcion\": \"Excento\",\n            \"porcentaje\": \"0.00\"\n        },\n        \"total_facturado\": 175035.2,\n        \"honorarios_medicos\": 78232.62,\n        \"honorarios_solicitantes\": 0,\n        \"uso_de_materiales\": 0,\n        \"retencion_cedir\": 20782.53,\n        \"retencion_impositiva\": 43758.8,\n        \"sala_recuperacion\": 7936.5,\n        \"honorarios_anestesistas\": 0,\n        \"retencion_anestesia\": 0,\n        \"total_medicamentos\": 9450,\n        \"total_material_especifico\": 14874.75\n    },\n    {\n        \"id\": 20787,\n        \"numero\": 557,\n        \"responsable\": \"Cedir\",\n        \"fecha_emision\": \"2019-10-08\",\n        \"nombre_cliente\": \"OSDE BINARIO\",\n        \"nro_cuit\": \"30546741253\",\n        \"tipo_comprobante\": {\n            \"id\": 4,\n            \"nombre\": \"Nota De Credito\"\n        },\n        \"sub_tipo\": \"A\",\n        \"nro_terminal\": 91,\n        \"neto\": -418.42,\n        \"iva\": -43.93,\n        \"gravado\": {\n            \"id\": 2,\n            \"descripcion\": \"IVA Inscripto 10.5\",\n            \"porcentaje\": \"10.50\"\n        },\n        \"total_facturado\": -462.35,\n        \"honorarios_medicos\": 0,\n        \"honorarios_solicitantes\": 0,\n        \"uso_de_materiales\": 0,\n        \"retencion_cedir\": 0,\n        \"retencion_impositiva\": 0,\n        \"sala_recuperacion\": 0,\n        \"honorarios_anestesistas\": 0,\n        \"retencion_anestesia\": 0,\n        \"total_medicamentos\": 0,\n        \"total_material_especifico\": 0\n    },\n    {\n        \"id\": 20788,\n        \"numero\": 1304,\n        \"responsable\": \"Cedir\",\n        \"fecha_emision\": \"2019-10-09\",\n        \"nombre_cliente\": \"ASOCIACION MUTUAL SANCOR SALUD\",\n        \"nro_cuit\": \"30590354798\",\n        \"tipo_comprobante\": {\n            \"id\": 1,\n            \"nombre\": \"Factura\"\n        },\n        \"sub_tipo\": \"B\",\n        \"nro_terminal\": 91,\n        \"neto\": 11647.1,\n        \"iva\": 1222.94,\n        \"gravado\": {\n            \"id\": 2,\n            \"descripcion\": \"IVA Inscripto 10.5\",\n            \"porcentaje\": \"10.50\"\n        },\n        \"total_facturado\": 12870.05,\n        \"honorarios_medicos\": 4466.4,\n        \"honorarios_solicitantes\": 0,\n        \"uso_de_materiales\": 0,\n        \"retencion_cedir\": 434.1,\n        \"retencion_impositiva\": 2911.78,\n        \"sala_recuperacion\": 819,\n        \"honorarios_anestesistas\": 0,\n        \"retencion_anestesia\": 0,\n        \"total_medicamentos\": 2349.19,\n        \"total_material_especifico\": 666.65\n    },\n    {\n        \"id\": 20789,\n        \"numero\": 1305,\n        \"responsable\": \"Cedir\",\n        \"fecha_emision\": \"2019-10-09\",\n        \"nombre_cliente\": \"ASOCIACION MUTUAL SANCOR SALUD\",\n        \"nro_cuit\": \"30590354798\",\n        \"tipo_comprobante\": {\n            \"id\": 1,\n            \"nombre\": \"Factura\"\n        },\n        \"sub_tipo\": \"B\",\n        \"nro_terminal\": 91,\n        \"neto\": 33495.99,\n        \"iva\": 3517.07,\n        \"gravado\": {\n            \"id\": 2,\n            \"descripcion\": \"IVA Inscripto 10.5\",\n            \"porcentaje\": \"10.50\"\n        },\n        \"total_facturado\": 37013.07,\n        \"honorarios_medicos\": 12811.6,\n        \"honorarios_solicitantes\": 0,\n        \"uso_de_materiales\": 1000,\n        \"retencion_cedir\": 3202.9,\n        \"retencion_impositiva\": 8374,\n        \"sala_recuperacion\": 1638,\n        \"honorarios_anestesistas\": 0,\n        \"retencion_anestesia\": 0,\n        \"total_medicamentos\": 5136.22,\n        \"total_material_especifico\": 1333.29\n    },\n    {\n        \"id\": 20790,\n        \"numero\": 1306,\n        \"responsable\": \"Cedir\",\n        \"fecha_emision\": \"2019-10-09\",\n        \"nombre_cliente\": \"ASOCIACION MUTUAL SANCOR SALUD\",\n        \"nro_cuit\": \"30590354798\",\n        \"tipo_comprobante\": {\n            \"id\": 1,\n            \"nombre\": \"Factura\"\n        },\n        \"sub_tipo\": \"B\",\n        \"nro_terminal\": 91,\n        \"neto\": 34466.15,\n        \"iva\": 0,\n        \"gravado\": {\n            \"id\": 1,\n            \"descripcion\": \"Excento\",\n            \"porcentaje\": \"0.00\"\n        },\n        \"total_facturado\": 34466.15,\n        \"honorarios_medicos\": 12148.56,\n        \"honorarios_solicitantes\": 1027.44,\n        \"uso_de_materiales\": 1500,\n        \"retencion_cedir\": 3294,\n        \"retencion_impositiva\": 8616.54,\n        \"sala_recuperacion\": 1638,\n        \"honorarios_anestesistas\": 0,\n        \"retencion_anestesia\": 0,\n        \"total_medicamentos\": 4908.35,\n        \"total_material_especifico\": 1333.29\n    },\n    {\n        \"id\": 20791,\n        \"numero\": 1307,\n        \"responsable\": \"Cedir\",\n        \"fecha_emision\": \"2019-10-09\",\n        \"nombre_cliente\": \"ASOCIACION MUTUAL SANCOR SALUD\",\n        \"nro_cuit\": \"30590354798\",\n        \"tipo_comprobante\": {\n            \"id\": 1,\n            \"nombre\": \"Factura\"\n        },\n        \"sub_tipo\": \"B\",\n        \"nro_terminal\": 91,\n        \"neto\": 45281.21,\n        \"iva\": 0,\n        \"gravado\": {\n            \"id\": 1,\n            \"descripcion\": \"Excento\",\n            \"porcentaje\": \"0.00\"\n        },\n        \"total_facturado\": 45281.21,\n        \"honorarios_medicos\": 18331.8,\n        \"honorarios_solicitantes\": 0,\n        \"uso_de_materiales\": 0,\n        \"retencion_cedir\": 3763.95,\n        \"retencion_impositiva\": 11320.31,\n        \"sala_recuperacion\": 2457,\n        \"honorarios_anestesistas\": 0,\n        \"retencion_anestesia\": 0,\n        \"total_medicamentos\": 7408.25,\n        \"total_material_especifico\": 1999.94\n    },\n    {\n        \"id\": 20792,\n        \"numero\": 500,\n        \"responsable\": \"Cedir\",\n        \"fecha_emision\": \"2019-10-09\",\n        \"nombre_cliente\": \"ASOCIACION MUTUAL SANCOR SALUD\",\n        \"nro_cuit\": \"30590354798\",\n        \"tipo_comprobante\": {\n            \"id\": 4,\n            \"nombre\": \"Nota De Credito\"\n        },\n        \"sub_tipo\": \"B\",\n        \"nro_terminal\": 91,\n        \"neto\": -2918.21,\n        \"iva\": -306.41,\n        \"gravado\": {\n            \"id\": 2,\n            \"descripcion\": \"IVA Inscripto 10.5\",\n            \"porcentaje\": \"10.50\"\n        },\n        \"total_facturado\": -3224.62,\n        \"honorarios_medicos\": 0,\n        \"honorarios_solicitantes\": 0,\n        \"uso_de_materiales\": 0,\n        \"retencion_cedir\": 0,\n        \"retencion_impositiva\": 0,\n        \"sala_recuperacion\": 0,\n        \"honorarios_anestesistas\": 0,\n        \"retencion_anestesia\": 0,\n        \"total_medicamentos\": 0,\n        \"total_material_especifico\": 0\n    },\n    {\n        \"id\": 20799,\n        \"numero\": 561,\n        \"responsable\": \"Cedir\",\n        \"fecha_emision\": \"2019-10-10\",\n        \"nombre_cliente\": \"GALENO ARGENTINA S.A\",\n        \"nro_cuit\": \"30522428163\",\n        \"tipo_comprobante\": {\n            \"id\": 4,\n            \"nombre\": \"Nota De Credito\"\n        },\n        \"sub_tipo\": \"A\",\n        \"nro_terminal\": 91,\n        \"neto\": -90,\n        \"iva\": 0,\n        \"gravado\": {\n            \"id\": 1,\n            \"descripcion\": \"Excento\",\n            \"porcentaje\": \"0.00\"\n        },\n        \"total_facturado\": -90,\n        \"honorarios_medicos\": 0,\n        \"honorarios_solicitantes\": 0,\n        \"uso_de_materiales\": 0,\n        \"retencion_cedir\": 0,\n        \"retencion_impositiva\": 0,\n        \"sala_recuperacion\": 0,\n        \"honorarios_anestesistas\": 0,\n        \"retencion_anestesia\": 0,\n        \"total_medicamentos\": 0,\n        \"total_material_especifico\": 0\n    },\n    {\n        \"id\": 20786,\n        \"numero\": 3,\n        \"responsable\": \"Cedir\",\n        \"fecha_emision\": \"2019-10-08\",\n        \"nombre_cliente\": \"OSDE BINARIO\",\n        \"nro_cuit\": \"30546741253\",\n        \"tipo_comprobante\": {\n            \"id\": 5,\n            \"nombre\": \"Factura Electronica\"\n        },\n        \"sub_tipo\": \"A\",\n        \"nro_terminal\": 91,\n        \"neto\": 160157.8,\n        \"iva\": 0,\n        \"gravado\": {\n            \"id\": 1,\n            \"descripcion\": \"Excento\",\n            \"porcentaje\": \"0.00\"\n        },\n        \"total_facturado\": 160157.8,\n        \"honorarios_medicos\": 71474.26,\n        \"honorarios_solicitantes\": 8081.97,\n        \"uso_de_materiales\": 0,\n        \"retencion_cedir\": 15476.99,\n        \"retencion_impositiva\": 40039.45,\n        \"sala_recuperacion\": 7517.25,\n        \"honorarios_anestesistas\": 0,\n        \"retencion_anestesia\": 0,\n        \"total_medicamentos\": 17568,\n        \"total_material_especifico\": 0\n    },\n    {\n        \"id\": 20793,\n        \"numero\": 1789,\n        \"responsable\": \"Cedir\",\n        \"fecha_emision\": \"2019-10-10\",\n        \"nombre_cliente\": \"ACA SALUD\",\n        \"nro_cuit\": \"30604958640\",\n        \"tipo_comprobante\": {\n            \"id\": 1,\n            \"nombre\": \"Factura\"\n        },\n        \"sub_tipo\": \"A\",\n        \"nro_terminal\": 91,\n        \"neto\": 63864.48,\n        \"iva\": 0,\n        \"gravado\": {\n            \"id\": 1,\n            \"descripcion\": \"Excento\",\n            \"porcentaje\": \"0.00\"\n        },\n        \"total_facturado\": 63864.48,\n        \"honorarios_medicos\": 24531.59,\n        \"honorarios_solicitantes\": 1835.04,\n        \"uso_de_materiales\": 0,\n        \"retencion_cedir\": 6256.13,\n        \"retencion_impositiva\": 15966.12,\n        \"sala_recuperacion\": 4170,\n        \"honorarios_anestesistas\": 0,\n        \"retencion_anestesia\": 0,\n        \"total_medicamentos\": 7238.61,\n        \"total_material_especifico\": 3867\n    },\n    {\n        \"id\": 20794,\n        \"numero\": 558,\n        \"responsable\": \"Cedir\",\n        \"fecha_emision\": \"2019-10-10\",\n        \"nombre_cliente\": \"ALIANZA MEDICA S.A.\",\n        \"nro_cuit\": \"33716405589\",\n        \"tipo_comprobante\": {\n            \"id\": 4,\n            \"nombre\": \"Nota De Credito\"\n        },\n        \"sub_tipo\": \"A\",\n        \"nro_terminal\": 91,\n        \"neto\": -1286.97,\n        \"iva\": -135.13,\n        \"gravado\": {\n            \"id\": 2,\n            \"descripcion\": \"IVA Inscripto 10.5\",\n            \"porcentaje\": \"10.50\"\n        },\n        \"total_facturado\": -1422.1,\n        \"honorarios_medicos\": 0,\n        \"honorarios_solicitantes\": 0,\n        \"uso_de_materiales\": 0,\n        \"retencion_cedir\": 0,\n        \"retencion_impositiva\": 0,\n        \"sala_recuperacion\": 0,\n        \"honorarios_anestesistas\": 0,\n        \"retencion_anestesia\": 0,\n        \"total_medicamentos\": 0,\n        \"total_material_especifico\": 0\n    },\n    {\n        \"id\": 20795,\n        \"numero\": 559,\n        \"responsable\": \"Cedir\",\n        \"fecha_emision\": \"2019-10-10\",\n        \"nombre_cliente\": \"BRITANICA SALUD - SALUD ROSARIO SA.\",\n        \"nro_cuit\": \"30684675245\",\n        \"tipo_comprobante\": {\n            \"id\": 4,\n            \"nombre\": \"Nota De Credito\"\n        },\n        \"sub_tipo\": \"A\",\n        \"nro_terminal\": 91,\n        \"neto\": -1137.34,\n        \"iva\": -119.42,\n        \"gravado\": {\n            \"id\": 2,\n            \"descripcion\": \"IVA Inscripto 10.5\",\n            \"porcentaje\": \"10.50\"\n        },\n        \"total_facturado\": -1256.76,\n        \"honorarios_medicos\": 0,\n        \"honorarios_solicitantes\": 0,\n        \"uso_de_materiales\": 0,\n        \"retencion_cedir\": 0,\n        \"retencion_impositiva\": 0,\n        \"sala_recuperacion\": 0,\n        \"honorarios_anestesistas\": 0,\n        \"retencion_anestesia\": 0,\n        \"total_medicamentos\": 0,\n        \"total_material_especifico\": 0\n    },\n    {\n        \"id\": 20796,\n        \"numero\": 560,\n        \"responsable\": \"Cedir\",\n        \"fecha_emision\": \"2019-10-10\",\n        \"nombre_cliente\": \"AMPARAS S A MEDICINA PRIVADA\",\n        \"nro_cuit\": \"30612650337\",\n        \"tipo_comprobante\": {\n            \"id\": 4,\n            \"nombre\": \"Nota De Credito\"\n        },\n        \"sub_tipo\": \"A\",\n        \"nro_terminal\": 91,\n        \"neto\": -1262.99,\n        \"iva\": 0,\n        \"gravado\": {\n            \"id\": 1,\n            \"descripcion\": \"Excento\",\n            \"porcentaje\": \"0.00\"\n        },\n        \"total_facturado\": -1262.99,\n        \"honorarios_medicos\": 0,\n        \"honorarios_solicitantes\": 0,\n        \"uso_de_materiales\": 0,\n        \"retencion_cedir\": 0,\n        \"retencion_impositiva\": 0,\n        \"sala_recuperacion\": 0,\n        \"honorarios_anestesistas\": 0,\n        \"retencion_anestesia\": 0,\n        \"total_medicamentos\": 0,\n        \"total_material_especifico\": 0\n    },\n    {\n        \"id\": 20797,\n        \"numero\": 501,\n        \"responsable\": \"Cedir\",\n        \"fecha_emision\": \"2019-10-10\",\n        \"nombre_cliente\": \"OSPERYHRA\",\n        \"nro_cuit\": \"30595459563\",\n        \"tipo_comprobante\": {\n            \"id\": 4,\n            \"nombre\": \"Nota De Credito\"\n        },\n        \"sub_tipo\": \"B\",\n        \"nro_terminal\": 91,\n        \"neto\": -655.16,\n        \"iva\": 0,\n        \"gravado\": {\n            \"id\": 1,\n            \"descripcion\": \"Excento\",\n            \"porcentaje\": \"0.00\"\n        },\n        \"total_facturado\": -655.16,\n        \"honorarios_medicos\": 0,\n        \"honorarios_solicitantes\": 0,\n        \"uso_de_materiales\": 0,\n        \"retencion_cedir\": 0,\n        \"retencion_impositiva\": 0,\n        \"sala_recuperacion\": 0,\n        \"honorarios_anestesistas\": 0,\n        \"retencion_anestesia\": 0,\n        \"total_medicamentos\": 0,\n        \"total_material_especifico\": 0\n    },\n    {\n        \"id\": 20798,\n        \"numero\": 4,\n        \"responsable\": \"Cedir\",\n        \"fecha_emision\": \"2019-10-10\",\n        \"nombre_cliente\": \"ACA SALUD\",\n        \"nro_cuit\": \"30604958640\",\n        \"tipo_comprobante\": {\n            \"id\": 5,\n            \"nombre\": \"Factura Electronica\"\n        },\n        \"sub_tipo\": \"A\",\n        \"nro_terminal\": 91,\n        \"neto\": 99852.7,\n        \"iva\": 10484.53,\n        \"gravado\": {\n            \"id\": 2,\n            \"descripcion\": \"IVA Inscripto 10.5\",\n            \"porcentaje\": \"10.50\"\n        },\n        \"total_facturado\": 110337.23,\n        \"honorarios_medicos\": 35085.15,\n        \"honorarios_solicitantes\": 2293.8,\n        \"uso_de_materiales\": 0,\n        \"retencion_cedir\": 8931.3,\n        \"retencion_impositiva\": 24963.18,\n        \"sala_recuperacion\": 6255,\n        \"honorarios_anestesistas\": 0,\n        \"retencion_anestesia\": 0,\n        \"total_medicamentos\": 13381.28,\n        \"total_material_especifico\": 8943\n    },\n    {\n        \"id\": 20800,\n        \"numero\": 9432,\n        \"responsable\": null,\n        \"fecha_emision\": \"2019-10-10\",\n        \"nombre_cliente\": \"DASUTEN\",\n        \"nro_cuit\": \"30-54667116-6\",\n        \"tipo_comprobante\": {\n            \"id\": 2,\n            \"nombre\": \"Liquidacion\"\n        },\n        \"sub_tipo\": null,\n        \"nro_terminal\": 0,\n        \"neto\": 605.8,\n        \"iva\": 0,\n        \"gravado\": null,\n        \"total_facturado\": 605.8,\n        \"honorarios_medicos\": 411.95,\n        \"honorarios_solicitantes\": 0,\n        \"uso_de_materiales\": 0,\n        \"retencion_cedir\": 0,\n        \"retencion_impositiva\": 193.86,\n        \"sala_recuperacion\": 0,\n        \"honorarios_anestesistas\": 0,\n        \"retencion_anestesia\": 0,\n        \"total_medicamentos\": 0,\n        \"total_material_especifico\": 0\n    },\n    {\n        \"id\": 20801,\n        \"numero\": 93,\n        \"responsable\": \"Cedir\",\n        \"fecha_emision\": \"2019-10-10\",\n        \"nombre_cliente\": \"OMINT ( GENESIS - CARTILLA 1 Y 2 )\",\n        \"nro_cuit\": \"30550245309\",\n        \"tipo_comprobante\": {\n            \"id\": 3,\n            \"nombre\": \"Nota De Debito\"\n        },\n        \"sub_tipo\": \"A\",\n        \"nro_terminal\": 91,\n        \"neto\": 358,\n        \"iva\": 0,\n        \"gravado\": {\n            \"id\": 1,\n            \"descripcion\": \"Excento\",\n            \"porcentaje\": \"0.00\"\n        },\n        \"total_facturado\": 358,\n        \"honorarios_medicos\": 0,\n        \"honorarios_solicitantes\": 0,\n        \"uso_de_materiales\": 0,\n        \"retencion_cedir\": 0,\n        \"retencion_impositiva\": 0,\n        \"sala_recuperacion\": 0,\n        \"honorarios_anestesistas\": 0,\n        \"retencion_anestesia\": 0,\n        \"total_medicamentos\": 0,\n        \"total_material_especifico\": 0\n    },\n    {\n        \"id\": 20802,\n        \"numero\": 562,\n        \"responsable\": \"Cedir\",\n        \"fecha_emision\": \"2019-10-10\",\n        \"nombre_cliente\": \"OMINT ( GENESIS - CARTILLA 1 Y 2 )\",\n        \"nro_cuit\": \"30550245309\",\n        \"tipo_comprobante\": {\n            \"id\": 4,\n            \"nombre\": \"Nota De Credito\"\n        },\n        \"sub_tipo\": \"A\",\n        \"nro_terminal\": 91,\n        \"neto\": -358,\n        \"iva\": -37.59,\n        \"gravado\": {\n            \"id\": 2,\n            \"descripcion\": \"IVA Inscripto 10.5\",\n            \"porcentaje\": \"10.50\"\n        },\n        \"total_facturado\": -395.59,\n        \"honorarios_medicos\": 0,\n        \"honorarios_solicitantes\": 0,\n        \"uso_de_materiales\": 0,\n        \"retencion_cedir\": 0,\n        \"retencion_impositiva\": 0,\n        \"sala_recuperacion\": 0,\n        \"honorarios_anestesistas\": 0,\n        \"retencion_anestesia\": 0,\n        \"total_medicamentos\": 0,\n        \"total_material_especifico\": 0\n    },\n    {\n        \"id\": 20803,\n        \"numero\": 94,\n        \"responsable\": \"Cedir\",\n        \"fecha_emision\": \"2019-10-10\",\n        \"nombre_cliente\": \"SWISS MEDICAL S.A.\",\n        \"nro_cuit\": \"30654855168\",\n        \"tipo_comprobante\": {\n            \"id\": 3,\n            \"nombre\": \"Nota De Debito\"\n        },\n        \"sub_tipo\": \"A\",\n        \"nro_terminal\": 91,\n        \"neto\": 1858.67,\n        \"iva\": 0,\n        \"gravado\": {\n            \"id\": 1,\n            \"descripcion\": \"Excento\",\n            \"porcentaje\": \"0.00\"\n        },\n        \"total_facturado\": 1858.67,\n        \"honorarios_medicos\": 0,\n        \"honorarios_solicitantes\": 0,\n        \"uso_de_materiales\": 0,\n        \"retencion_cedir\": 0,\n        \"retencion_impositiva\": 0,\n        \"sala_recuperacion\": 0,\n        \"honorarios_anestesistas\": 0,\n        \"retencion_anestesia\": 0,\n        \"total_medicamentos\": 0,\n        \"total_material_especifico\": 0\n    },\n    {\n        \"id\": 20804,\n        \"numero\": 563,\n        \"responsable\": \"Cedir\",\n        \"fecha_emision\": \"2019-10-10\",\n        \"nombre_cliente\": \"SWISS MEDICAL S.A.\",\n        \"nro_cuit\": \"30654855168\",\n        \"tipo_comprobante\": {\n            \"id\": 4,\n            \"nombre\": \"Nota De Credito\"\n        },\n        \"sub_tipo\": \"A\",\n        \"nro_terminal\": 91,\n        \"neto\": -1858.67,\n        \"iva\": -195.16,\n        \"gravado\": {\n            \"id\": 2,\n            \"descripcion\": \"IVA Inscripto 10.5\",\n            \"porcentaje\": \"10.50\"\n        },\n        \"total_facturado\": -2053.83,\n        \"honorarios_medicos\": 0,\n        \"honorarios_solicitantes\": 0,\n        \"uso_de_materiales\": 0,\n        \"retencion_cedir\": 0,\n        \"retencion_impositiva\": 0,\n        \"sala_recuperacion\": 0,\n        \"honorarios_anestesistas\": 0,\n        \"retencion_anestesia\": 0,\n        \"total_medicamentos\": 0,\n        \"total_material_especifico\": 0\n    },\n    {\n        \"id\": 20805,\n        \"numero\": 9433,\n        \"responsable\": null,\n        \"fecha_emision\": \"2019-10-10\",\n        \"nombre_cliente\": \"OSSEG\",\n        \"nro_cuit\": \"30500053522\",\n        \"tipo_comprobante\": {\n            \"id\": 2,\n            \"nombre\": \"Liquidacion\"\n        },\n        \"sub_tipo\": null,\n        \"nro_terminal\": 0,\n        \"neto\": 260,\n        \"iva\": 0,\n        \"gravado\": null,\n        \"total_facturado\": 260,\n        \"honorarios_medicos\": 176.8,\n        \"honorarios_solicitantes\": 0,\n        \"uso_de_materiales\": 0,\n        \"retencion_cedir\": 0,\n        \"retencion_impositiva\": 83.2,\n        \"sala_recuperacion\": 0,\n        \"honorarios_anestesistas\": 0,\n        \"retencion_anestesia\": 0,\n        \"total_medicamentos\": 0,\n        \"total_material_especifico\": 0\n    },\n    {\n        \"id\": 20844,\n        \"numero\": 9466,\n        \"responsable\": null,\n        \"fecha_emision\": \"2019-10-14\",\n        \"nombre_cliente\": \"OSSEG\",\n        \"nro_cuit\": \"30500053522\",\n        \"tipo_comprobante\": {\n            \"id\": 2,\n            \"nombre\": \"Liquidacion\"\n        },\n        \"sub_tipo\": null,\n        \"nro_terminal\": 0,\n        \"neto\": 14853.71,\n        \"iva\": 0,\n        \"gravado\": null,\n        \"total_facturado\": 14853.71,\n        \"honorarios_medicos\": 4643.23,\n        \"honorarios_solicitantes\": 0,\n        \"uso_de_materiales\": 500,\n        \"retencion_cedir\": 1160.81,\n        \"retencion_impositiva\": 4753.19,\n        \"sala_recuperacion\": 1199.4,\n        \"honorarios_anestesistas\": 0,\n        \"retencion_anestesia\": 0,\n        \"total_medicamentos\": 2597.09,\n        \"total_material_especifico\": 0\n    },\n    {\n        \"id\": 20806,\n        \"numero\": 9434,\n        \"responsable\": null,\n        \"fecha_emision\": \"2019-10-11\",\n        \"nombre_cliente\": \"OSSEG\",\n        \"nro_cuit\": \"30500053522\",\n        \"tipo_comprobante\": {\n            \"id\": 2,\n            \"nombre\": \"Liquidacion\"\n        },\n        \"sub_tipo\": null,\n        \"nro_terminal\": 0,\n        \"neto\": 130,\n        \"iva\": 0,\n        \"gravado\": null,\n        \"total_facturado\": 130,\n        \"honorarios_medicos\": 88.4,\n        \"honorarios_solicitantes\": 0,\n        \"uso_de_materiales\": 0,\n        \"retencion_cedir\": 0,\n        \"retencion_impositiva\": 41.6,\n        \"sala_recuperacion\": 0,\n        \"honorarios_anestesistas\": 0,\n        \"retencion_anestesia\": 0,\n        \"total_medicamentos\": 0,\n        \"total_material_especifico\": 0\n    },\n    {\n        \"id\": 20807,\n        \"numero\": 502,\n        \"responsable\": \"Cedir\",\n        \"fecha_emision\": \"2019-10-11\",\n        \"nombre_cliente\": \"ASOCIACION MEDICA DE ROSARIO\",\n        \"nro_cuit\": \"30528073146\",\n        \"tipo_comprobante\": {\n            \"id\": 4,\n            \"nombre\": \"Nota De Credito\"\n        },\n        \"sub_tipo\": \"B\",\n        \"nro_terminal\": 91,\n        \"neto\": -3733.72,\n        \"iva\": 0,\n        \"gravado\": {\n            \"id\": 1,\n            \"descripcion\": \"Excento\",\n            \"porcentaje\": \"0.00\"\n        },\n        \"total_facturado\": -3733.72,\n        \"honorarios_medicos\": 0,\n        \"honorarios_solicitantes\": 0,\n        \"uso_de_materiales\": 0,\n        \"retencion_cedir\": 0,\n        \"retencion_impositiva\": 0,\n        \"sala_recuperacion\": 0,\n        \"honorarios_anestesistas\": 0,\n        \"retencion_anestesia\": 0,\n        \"total_medicamentos\": 0,\n        \"total_material_especifico\": 0\n    },\n    {\n        \"id\": 20808,\n        \"numero\": 503,\n        \"responsable\": \"Cedir\",\n        \"fecha_emision\": \"2019-10-11\",\n        \"nombre_cliente\": \"ASOCIACION MEDICA DE ROSARIO\",\n        \"nro_cuit\": \"30528073146\",\n        \"tipo_comprobante\": {\n            \"id\": 4,\n            \"nombre\": \"Nota De Credito\"\n        },\n        \"sub_tipo\": \"B\",\n        \"nro_terminal\": 91,\n        \"neto\": -3949.38,\n        \"iva\": 0,\n        \"gravado\": {\n            \"id\": 1,\n            \"descripcion\": \"Excento\",\n            \"porcentaje\": \"0.00\"\n        },\n        \"total_facturado\": -3949.38,\n        \"honorarios_medicos\": 0,\n        \"honorarios_solicitantes\": 0,\n        \"uso_de_materiales\": 0,\n        \"retencion_cedir\": 0,\n        \"retencion_impositiva\": 0,\n        \"sala_recuperacion\": 0,\n        \"honorarios_anestesistas\": 0,\n        \"retencion_anestesia\": 0,\n        \"total_medicamentos\": 0,\n        \"total_material_especifico\": 0\n    },\n    {\n        \"id\": 20809,\n        \"numero\": 504,\n        \"responsable\": \"Cedir\",\n        \"fecha_emision\": \"2019-10-11\",\n        \"nombre_cliente\": \"ASOCIACION MEDICA DE ROSARIO\",\n        \"nro_cuit\": \"30528073146\",\n        \"tipo_comprobante\": {\n            \"id\": 4,\n            \"nombre\": \"Nota De Credito\"\n        },\n        \"sub_tipo\": \"B\",\n        \"nro_terminal\": 91,\n        \"neto\": -2132.98,\n        \"iva\": 0,\n        \"gravado\": {\n            \"id\": 1,\n            \"descripcion\": \"Excento\",\n            \"porcentaje\": \"0.00\"\n        },\n        \"total_facturado\": -2132.98,\n        \"honorarios_medicos\": 0,\n        \"honorarios_solicitantes\": 0,\n        \"uso_de_materiales\": 0,\n        \"retencion_cedir\": 0,\n        \"retencion_impositiva\": 0,\n        \"sala_recuperacion\": 0,\n        \"honorarios_anestesistas\": 0,\n        \"retencion_anestesia\": 0,\n        \"total_medicamentos\": 0,\n        \"total_material_especifico\": 0\n    },\n    {\n        \"id\": 20810,\n        \"numero\": 505,\n        \"responsable\": \"Cedir\",\n        \"fecha_emision\": \"2019-10-11\",\n        \"nombre_cliente\": \"ASOCIACION MEDICA DE ROSARIO\",\n        \"nro_cuit\": \"30528073146\",\n        \"tipo_comprobante\": {\n            \"id\": 4,\n            \"nombre\": \"Nota De Credito\"\n        },\n        \"sub_tipo\": \"B\",\n        \"nro_terminal\": 91,\n        \"neto\": -1789.22,\n        \"iva\": 0,\n        \"gravado\": {\n            \"id\": 1,\n            \"descripcion\": \"Excento\",\n            \"porcentaje\": \"0.00\"\n        },\n        \"total_facturado\": -1789.22,\n        \"honorarios_medicos\": 0,\n        \"honorarios_solicitantes\": 0,\n        \"uso_de_materiales\": 0,\n        \"retencion_cedir\": 0,\n        \"retencion_impositiva\": 0,\n        \"sala_recuperacion\": 0,\n        \"honorarios_anestesistas\": 0,\n        \"retencion_anestesia\": 0,\n        \"total_medicamentos\": 0,\n        \"total_material_especifico\": 0\n    },\n    {\n        \"id\": 20811,\n        \"numero\": 506,\n        \"responsable\": \"Cedir\",\n        \"fecha_emision\": \"2019-10-11\",\n        \"nombre_cliente\": \"ASOCIACION MEDICA DE ROSARIO\",\n        \"nro_cuit\": \"30528073146\",\n        \"tipo_comprobante\": {\n            \"id\": 4,\n            \"nombre\": \"Nota De Credito\"\n        },\n        \"sub_tipo\": \"B\",\n        \"nro_terminal\": 91,\n        \"neto\": -4039.27,\n        \"iva\": 0,\n        \"gravado\": {\n            \"id\": 1,\n            \"descripcion\": \"Excento\",\n            \"porcentaje\": \"0.00\"\n        },\n        \"total_facturado\": -4039.27,\n        \"honorarios_medicos\": 0,\n        \"honorarios_solicitantes\": 0,\n        \"uso_de_materiales\": 0,\n        \"retencion_cedir\": 0,\n        \"retencion_impositiva\": 0,\n        \"sala_recuperacion\": 0,\n        \"honorarios_anestesistas\": 0,\n        \"retencion_anestesia\": 0,\n        \"total_medicamentos\": 0,\n        \"total_material_especifico\": 0\n    },\n    {\n        \"id\": 20812,\n        \"numero\": 9435,\n        \"responsable\": null,\n        \"fecha_emision\": \"2019-10-11\",\n        \"nombre_cliente\": \"IAPOS ROSARIO\",\n        \"nro_cuit\": \"30-99917935\",\n        \"tipo_comprobante\": {\n            \"id\": 2,\n            \"nombre\": \"Liquidacion\"\n        },\n        \"sub_tipo\": null,\n        \"nro_terminal\": 0,\n        \"neto\": 415,\n        \"iva\": 0,\n        \"gravado\": null,\n        \"total_facturado\": 415,\n        \"honorarios_medicos\": 282.2,\n        \"honorarios_solicitantes\": 0,\n        \"uso_de_materiales\": 0,\n        \"retencion_cedir\": 0,\n        \"retencion_impositiva\": 132.8,\n        \"sala_recuperacion\": 0,\n        \"honorarios_anestesistas\": 0,\n        \"retencion_anestesia\": 0,\n        \"total_medicamentos\": 0,\n        \"total_material_especifico\": 0\n    },\n    {\n        \"id\": 20813,\n        \"numero\": 9436,\n        \"responsable\": null,\n        \"fecha_emision\": \"2019-10-11\",\n        \"nombre_cliente\": \"IAPOS ROSARIO\",\n        \"nro_cuit\": \"30-99917935\",\n        \"tipo_comprobante\": {\n            \"id\": 2,\n            \"nombre\": \"Liquidacion\"\n        },\n        \"sub_tipo\": null,\n        \"nro_terminal\": 0,\n        \"neto\": 415,\n        \"iva\": 0,\n        \"gravado\": null,\n        \"total_facturado\": 415,\n        \"honorarios_medicos\": 282.2,\n        \"honorarios_solicitantes\": 0,\n        \"uso_de_materiales\": 0,\n        \"retencion_cedir\": 0,\n        \"retencion_impositiva\": 132.8,\n        \"sala_recuperacion\": 0,\n        \"honorarios_anestesistas\": 0,\n        \"retencion_anestesia\": 0,\n        \"total_medicamentos\": 0,\n        \"total_material_especifico\": 0\n    },\n    {\n        \"id\": 20814,\n        \"numero\": 9437,\n        \"responsable\": null,\n        \"fecha_emision\": \"2019-10-11\",\n        \"nombre_cliente\": \"IAPOS ROSARIO\",\n        \"nro_cuit\": \"30-99917935\",\n        \"tipo_comprobante\": {\n            \"id\": 2,\n            \"nombre\": \"Liquidacion\"\n        },\n        \"sub_tipo\": null,\n        \"nro_terminal\": 0,\n        \"neto\": 415,\n        \"iva\": 0,\n        \"gravado\": null,\n        \"total_facturado\": 415,\n        \"honorarios_medicos\": 282.2,\n        \"honorarios_solicitantes\": 0,\n        \"uso_de_materiales\": 0,\n        \"retencion_cedir\": 0,\n        \"retencion_impositiva\": 132.8,\n        \"sala_recuperacion\": 0,\n        \"honorarios_anestesistas\": 0,\n        \"retencion_anestesia\": 0,\n        \"total_medicamentos\": 0,\n        \"total_material_especifico\": 0\n    },\n    {\n        \"id\": 20815,\n        \"numero\": 9438,\n        \"responsable\": null,\n        \"fecha_emision\": \"2019-10-11\",\n        \"nombre_cliente\": \"IAPOS ROSARIO\",\n        \"nro_cuit\": \"30-99917935\",\n        \"tipo_comprobante\": {\n            \"id\": 2,\n            \"nombre\": \"Liquidacion\"\n        },\n        \"sub_tipo\": null,\n        \"nro_terminal\": 0,\n        \"neto\": 415,\n        \"iva\": 0,\n        \"gravado\": null,\n        \"total_facturado\": 415,\n        \"honorarios_medicos\": 282.2,\n        \"honorarios_solicitantes\": 0,\n        \"uso_de_materiales\": 0,\n        \"retencion_cedir\": 0,\n        \"retencion_impositiva\": 132.8,\n        \"sala_recuperacion\": 0,\n        \"honorarios_anestesistas\": 0,\n        \"retencion_anestesia\": 0,\n        \"total_medicamentos\": 0,\n        \"total_material_especifico\": 0\n    },\n    {\n        \"id\": 20816,\n        \"numero\": 9439,\n        \"responsable\": null,\n        \"fecha_emision\": \"2019-10-11\",\n        \"nombre_cliente\": \"IAPOS INTERIOR\",\n        \"nro_cuit\": \"30-99917935\",\n        \"tipo_comprobante\": {\n            \"id\": 2,\n            \"nombre\": \"Liquidacion\"\n        },\n        \"sub_tipo\": null,\n        \"nro_terminal\": 0,\n        \"neto\": 830,\n        \"iva\": 0,\n        \"gravado\": null,\n        \"total_facturado\": 830,\n        \"honorarios_medicos\": 564.4,\n        \"honorarios_solicitantes\": 0,\n        \"uso_de_materiales\": 0,\n        \"retencion_cedir\": 0,\n        \"retencion_impositiva\": 265.6,\n        \"sala_recuperacion\": 0,\n        \"honorarios_anestesistas\": 0,\n        \"retencion_anestesia\": 0,\n        \"total_medicamentos\": 0,\n        \"total_material_especifico\": 0\n    },\n    {\n        \"id\": 20817,\n        \"numero\": 9440,\n        \"responsable\": null,\n        \"fecha_emision\": \"2019-10-11\",\n        \"nombre_cliente\": \"IAPOS INTERIOR\",\n        \"nro_cuit\": \"30-99917935\",\n        \"tipo_comprobante\": {\n            \"id\": 2,\n            \"nombre\": \"Liquidacion\"\n        },\n        \"sub_tipo\": null,\n        \"nro_terminal\": 0,\n        \"neto\": 415,\n        \"iva\": 0,\n        \"gravado\": null,\n        \"total_facturado\": 415,\n        \"honorarios_medicos\": 282.2,\n        \"honorarios_solicitantes\": 0,\n        \"uso_de_materiales\": 0,\n        \"retencion_cedir\": 0,\n        \"retencion_impositiva\": 132.8,\n        \"sala_recuperacion\": 0,\n        \"honorarios_anestesistas\": 0,\n        \"retencion_anestesia\": 0,\n        \"total_medicamentos\": 0,\n        \"total_material_especifico\": 0\n    },\n    {\n        \"id\": 20818,\n        \"numero\": 9441,\n        \"responsable\": null,\n        \"fecha_emision\": \"2019-10-11\",\n        \"nombre_cliente\": \"IAPOS INTERIOR\",\n        \"nro_cuit\": \"30-99917935\",\n        \"tipo_comprobante\": {\n            \"id\": 2,\n            \"nombre\": \"Liquidacion\"\n        },\n        \"sub_tipo\": null,\n        \"nro_terminal\": 0,\n        \"neto\": 415,\n        \"iva\": 0,\n        \"gravado\": null,\n        \"total_facturado\": 415,\n        \"honorarios_medicos\": 282.2,\n        \"honorarios_solicitantes\": 0,\n        \"uso_de_materiales\": 0,\n        \"retencion_cedir\": 0,\n        \"retencion_impositiva\": 132.8,\n        \"sala_recuperacion\": 0,\n        \"honorarios_anestesistas\": 0,\n        \"retencion_anestesia\": 0,\n        \"total_medicamentos\": 0,\n        \"total_material_especifico\": 0\n    },\n    {\n        \"id\": 20819,\n        \"numero\": 9442,\n        \"responsable\": null,\n        \"fecha_emision\": \"2019-10-11\",\n        \"nombre_cliente\": \"IAPOS INTERIOR\",\n        \"nro_cuit\": \"30-99917935\",\n        \"tipo_comprobante\": {\n            \"id\": 2,\n            \"nombre\": \"Liquidacion\"\n        },\n        \"sub_tipo\": null,\n        \"nro_terminal\": 0,\n        \"neto\": 830,\n        \"iva\": 0,\n        \"gravado\": null,\n        \"total_facturado\": 830,\n        \"honorarios_medicos\": 564.4,\n        \"honorarios_solicitantes\": 0,\n        \"uso_de_materiales\": 0,\n        \"retencion_cedir\": 0,\n        \"retencion_impositiva\": 265.6,\n        \"sala_recuperacion\": 0,\n        \"honorarios_anestesistas\": 0,\n        \"retencion_anestesia\": 0,\n        \"total_medicamentos\": 0,\n        \"total_material_especifico\": 0\n    },\n    {\n        \"id\": 20820,\n        \"numero\": 9443,\n        \"responsable\": null,\n        \"fecha_emision\": \"2019-10-11\",\n        \"nombre_cliente\": \"IAPOS INTERIOR\",\n        \"nro_cuit\": \"30-99917935\",\n        \"tipo_comprobante\": {\n            \"id\": 2,\n            \"nombre\": \"Liquidacion\"\n        },\n        \"sub_tipo\": null,\n        \"nro_terminal\": 0,\n        \"neto\": 2075,\n        \"iva\": 0,\n        \"gravado\": null,\n        \"total_facturado\": 2075,\n        \"honorarios_medicos\": 1411,\n        \"honorarios_solicitantes\": 0,\n        \"uso_de_materiales\": 0,\n        \"retencion_cedir\": 0,\n        \"retencion_impositiva\": 664,\n        \"sala_recuperacion\": 0,\n        \"honorarios_anestesistas\": 0,\n        \"retencion_anestesia\": 0,\n        \"total_medicamentos\": 0,\n        \"total_material_especifico\": 0\n    },\n    {\n        \"id\": 20821,\n        \"numero\": 9444,\n        \"responsable\": null,\n        \"fecha_emision\": \"2019-10-11\",\n        \"nombre_cliente\": \"IAPOS INTERIOR\",\n        \"nro_cuit\": \"30-99917935\",\n        \"tipo_comprobante\": {\n            \"id\": 2,\n            \"nombre\": \"Liquidacion\"\n        },\n        \"sub_tipo\": null,\n        \"nro_terminal\": 0,\n        \"neto\": 6463,\n        \"iva\": 0,\n        \"gravado\": null,\n        \"total_facturado\": 6463,\n        \"honorarios_medicos\": 2660.16,\n        \"honorarios_solicitantes\": 0,\n        \"uso_de_materiales\": 0,\n        \"retencion_cedir\": 665.04,\n        \"retencion_impositiva\": 2068.16,\n        \"sala_recuperacion\": 344.08,\n        \"honorarios_anestesistas\": 0,\n        \"retencion_anestesia\": 0,\n        \"total_medicamentos\": 725.56,\n        \"total_material_especifico\": 0\n    },\n    {\n        \"id\": 20822,\n        \"numero\": 9445,\n        \"responsable\": null,\n        \"fecha_emision\": \"2019-10-11\",\n        \"nombre_cliente\": \"IAPOS INTERIOR\",\n        \"nro_cuit\": \"30-99917935\",\n        \"tipo_comprobante\": {\n            \"id\": 2,\n            \"nombre\": \"Liquidacion\"\n        },\n        \"sub_tipo\": null,\n        \"nro_terminal\": 0,\n        \"neto\": 6463,\n        \"iva\": 0,\n        \"gravado\": null,\n        \"total_facturado\": 6463,\n        \"honorarios_medicos\": 2660.16,\n        \"honorarios_solicitantes\": 0,\n        \"uso_de_materiales\": 0,\n        \"retencion_cedir\": 665.04,\n        \"retencion_impositiva\": 2068.16,\n        \"sala_recuperacion\": 344.08,\n        \"honorarios_anestesistas\": 0,\n        \"retencion_anestesia\": 0,\n        \"total_medicamentos\": 725.56,\n        \"total_material_especifico\": 0\n    },\n    {\n        \"id\": 20823,\n        \"numero\": 9446,\n        \"responsable\": null,\n        \"fecha_emision\": \"2019-10-11\",\n        \"nombre_cliente\": \"IAPOS INTERIOR\",\n        \"nro_cuit\": \"30-99917935\",\n        \"tipo_comprobante\": {\n            \"id\": 2,\n            \"nombre\": \"Liquidacion\"\n        },\n        \"sub_tipo\": null,\n        \"nro_terminal\": 0,\n        \"neto\": 6463,\n        \"iva\": 0,\n        \"gravado\": null,\n        \"total_facturado\": 6463,\n        \"honorarios_medicos\": 2660.16,\n        \"honorarios_solicitantes\": 0,\n        \"uso_de_materiales\": 0,\n        \"retencion_cedir\": 665.04,\n        \"retencion_impositiva\": 2068.16,\n        \"sala_recuperacion\": 344.08,\n        \"honorarios_anestesistas\": 0,\n        \"retencion_anestesia\": 0,\n        \"total_medicamentos\": 725.56,\n        \"total_material_especifico\": 0\n    },\n    {\n        \"id\": 20824,\n        \"numero\": 9447,\n        \"responsable\": null,\n        \"fecha_emision\": \"2019-10-11\",\n        \"nombre_cliente\": \"IAPOS ROSARIO\",\n        \"nro_cuit\": \"30-99917935\",\n        \"tipo_comprobante\": {\n            \"id\": 2,\n            \"nombre\": \"Liquidacion\"\n        },\n        \"sub_tipo\": null,\n        \"nro_terminal\": 0,\n        \"neto\": 1245,\n        \"iva\": 0,\n        \"gravado\": null,\n        \"total_facturado\": 1245,\n        \"honorarios_medicos\": 846.6,\n        \"honorarios_solicitantes\": 0,\n        \"uso_de_materiales\": 0,\n        \"retencion_cedir\": 0,\n        \"retencion_impositiva\": 398.4,\n        \"sala_recuperacion\": 0,\n        \"honorarios_anestesistas\": 0,\n        \"retencion_anestesia\": 0,\n        \"total_medicamentos\": 0,\n        \"total_material_especifico\": 0\n    },\n    {\n        \"id\": 20825,\n        \"numero\": 9448,\n        \"responsable\": null,\n        \"fecha_emision\": \"2019-10-11\",\n        \"nombre_cliente\": \"IAPOS ROSARIO\",\n        \"nro_cuit\": \"30-99917935\",\n        \"tipo_comprobante\": {\n            \"id\": 2,\n            \"nombre\": \"Liquidacion\"\n        },\n        \"sub_tipo\": null,\n        \"nro_terminal\": 0,\n        \"neto\": 830,\n        \"iva\": 0,\n        \"gravado\": null,\n        \"total_facturado\": 830,\n        \"honorarios_medicos\": 564.4,\n        \"honorarios_solicitantes\": 0,\n        \"uso_de_materiales\": 0,\n        \"retencion_cedir\": 0,\n        \"retencion_impositiva\": 265.6,\n        \"sala_recuperacion\": 0,\n        \"honorarios_anestesistas\": 0,\n        \"retencion_anestesia\": 0,\n        \"total_medicamentos\": 0,\n        \"total_material_especifico\": 0\n    },\n    {\n        \"id\": 20826,\n        \"numero\": 9449,\n        \"responsable\": null,\n        \"fecha_emision\": \"2019-10-11\",\n        \"nombre_cliente\": \"IAPOS ROSARIO\",\n        \"nro_cuit\": \"30-99917935\",\n        \"tipo_comprobante\": {\n            \"id\": 2,\n            \"nombre\": \"Liquidacion\"\n        },\n        \"sub_tipo\": null,\n        \"nro_terminal\": 0,\n        \"neto\": 1245,\n        \"iva\": 0,\n        \"gravado\": null,\n        \"total_facturado\": 1245,\n        \"honorarios_medicos\": 846.6,\n        \"honorarios_solicitantes\": 0,\n        \"uso_de_materiales\": 0,\n        \"retencion_cedir\": 0,\n        \"retencion_impositiva\": 398.4,\n        \"sala_recuperacion\": 0,\n        \"honorarios_anestesistas\": 0,\n        \"retencion_anestesia\": 0,\n        \"total_medicamentos\": 0,\n        \"total_material_especifico\": 0\n    },\n    {\n        \"id\": 20827,\n        \"numero\": 9450,\n        \"responsable\": null,\n        \"fecha_emision\": \"2019-10-11\",\n        \"nombre_cliente\": \"IAPOS ROSARIO\",\n        \"nro_cuit\": \"30-99917935\",\n        \"tipo_comprobante\": {\n            \"id\": 2,\n            \"nombre\": \"Liquidacion\"\n        },\n        \"sub_tipo\": null,\n        \"nro_terminal\": 0,\n        \"neto\": 2490,\n        \"iva\": 0,\n        \"gravado\": null,\n        \"total_facturado\": 2490,\n        \"honorarios_medicos\": 1693.2,\n        \"honorarios_solicitantes\": 0,\n        \"uso_de_materiales\": 0,\n        \"retencion_cedir\": 0,\n        \"retencion_impositiva\": 796.8,\n        \"sala_recuperacion\": 0,\n        \"honorarios_anestesistas\": 0,\n        \"retencion_anestesia\": 0,\n        \"total_medicamentos\": 0,\n        \"total_material_especifico\": 0\n    },\n    {\n        \"id\": 20828,\n        \"numero\": 9451,\n        \"responsable\": null,\n        \"fecha_emision\": \"2019-10-11\",\n        \"nombre_cliente\": \"IAPOS ROSARIO\",\n        \"nro_cuit\": \"30-99917935\",\n        \"tipo_comprobante\": {\n            \"id\": 2,\n            \"nombre\": \"Liquidacion\"\n        },\n        \"sub_tipo\": null,\n        \"nro_terminal\": 0,\n        \"neto\": 6640,\n        \"iva\": 0,\n        \"gravado\": null,\n        \"total_facturado\": 6640,\n        \"honorarios_medicos\": 4515.2,\n        \"honorarios_solicitantes\": 0,\n        \"uso_de_materiales\": 0,\n        \"retencion_cedir\": 0,\n        \"retencion_impositiva\": 2124.8,\n        \"sala_recuperacion\": 0,\n        \"honorarios_anestesistas\": 0,\n        \"retencion_anestesia\": 0,\n        \"total_medicamentos\": 0,\n        \"total_material_especifico\": 0\n    },\n    {\n        \"id\": 20829,\n        \"numero\": 1308,\n        \"responsable\": \"Cedir\",\n        \"fecha_emision\": \"2019-10-14\",\n        \"nombre_cliente\": \"DELLA VEDOVA, MARIA DEL CARMEN\",\n        \"nro_cuit\": \"5196181\",\n        \"tipo_comprobante\": {\n            \"id\": 1,\n            \"nombre\": \"Factura\"\n        },\n        \"sub_tipo\": \"B\",\n        \"nro_terminal\": 91,\n        \"neto\": 1100,\n        \"iva\": 115.5,\n        \"gravado\": {\n            \"id\": 2,\n            \"descripcion\": \"IVA Inscripto 10.5\",\n            \"porcentaje\": \"10.50\"\n        },\n        \"total_facturado\": 1215.5,\n        \"honorarios_medicos\": 0,\n        \"honorarios_solicitantes\": 0,\n        \"uso_de_materiales\": 0,\n        \"retencion_cedir\": 0,\n        \"retencion_impositiva\": 0,\n        \"sala_recuperacion\": 0,\n        \"honorarios_anestesistas\": 0,\n        \"retencion_anestesia\": 0,\n        \"total_medicamentos\": 0,\n        \"total_material_especifico\": 0\n    },\n    {\n        \"id\": 20830,\n        \"numero\": 9452,\n        \"responsable\": null,\n        \"fecha_emision\": \"2019-10-14\",\n        \"nombre_cliente\": \"IAPOS INTERIOR\",\n        \"nro_cuit\": \"30-99917935\",\n        \"tipo_comprobante\": {\n            \"id\": 2,\n            \"nombre\": \"Liquidacion\"\n        },\n        \"sub_tipo\": null,\n        \"nro_terminal\": 0,\n        \"neto\": 88032.25,\n        \"iva\": 0,\n        \"gravado\": null,\n        \"total_facturado\": 88032.25,\n        \"honorarios_medicos\": 28369.14,\n        \"honorarios_solicitantes\": 6361.2,\n        \"uso_de_materiales\": 3000,\n        \"retencion_cedir\": 9295.93,\n        \"retencion_impositiva\": 28170.32,\n        \"sala_recuperacion\": 4128.96,\n        \"honorarios_anestesistas\": 0,\n        \"retencion_anestesia\": 0,\n        \"total_medicamentos\": 8706.72,\n        \"total_material_especifico\": 0\n    },\n    {\n        \"id\": 20831,\n        \"numero\": 9453,\n        \"responsable\": null,\n        \"fecha_emision\": \"2019-10-14\",\n        \"nombre_cliente\": \"IAPOS INTERIOR\",\n        \"nro_cuit\": \"30-99917935\",\n        \"tipo_comprobante\": {\n            \"id\": 2,\n            \"nombre\": \"Liquidacion\"\n        },\n        \"sub_tipo\": null,\n        \"nro_terminal\": 0,\n        \"neto\": 25235,\n        \"iva\": 0,\n        \"gravado\": null,\n        \"total_facturado\": 25235,\n        \"honorarios_medicos\": 9960.71,\n        \"honorarios_solicitantes\": 0,\n        \"uso_de_materiales\": 1500,\n        \"retencion_cedir\": 2490.18,\n        \"retencion_impositiva\": 8075.2,\n        \"sala_recuperacion\": 1032.24,\n        \"honorarios_anestesistas\": 0,\n        \"retencion_anestesia\": 0,\n        \"total_medicamentos\": 2176.68,\n        \"total_material_especifico\": 0\n    },\n    {\n        \"id\": 20832,\n        \"numero\": 9454,\n        \"responsable\": null,\n        \"fecha_emision\": \"2019-10-14\",\n        \"nombre_cliente\": \"IAPOS ROSARIO\",\n        \"nro_cuit\": \"30-99917935\",\n        \"tipo_comprobante\": {\n            \"id\": 2,\n            \"nombre\": \"Liquidacion\"\n        },\n        \"sub_tipo\": null,\n        \"nro_terminal\": 0,\n        \"neto\": 3578,\n        \"iva\": 0,\n        \"gravado\": null,\n        \"total_facturado\": 3578,\n        \"honorarios_medicos\": 1090.72,\n        \"honorarios_solicitantes\": 0,\n        \"uso_de_materiales\": 0,\n        \"retencion_cedir\": 272.68,\n        \"retencion_impositiva\": 1144.96,\n        \"sala_recuperacion\": 344.08,\n        \"honorarios_anestesistas\": 0,\n        \"retencion_anestesia\": 0,\n        \"total_medicamentos\": 725.56,\n        \"total_material_especifico\": 0\n    },\n    {\n        \"id\": 20833,\n        \"numero\": 9455,\n        \"responsable\": null,\n        \"fecha_emision\": \"2019-10-14\",\n        \"nombre_cliente\": \"CAJA FORENSE\",\n        \"nro_cuit\": \"30-53435350-9\",\n        \"tipo_comprobante\": {\n            \"id\": 2,\n            \"nombre\": \"Liquidacion\"\n        },\n        \"sub_tipo\": null,\n        \"nro_terminal\": 0,\n        \"neto\": 20786.66,\n        \"iva\": 0,\n        \"gravado\": null,\n        \"total_facturado\": 20786.66,\n        \"honorarios_medicos\": 7023.97,\n        \"honorarios_solicitantes\": 0,\n        \"uso_de_materiales\": 500,\n        \"retencion_cedir\": 1364.32,\n        \"retencion_impositiva\": 6651.74,\n        \"sala_recuperacion\": 1285.2,\n        \"honorarios_anestesistas\": 0,\n        \"retencion_anestesia\": 0,\n        \"total_medicamentos\": 3961.46,\n        \"total_material_especifico\": 0\n    },\n    {\n        \"id\": 20834,\n        \"numero\": 9456,\n        \"responsable\": null,\n        \"fecha_emision\": \"2019-10-14\",\n        \"nombre_cliente\": \"CAJA DE PREVISON SOCIAL PROFESIONALES INGENIERIA\",\n        \"nro_cuit\": \"3053708388-9\",\n        \"tipo_comprobante\": {\n            \"id\": 2,\n            \"nombre\": \"Liquidacion\"\n        },\n        \"sub_tipo\": null,\n        \"nro_terminal\": 0,\n        \"neto\": 14022.25,\n        \"iva\": 0,\n        \"gravado\": null,\n        \"total_facturado\": 14022.25,\n        \"honorarios_medicos\": 0,\n        \"honorarios_solicitantes\": 0,\n        \"uso_de_materiales\": 0,\n        \"retencion_cedir\": 0,\n        \"retencion_impositiva\": 0,\n        \"sala_recuperacion\": 0,\n        \"honorarios_anestesistas\": 0,\n        \"retencion_anestesia\": 0,\n        \"total_medicamentos\": 0,\n        \"total_material_especifico\": 0\n    },\n    {\n        \"id\": 20835,\n        \"numero\": 9457,\n        \"responsable\": null,\n        \"fecha_emision\": \"2019-10-14\",\n        \"nombre_cliente\": \"IAPOS ROSARIO\",\n        \"nro_cuit\": \"30-99917935\",\n        \"tipo_comprobante\": {\n            \"id\": 2,\n            \"nombre\": \"Liquidacion\"\n        },\n        \"sub_tipo\": null,\n        \"nro_terminal\": 0,\n        \"neto\": 6463,\n        \"iva\": 0,\n        \"gravado\": null,\n        \"total_facturado\": 6463,\n        \"honorarios_medicos\": 2660.16,\n        \"honorarios_solicitantes\": 0,\n        \"uso_de_materiales\": 0,\n        \"retencion_cedir\": 665.04,\n        \"retencion_impositiva\": 2068.16,\n        \"sala_recuperacion\": 344.08,\n        \"honorarios_anestesistas\": 0,\n        \"retencion_anestesia\": 0,\n        \"total_medicamentos\": 725.56,\n        \"total_material_especifico\": 0\n    },\n    {\n        \"id\": 20836,\n        \"numero\": 9458,\n        \"responsable\": null,\n        \"fecha_emision\": \"2019-10-14\",\n        \"nombre_cliente\": \"CIENCIAS ECONOMICAS\",\n        \"nro_cuit\": \"30-51545954-1\",\n        \"tipo_comprobante\": {\n            \"id\": 2,\n            \"nombre\": \"Liquidacion\"\n        },\n        \"sub_tipo\": null,\n        \"nro_terminal\": 0,\n        \"neto\": 18741.5,\n        \"iva\": 0,\n        \"gravado\": null,\n        \"total_facturado\": 18741.5,\n        \"honorarios_medicos\": 5891.93,\n        \"honorarios_solicitantes\": 0,\n        \"uso_de_materiales\": 0,\n        \"retencion_cedir\": 1399.04,\n        \"retencion_impositiva\": 5997.28,\n        \"sala_recuperacion\": 1285.2,\n        \"honorarios_anestesistas\": 0,\n        \"retencion_anestesia\": 0,\n        \"total_medicamentos\": 4168.06,\n        \"total_material_especifico\": 0\n    },\n    {\n        \"id\": 20837,\n        \"numero\": 9459,\n        \"responsable\": null,\n        \"fecha_emision\": \"2019-10-14\",\n        \"nombre_cliente\": \"IAPOS ROSARIO\",\n        \"nro_cuit\": \"30-99917935\",\n        \"tipo_comprobante\": {\n            \"id\": 2,\n            \"nombre\": \"Liquidacion\"\n        },\n        \"sub_tipo\": null,\n        \"nro_terminal\": 0,\n        \"neto\": 9080,\n        \"iva\": 0,\n        \"gravado\": null,\n        \"total_facturado\": 9080,\n        \"honorarios_medicos\": 3683.81,\n        \"honorarios_solicitantes\": 0,\n        \"uso_de_materiales\": 500,\n        \"retencion_cedir\": 920.96,\n        \"retencion_impositiva\": 2905.6,\n        \"sala_recuperacion\": 344.08,\n        \"honorarios_anestesistas\": 0,\n        \"retencion_anestesia\": 0,\n        \"total_medicamentos\": 725.56,\n        \"total_material_especifico\": 0\n    },\n    {\n        \"id\": 20838,\n        \"numero\": 9460,\n        \"responsable\": null,\n        \"fecha_emision\": \"2019-10-14\",\n        \"nombre_cliente\": \"IAPOS ROSARIO\",\n        \"nro_cuit\": \"30-99917935\",\n        \"tipo_comprobante\": {\n            \"id\": 2,\n            \"nombre\": \"Liquidacion\"\n        },\n        \"sub_tipo\": null,\n        \"nro_terminal\": 0,\n        \"neto\": 29062,\n        \"iva\": 0,\n        \"gravado\": null,\n        \"total_facturado\": 29062,\n        \"honorarios_medicos\": 11186.88,\n        \"honorarios_solicitantes\": 0,\n        \"uso_de_materiales\": 1500,\n        \"retencion_cedir\": 2796.72,\n        \"retencion_impositiva\": 9299.84,\n        \"sala_recuperacion\": 1376.32,\n        \"honorarios_anestesistas\": 0,\n        \"retencion_anestesia\": 0,\n        \"total_medicamentos\": 2902.24,\n        \"total_material_especifico\": 0\n    },\n    {\n        \"id\": 20839,\n        \"numero\": 9461,\n        \"responsable\": null,\n        \"fecha_emision\": \"2019-10-14\",\n        \"nombre_cliente\": \"IAPOS ROSARIO\",\n        \"nro_cuit\": \"30-99917935\",\n        \"tipo_comprobante\": {\n            \"id\": 2,\n            \"nombre\": \"Liquidacion\"\n        },\n        \"sub_tipo\": null,\n        \"nro_terminal\": 0,\n        \"neto\": 16504,\n        \"iva\": 0,\n        \"gravado\": null,\n        \"total_facturado\": 16504,\n        \"honorarios_medicos\": 6411.04,\n        \"honorarios_solicitantes\": 0,\n        \"uso_de_materiales\": 0,\n        \"retencion_cedir\": 1602.76,\n        \"retencion_impositiva\": 5281.28,\n        \"sala_recuperacion\": 1032.24,\n        \"honorarios_anestesistas\": 0,\n        \"retencion_anestesia\": 0,\n        \"total_medicamentos\": 2176.68,\n        \"total_material_especifico\": 0\n    },\n    {\n        \"id\": 20840,\n        \"numero\": 9462,\n        \"responsable\": null,\n        \"fecha_emision\": \"2019-10-14\",\n        \"nombre_cliente\": \"IAPOS ROSARIO\",\n        \"nro_cuit\": \"30-99917935\",\n        \"tipo_comprobante\": {\n            \"id\": 2,\n            \"nombre\": \"Liquidacion\"\n        },\n        \"sub_tipo\": null,\n        \"nro_terminal\": 0,\n        \"neto\": 16504,\n        \"iva\": 0,\n        \"gravado\": null,\n        \"total_facturado\": 16504,\n        \"honorarios_medicos\": 1282.21,\n        \"honorarios_solicitantes\": 5128.84,\n        \"uso_de_materiales\": 0,\n        \"retencion_cedir\": 1602.76,\n        \"retencion_impositiva\": 5281.28,\n        \"sala_recuperacion\": 1032.24,\n        \"honorarios_anestesistas\": 0,\n        \"retencion_anestesia\": 0,\n        \"total_medicamentos\": 2176.68,\n        \"total_material_especifico\": 0\n    },\n    {\n        \"id\": 20841,\n        \"numero\": 9463,\n        \"responsable\": null,\n        \"fecha_emision\": \"2019-10-14\",\n        \"nombre_cliente\": \"ASOC. MUTUAL PERSONAL JERARQUICO DE BANCOS OFICIALES\",\n        \"nro_cuit\": \"30686955180\",\n        \"tipo_comprobante\": {\n            \"id\": 2,\n            \"nombre\": \"Liquidacion\"\n        },\n        \"sub_tipo\": null,\n        \"nro_terminal\": 0,\n        \"neto\": 38117.91,\n        \"iva\": 0,\n        \"gravado\": null,\n        \"total_facturado\": 38117.91,\n        \"honorarios_medicos\": 10382.87,\n        \"honorarios_solicitantes\": 4149.94,\n        \"uso_de_materiales\": 500,\n        \"retencion_cedir\": 3410.84,\n        \"retencion_impositiva\": 12197.74,\n        \"sala_recuperacion\": 2411.28,\n        \"honorarios_anestesistas\": 0,\n        \"retencion_anestesia\": 0,\n        \"total_medicamentos\": 5065.26,\n        \"total_material_especifico\": 0\n    },\n    {\n        \"id\": 20842,\n        \"numero\": 9464,\n        \"responsable\": null,\n        \"fecha_emision\": \"2019-10-14\",\n        \"nombre_cliente\": \"OSPAT - SALUD DEL NUEVO ROSARIO\",\n        \"nro_cuit\": \"30-70932531-7\",\n        \"tipo_comprobante\": {\n            \"id\": 2,\n            \"nombre\": \"Liquidacion\"\n        },\n        \"sub_tipo\": null,\n        \"nro_terminal\": 0,\n        \"neto\": 9362.25,\n        \"iva\": 0,\n        \"gravado\": null,\n        \"total_facturado\": 9362.25,\n        \"honorarios_medicos\": 2367.63,\n        \"honorarios_solicitantes\": 0,\n        \"uso_de_materiales\": 0,\n        \"retencion_cedir\": 575.42,\n        \"retencion_impositiva\": 2995.92,\n        \"sala_recuperacion\": 826.2,\n        \"honorarios_anestesistas\": 0,\n        \"retencion_anestesia\": 0,\n        \"total_medicamentos\": 2597.09,\n        \"total_material_especifico\": 0\n    },\n    {\n        \"id\": 20843,\n        \"numero\": 9465,\n        \"responsable\": null,\n        \"fecha_emision\": \"2019-10-14\",\n        \"nombre_cliente\": \"IAPOS ROSARIO\",\n        \"nro_cuit\": \"30-99917935\",\n        \"tipo_comprobante\": {\n            \"id\": 2,\n            \"nombre\": \"Liquidacion\"\n        },\n        \"sub_tipo\": null,\n        \"nro_terminal\": 0,\n        \"neto\": 73735,\n        \"iva\": 0,\n        \"gravado\": null,\n        \"total_facturado\": 73735,\n        \"honorarios_medicos\": 25223.94,\n        \"honorarios_solicitantes\": 4330.79,\n        \"uso_de_materiales\": 2500,\n        \"retencion_cedir\": 7388.68,\n        \"retencion_impositiva\": 23595.2,\n        \"sala_recuperacion\": 3440.8,\n        \"honorarios_anestesistas\": 0,\n        \"retencion_anestesia\": 0,\n        \"total_medicamentos\": 7255.6,\n        \"total_material_especifico\": 0\n    },\n    {\n        \"id\": 20845,\n        \"numero\": 9467,\n        \"responsable\": null,\n        \"fecha_emision\": \"2019-10-14\",\n        \"nombre_cliente\": \"PODER JUDICIAL\",\n        \"nro_cuit\": \"3063619685-8\",\n        \"tipo_comprobante\": {\n            \"id\": 2,\n            \"nombre\": \"Liquidacion\"\n        },\n        \"sub_tipo\": null,\n        \"nro_terminal\": 0,\n        \"neto\": 14315.44,\n        \"iva\": 0,\n        \"gravado\": null,\n        \"total_facturado\": 14315.44,\n        \"honorarios_medicos\": 4838.4,\n        \"honorarios_solicitantes\": 0,\n        \"uso_de_materiales\": 500,\n        \"retencion_cedir\": 1209.6,\n        \"retencion_impositiva\": 4580.95,\n        \"sala_recuperacion\": 1126.76,\n        \"honorarios_anestesistas\": 0,\n        \"retencion_anestesia\": 0,\n        \"total_medicamentos\": 2059.75,\n        \"total_material_especifico\": 0\n    },\n    {\n        \"id\": 20846,\n        \"numero\": 9468,\n        \"responsable\": null,\n        \"fecha_emision\": \"2019-10-14\",\n        \"nombre_cliente\": \"SINDICATO DE PRENSA\",\n        \"nro_cuit\": \"30-62425407-01\",\n        \"tipo_comprobante\": {\n            \"id\": 2,\n            \"nombre\": \"Liquidacion\"\n        },\n        \"sub_tipo\": null,\n        \"nro_terminal\": 0,\n        \"neto\": 8606.2,\n        \"iva\": 0,\n        \"gravado\": null,\n        \"total_facturado\": 8606.2,\n        \"honorarios_medicos\": 2166.76,\n        \"honorarios_solicitantes\": 0,\n        \"uso_de_materiales\": 0,\n        \"retencion_cedir\": 541.69,\n        \"retencion_impositiva\": 2753.99,\n        \"sala_recuperacion\": 840.48,\n        \"honorarios_anestesistas\": 0,\n        \"retencion_anestesia\": 0,\n        \"total_medicamentos\": 2303.3,\n        \"total_material_especifico\": 0\n    },\n    {\n        \"id\": 20847,\n        \"numero\": 9469,\n        \"responsable\": null,\n        \"fecha_emision\": \"2019-10-14\",\n        \"nombre_cliente\": \"INST O,SOCIAL DE LAS FUERZAS ARMADAS \",\n        \"nro_cuit\": \"30714292141\",\n        \"tipo_comprobante\": {\n            \"id\": 2,\n            \"nombre\": \"Liquidacion\"\n        },\n        \"sub_tipo\": null,\n        \"nro_terminal\": 0,\n        \"neto\": 8581.2,\n        \"iva\": 0,\n        \"gravado\": null,\n        \"total_facturado\": 8581.2,\n        \"honorarios_medicos\": 2943.8,\n        \"honorarios_solicitantes\": 0,\n        \"uso_de_materiales\": 0,\n        \"retencion_cedir\": 567.65,\n        \"retencion_impositiva\": 2745.99,\n        \"sala_recuperacion\": 752.81,\n        \"honorarios_anestesistas\": 0,\n        \"retencion_anestesia\": 0,\n        \"total_medicamentos\": 1570.97,\n        \"total_material_especifico\": 0\n    },\n    {\n        \"id\": 20848,\n        \"numero\": 1790,\n        \"responsable\": \"Cedir\",\n        \"fecha_emision\": \"2019-10-15\",\n        \"nombre_cliente\": \"OSDE BINARIO\",\n        \"nro_cuit\": \"30546741253\",\n        \"tipo_comprobante\": {\n            \"id\": 1,\n            \"nombre\": \"Factura\"\n        },\n        \"sub_tipo\": \"A\",\n        \"nro_terminal\": 91,\n        \"neto\": 404.27,\n        \"iva\": 0,\n        \"gravado\": {\n            \"id\": 1,\n            \"descripcion\": \"Excento\",\n            \"porcentaje\": \"0.00\"\n        },\n        \"total_facturado\": 404.27,\n        \"honorarios_medicos\": 303.21,\n        \"honorarios_solicitantes\": 0,\n        \"uso_de_materiales\": 0,\n        \"retencion_cedir\": 0,\n        \"retencion_impositiva\": 101.07,\n        \"sala_recuperacion\": 0,\n        \"honorarios_anestesistas\": 0,\n        \"retencion_anestesia\": 0,\n        \"total_medicamentos\": 0,\n        \"total_material_especifico\": 0\n    },\n    {\n        \"id\": 20849,\n        \"numero\": 9470,\n        \"responsable\": null,\n        \"fecha_emision\": \"2019-10-15\",\n        \"nombre_cliente\": \"OSDE BINARIO\",\n        \"nro_cuit\": \"30546741253\",\n        \"tipo_comprobante\": {\n            \"id\": 2,\n            \"nombre\": \"Liquidacion\"\n        },\n        \"sub_tipo\": null,\n        \"nro_terminal\": 0,\n        \"neto\": 123144.2,\n        \"iva\": 0,\n        \"gravado\": null,\n        \"total_facturado\": 123144.2,\n        \"honorarios_medicos\": 53605.44,\n        \"honorarios_solicitantes\": 693.94,\n        \"uso_de_materiales\": 0,\n        \"retencion_cedir\": 10506.86,\n        \"retencion_impositiva\": 30786.05,\n        \"sala_recuperacion\": 6514.95,\n        \"honorarios_anestesistas\": 0,\n        \"retencion_anestesia\": 0,\n        \"total_medicamentos\": 14347.03,\n        \"total_material_especifico\": 6690.06\n    },\n    {\n        \"id\": 20850,\n        \"numero\": 9471,\n        \"responsable\": null,\n        \"fecha_emision\": \"2019-10-15\",\n        \"nombre_cliente\": \"OSDE BINARIO\",\n        \"nro_cuit\": \"30546741253\",\n        \"tipo_comprobante\": {\n            \"id\": 2,\n            \"nombre\": \"Liquidacion\"\n        },\n        \"sub_tipo\": null,\n        \"nro_terminal\": 0,\n        \"neto\": 205702,\n        \"iva\": 0,\n        \"gravado\": null,\n        \"total_facturado\": 205702,\n        \"honorarios_medicos\": 95469.55,\n        \"honorarios_solicitantes\": 6360.04,\n        \"uso_de_materiales\": 0,\n        \"retencion_cedir\": 20576.63,\n        \"retencion_impositiva\": 51425.5,\n        \"sala_recuperacion\": 9020.7,\n        \"honorarios_anestesistas\": 0,\n        \"retencion_anestesia\": 0,\n        \"total_medicamentos\": 19865.12,\n        \"total_material_especifico\": 2984.47\n    },\n    {\n        \"id\": 20851,\n        \"numero\": 1791,\n        \"responsable\": \"Cedir\",\n        \"fecha_emision\": \"2019-10-15\",\n        \"nombre_cliente\": \"AS. AGENTES DE PROPAGANDA MEDICA\",\n        \"nro_cuit\": \"30628206224\",\n        \"tipo_comprobante\": {\n            \"id\": 1,\n            \"nombre\": \"Factura\"\n        },\n        \"sub_tipo\": \"A\",\n        \"nro_terminal\": 91,\n        \"neto\": 11030.25,\n        \"iva\": 0,\n        \"gravado\": {\n            \"id\": 1,\n            \"descripcion\": \"Excento\",\n            \"porcentaje\": \"0.00\"\n        },\n        \"total_facturado\": 11030.25,\n        \"honorarios_medicos\": 2924.55,\n        \"honorarios_solicitantes\": 0,\n        \"uso_de_materiales\": 0,\n        \"retencion_cedir\": 731.14,\n        \"retencion_impositiva\": 3529.68,\n        \"sala_recuperacion\": 1247.8,\n        \"honorarios_anestesistas\": 0,\n        \"retencion_anestesia\": 0,\n        \"total_medicamentos\": 2597.09,\n        \"total_material_especifico\": 0\n    },\n    {\n        \"id\": 20852,\n        \"numero\": 1792,\n        \"responsable\": \"Cedir\",\n        \"fecha_emision\": \"2019-10-15\",\n        \"nombre_cliente\": \"LUIS PASTEUR\",\n        \"nro_cuit\": \"30558325557\",\n        \"tipo_comprobante\": {\n            \"id\": 1,\n            \"nombre\": \"Factura\"\n        },\n        \"sub_tipo\": \"A\",\n        \"nro_terminal\": 91,\n        \"neto\": 11537.41,\n        \"iva\": 0,\n        \"gravado\": {\n            \"id\": 1,\n            \"descripcion\": \"Excento\",\n            \"porcentaje\": \"0.00\"\n        },\n        \"total_facturado\": 11537.41,\n        \"honorarios_medicos\": 3449.35,\n        \"honorarios_solicitantes\": 0,\n        \"uso_de_materiales\": 500,\n        \"retencion_cedir\": 862.34,\n        \"retencion_impositiva\": 3691.98,\n        \"sala_recuperacion\": 1110.44,\n        \"honorarios_anestesistas\": 0,\n        \"retencion_anestesia\": 0,\n        \"total_medicamentos\": 1923.32,\n        \"total_material_especifico\": 0\n    },\n    {\n        \"id\": 20853,\n        \"numero\": 1793,\n        \"responsable\": \"Cedir\",\n        \"fecha_emision\": \"2019-10-15\",\n        \"nombre_cliente\": \"LUIS PASTEUR\",\n        \"nro_cuit\": \"30558325557\",\n        \"tipo_comprobante\": {\n            \"id\": 1,\n            \"nombre\": \"Factura\"\n        },\n        \"sub_tipo\": \"A\",\n        \"nro_terminal\": 91,\n        \"neto\": 17187.41,\n        \"iva\": 1804.67,\n        \"gravado\": {\n            \"id\": 2,\n            \"descripcion\": \"IVA Inscripto 10.5\",\n            \"porcentaje\": \"10.50\"\n        },\n        \"total_facturado\": 18992.09,\n        \"honorarios_medicos\": 2851.03,\n        \"honorarios_solicitantes\": 2851.03,\n        \"uso_de_materiales\": 500,\n        \"retencion_cedir\": 1425.52,\n        \"retencion_impositiva\": 5499.98,\n        \"sala_recuperacion\": 1110.44,\n        \"honorarios_anestesistas\": 0,\n        \"retencion_anestesia\": 0,\n        \"total_medicamentos\": 2949.44,\n        \"total_material_especifico\": 0\n    },\n    {\n        \"id\": 20854,\n        \"numero\": 1794,\n        \"responsable\": \"Cedir\",\n        \"fecha_emision\": \"2019-10-15\",\n        \"nombre_cliente\": \"PREVENCION SALUD S.A.\",\n        \"nro_cuit\": \"30713045000\",\n        \"tipo_comprobante\": {\n            \"id\": 1,\n            \"nombre\": \"Factura\"\n        },\n        \"sub_tipo\": \"A\",\n        \"nro_terminal\": 91,\n        \"neto\": 15625.11,\n        \"iva\": 1640.63,\n        \"gravado\": {\n            \"id\": 2,\n            \"descripcion\": \"IVA Inscripto 10.5\",\n            \"porcentaje\": \"10.50\"\n        },\n        \"total_facturado\": 17265.75,\n        \"honorarios_medicos\": 5906.16,\n        \"honorarios_solicitantes\": 0,\n        \"uso_de_materiales\": 500,\n        \"retencion_cedir\": 1216.78,\n        \"retencion_impositiva\": 5000.04,\n        \"sala_recuperacion\": 698.85,\n        \"honorarios_anestesistas\": 0,\n        \"retencion_anestesia\": 0,\n        \"total_medicamentos\": 2303.3,\n        \"total_material_especifico\": 0\n    },\n    {\n        \"id\": 20855,\n        \"numero\": 1795,\n        \"responsable\": \"Cedir\",\n        \"fecha_emision\": \"2019-10-16\",\n        \"nombre_cliente\": \"OSSEG\",\n        \"nro_cuit\": \"30500053522\",\n        \"tipo_comprobante\": {\n            \"id\": 1,\n            \"nombre\": \"Factura\"\n        },\n        \"sub_tipo\": \"A\",\n        \"nro_terminal\": 91,\n        \"neto\": 8851.92,\n        \"iva\": 0,\n        \"gravado\": {\n            \"id\": 1,\n            \"descripcion\": \"Excento\",\n            \"porcentaje\": \"0.00\"\n        },\n        \"total_facturado\": 8851.92,\n        \"honorarios_medicos\": 1377.11,\n        \"honorarios_solicitantes\": 918.07,\n        \"uso_de_materiales\": 0,\n        \"retencion_cedir\": 573.8,\n        \"retencion_impositiva\": 2832.62,\n        \"sala_recuperacion\": 1199.4,\n        \"honorarios_anestesistas\": 0,\n        \"retencion_anestesia\": 0,\n        \"total_medicamentos\": 1950.95,\n        \"total_material_especifico\": 0\n    },\n    {\n        \"id\": 20856,\n        \"numero\": 1796,\n        \"responsable\": \"Cedir\",\n        \"fecha_emision\": \"2019-10-16\",\n        \"nombre_cliente\": \"AMR SALUD S.A.\",\n        \"nro_cuit\": \"30698316981\",\n        \"tipo_comprobante\": {\n            \"id\": 1,\n            \"nombre\": \"Factura\"\n        },\n        \"sub_tipo\": \"A\",\n        \"nro_terminal\": 91,\n        \"neto\": 15798.89,\n        \"iva\": 1658.88,\n        \"gravado\": {\n            \"id\": 2,\n            \"descripcion\": \"IVA Inscripto 10.5\",\n            \"porcentaje\": \"10.50\"\n        },\n        \"total_facturado\": 17457.77,\n        \"honorarios_medicos\": 3873.58,\n        \"honorarios_solicitantes\": 2494.88,\n        \"uso_de_materiales\": 500,\n        \"retencion_cedir\": 1056.28,\n        \"retencion_impositiva\": 5055.65,\n        \"sala_recuperacion\": 641.92,\n        \"honorarios_anestesistas\": 0,\n        \"retencion_anestesia\": 0,\n        \"total_medicamentos\": 2176.61,\n        \"total_material_especifico\": 0\n    },\n    {\n        \"id\": 20857,\n        \"numero\": 1797,\n        \"responsable\": \"Cedir\",\n        \"fecha_emision\": \"2019-10-16\",\n        \"nombre_cliente\": \"OSSEG\",\n        \"nro_cuit\": \"30500053522\",\n        \"tipo_comprobante\": {\n            \"id\": 1,\n            \"nombre\": \"Factura\"\n        },\n        \"sub_tipo\": \"A\",\n        \"nro_terminal\": 91,\n        \"neto\": 11791.93,\n        \"iva\": 0,\n        \"gravado\": {\n            \"id\": 1,\n            \"descripcion\": \"Excento\",\n            \"porcentaje\": \"0.00\"\n        },\n        \"total_facturado\": 11791.93,\n        \"honorarios_medicos\": 3805.31,\n        \"honorarios_solicitantes\": 0,\n        \"uso_de_materiales\": 0,\n        \"retencion_cedir\": 883.89,\n        \"retencion_impositiva\": 3773.42,\n        \"sala_recuperacion\": 1199.4,\n        \"honorarios_anestesistas\": 0,\n        \"retencion_anestesia\": 0,\n        \"total_medicamentos\": 2129.93,\n        \"total_material_especifico\": 0\n    },\n    {\n        \"id\": 20858,\n        \"numero\": 1798,\n        \"responsable\": \"Cedir\",\n        \"fecha_emision\": \"2019-10-16\",\n        \"nombre_cliente\": \"PREVENCION SALUD S.A.\",\n        \"nro_cuit\": \"30713045000\",\n        \"tipo_comprobante\": {\n            \"id\": 1,\n            \"nombre\": \"Factura\"\n        },\n        \"sub_tipo\": \"A\",\n        \"nro_terminal\": 91,\n        \"neto\": 20679.74,\n        \"iva\": 0,\n        \"gravado\": {\n            \"id\": 1,\n            \"descripcion\": \"Excento\",\n            \"porcentaje\": \"0.00\"\n        },\n        \"total_facturado\": 20679.74,\n        \"honorarios_medicos\": 7890.91,\n        \"honorarios_solicitantes\": 90.71,\n        \"uso_de_materiales\": 500,\n        \"retencion_cedir\": 1932.34,\n        \"retencion_impositiva\": 6617.52,\n        \"sala_recuperacion\": 698.85,\n        \"honorarios_anestesistas\": 0,\n        \"retencion_anestesia\": 0,\n        \"total_medicamentos\": 2949.44,\n        \"total_material_especifico\": 0\n    },\n    {\n        \"id\": 20859,\n        \"numero\": 1799,\n        \"responsable\": \"Cedir\",\n        \"fecha_emision\": \"2019-10-16\",\n        \"nombre_cliente\": \"AMR SALUD S.A.\",\n        \"nro_cuit\": \"30698316981\",\n        \"tipo_comprobante\": {\n            \"id\": 1,\n            \"nombre\": \"Factura\"\n        },\n        \"sub_tipo\": \"A\",\n        \"nro_terminal\": 91,\n        \"neto\": 29087.04,\n        \"iva\": 0,\n        \"gravado\": {\n            \"id\": 1,\n            \"descripcion\": \"Excento\",\n            \"porcentaje\": \"0.00\"\n        },\n        \"total_facturado\": 29087.04,\n        \"honorarios_medicos\": 10420.24,\n        \"honorarios_solicitantes\": 0,\n        \"uso_de_materiales\": 1000,\n        \"retencion_cedir\": 2924.43,\n        \"retencion_impositiva\": 9307.86,\n        \"sala_recuperacion\": 1283.84,\n        \"honorarios_anestesistas\": 0,\n        \"retencion_anestesia\": 0,\n        \"total_medicamentos\": 4150.69,\n        \"total_material_especifico\": 0\n    },\n    {\n        \"id\": 20860,\n        \"numero\": 507,\n        \"responsable\": \"Cedir\",\n        \"fecha_emision\": \"2019-10-16\",\n        \"nombre_cliente\": \"O.S.F.A.T.L. Y F.\",\n        \"nro_cuit\": \"30663221244\",\n        \"tipo_comprobante\": {\n            \"id\": 4,\n            \"nombre\": \"Nota De Credito\"\n        },\n        \"sub_tipo\": \"B\",\n        \"nro_terminal\": 91,\n        \"neto\": -10540.92,\n        \"iva\": 0,\n        \"gravado\": {\n            \"id\": 1,\n            \"descripcion\": \"Excento\",\n            \"porcentaje\": \"0.00\"\n        },\n        \"total_facturado\": -10540.92,\n        \"honorarios_medicos\": 0,\n        \"honorarios_solicitantes\": 0,\n        \"uso_de_materiales\": 0,\n        \"retencion_cedir\": 0,\n        \"retencion_impositiva\": 0,\n        \"sala_recuperacion\": 0,\n        \"honorarios_anestesistas\": 0,\n        \"retencion_anestesia\": 0,\n        \"total_medicamentos\": 0,\n        \"total_material_especifico\": 0\n    },\n    {\n        \"id\": 20861,\n        \"numero\": 1800,\n        \"responsable\": \"Cedir\",\n        \"fecha_emision\": \"2019-10-16\",\n        \"nombre_cliente\": \"O.S.F.A.T.L. Y F.\",\n        \"nro_cuit\": \"30663221244\",\n        \"tipo_comprobante\": {\n            \"id\": 1,\n            \"nombre\": \"Factura\"\n        },\n        \"sub_tipo\": \"A\",\n        \"nro_terminal\": 91,\n        \"neto\": 10540.92,\n        \"iva\": 0,\n        \"gravado\": {\n            \"id\": 1,\n            \"descripcion\": \"Excento\",\n            \"porcentaje\": \"0.00\"\n        },\n        \"total_facturado\": 10540.92,\n        \"honorarios_medicos\": 4098.6,\n        \"honorarios_solicitantes\": 0,\n        \"uso_de_materiales\": 0,\n        \"retencion_cedir\": 1024.65,\n        \"retencion_impositiva\": 2635.23,\n        \"sala_recuperacion\": 1066.5,\n        \"honorarios_anestesistas\": 0,\n        \"retencion_anestesia\": 0,\n        \"total_medicamentos\": 1715.95,\n        \"total_material_especifico\": 0\n    },\n    {\n        \"id\": 20862,\n        \"numero\": 564,\n        \"responsable\": \"Cedir\",\n        \"fecha_emision\": \"2019-10-17\",\n        \"nombre_cliente\": \"AMC - SOLIDARIA SALUD\",\n        \"nro_cuit\": \"30695660398\",\n        \"tipo_comprobante\": {\n            \"id\": 4,\n            \"nombre\": \"Nota De Credito\"\n        },\n        \"sub_tipo\": \"A\",\n        \"nro_terminal\": 91,\n        \"neto\": -976.53,\n        \"iva\": -102.54,\n        \"gravado\": {\n            \"id\": 2,\n            \"descripcion\": \"IVA Inscripto 10.5\",\n            \"porcentaje\": \"10.50\"\n        },\n        \"total_facturado\": -1079.07,\n        \"honorarios_medicos\": 0,\n        \"honorarios_solicitantes\": 0,\n        \"uso_de_materiales\": 0,\n        \"retencion_cedir\": 0,\n        \"retencion_impositiva\": 0,\n        \"sala_recuperacion\": 0,\n        \"honorarios_anestesistas\": 0,\n        \"retencion_anestesia\": 0,\n        \"total_medicamentos\": 0,\n        \"total_material_especifico\": 0\n    },\n    {\n        \"id\": 20863,\n        \"numero\": 508,\n        \"responsable\": \"Cedir\",\n        \"fecha_emision\": \"2019-10-17\",\n        \"nombre_cliente\": \"FEDERACION MEDICA (S.O.S.-ASOCIACIÓN MUTULA MÉDICA VILLA MARÍA)\",\n        \"nro_cuit\": \"30638604279\",\n        \"tipo_comprobante\": {\n            \"id\": 4,\n            \"nombre\": \"Nota De Credito\"\n        },\n        \"sub_tipo\": \"B\",\n        \"nro_terminal\": 91,\n        \"neto\": -3271,\n        \"iva\": -343.46,\n        \"gravado\": {\n            \"id\": 2,\n            \"descripcion\": \"IVA Inscripto 10.5\",\n            \"porcentaje\": \"10.50\"\n        },\n        \"total_facturado\": -3614.46,\n        \"honorarios_medicos\": 0,\n        \"honorarios_solicitantes\": 0,\n        \"uso_de_materiales\": 0,\n        \"retencion_cedir\": 0,\n        \"retencion_impositiva\": 0,\n        \"sala_recuperacion\": 0,\n        \"honorarios_anestesistas\": 0,\n        \"retencion_anestesia\": 0,\n        \"total_medicamentos\": 0,\n        \"total_material_especifico\": 0\n    },\n    {\n        \"id\": 20865,\n        \"numero\": 100,\n        \"responsable\": \"Brunetti\",\n        \"fecha_emision\": \"2019-10-19\",\n        \"nombre_cliente\": \"C.E.DI.R. - CENTRO DE ENDOSCOPIA DIGESTIVA DE ROSARIO\",\n        \"nro_cuit\": \"30-70930015-2\",\n        \"tipo_comprobante\": {\n            \"id\": 1,\n            \"nombre\": \"Factura\"\n        },\n        \"sub_tipo\": \"A\",\n        \"nro_terminal\": 3,\n        \"neto\": 18750,\n        \"iva\": 1968.75,\n        \"gravado\": {\n            \"id\": 2,\n            \"descripcion\": \"IVA Inscripto 10.5\",\n            \"porcentaje\": \"10.50\"\n        },\n        \"total_facturado\": 20718.75,\n        \"honorarios_medicos\": 0,\n        \"honorarios_solicitantes\": 0,\n        \"uso_de_materiales\": 0,\n        \"retencion_cedir\": 0,\n        \"retencion_impositiva\": 0,\n        \"sala_recuperacion\": 0,\n        \"honorarios_anestesistas\": 0,\n        \"retencion_anestesia\": 0,\n        \"total_medicamentos\": 0,\n        \"total_material_especifico\": 0\n    },\n    {\n        \"id\": 20866,\n        \"numero\": 101,\n        \"responsable\": \"Brunetti\",\n        \"fecha_emision\": \"2019-10-19\",\n        \"nombre_cliente\": \"C.E.DI.R. - CENTRO DE ENDOSCOPIA DIGESTIVA DE ROSARIO\",\n        \"nro_cuit\": \"30-70930015-2\",\n        \"tipo_comprobante\": {\n            \"id\": 1,\n            \"nombre\": \"Factura\"\n        },\n        \"sub_tipo\": \"A\",\n        \"nro_terminal\": 3,\n        \"neto\": 48700,\n        \"iva\": 0,\n        \"gravado\": {\n            \"id\": 1,\n            \"descripcion\": \"Excento\",\n            \"porcentaje\": \"0.00\"\n        },\n        \"total_facturado\": 48700,\n        \"honorarios_medicos\": 0,\n        \"honorarios_solicitantes\": 0,\n        \"uso_de_materiales\": 0,\n        \"retencion_cedir\": 0,\n        \"retencion_impositiva\": 0,\n        \"sala_recuperacion\": 0,\n        \"honorarios_anestesistas\": 0,\n        \"retencion_anestesia\": 0,\n        \"total_medicamentos\": 0,\n        \"total_material_especifico\": 0\n    },\n    {\n        \"id\": 20867,\n        \"numero\": 1801,\n        \"responsable\": \"Cedir\",\n        \"fecha_emision\": \"2019-10-19\",\n        \"nombre_cliente\": \"RAINOLDI Y ASOCIADO\",\n        \"nro_cuit\": \"30715824600\",\n        \"tipo_comprobante\": {\n            \"id\": 1,\n            \"nombre\": \"Factura\"\n        },\n        \"sub_tipo\": \"A\",\n        \"nro_terminal\": 91,\n        \"neto\": 3120,\n        \"iva\": 655.2,\n        \"gravado\": {\n            \"id\": 3,\n            \"descripcion\": \"IVA Inscripto 21\",\n            \"porcentaje\": \"21.00\"\n        },\n        \"total_facturado\": 3775.2,\n        \"honorarios_medicos\": 0,\n        \"honorarios_solicitantes\": 0,\n        \"uso_de_materiales\": 0,\n        \"retencion_cedir\": 0,\n        \"retencion_impositiva\": 0,\n        \"sala_recuperacion\": 0,\n        \"honorarios_anestesistas\": 0,\n        \"retencion_anestesia\": 0,\n        \"total_medicamentos\": 0,\n        \"total_material_especifico\": 0\n    },\n    {\n        \"id\": 20868,\n        \"numero\": 1802,\n        \"responsable\": \"Cedir\",\n        \"fecha_emision\": \"2019-10-19\",\n        \"nombre_cliente\": \"RAINOLDI Y ASOCIADO\",\n        \"nro_cuit\": \"30715824600\",\n        \"tipo_comprobante\": {\n            \"id\": 1,\n            \"nombre\": \"Factura\"\n        },\n        \"sub_tipo\": \"A\",\n        \"nro_terminal\": 91,\n        \"neto\": 3120,\n        \"iva\": 655.2,\n        \"gravado\": {\n            \"id\": 3,\n            \"descripcion\": \"IVA Inscripto 21\",\n            \"porcentaje\": \"21.00\"\n        },\n        \"total_facturado\": 3775.2,\n        \"honorarios_medicos\": 0,\n        \"honorarios_solicitantes\": 0,\n        \"uso_de_materiales\": 0,\n        \"retencion_cedir\": 0,\n        \"retencion_impositiva\": 0,\n        \"sala_recuperacion\": 0,\n        \"honorarios_anestesistas\": 0,\n        \"retencion_anestesia\": 0,\n        \"total_medicamentos\": 0,\n        \"total_material_especifico\": 0\n    },\n    {\n        \"id\": 20869,\n        \"numero\": 1309,\n        \"responsable\": \"Cedir\",\n        \"fecha_emision\": \"2019-10-21\",\n        \"nombre_cliente\": \"VINEIS, ALICIA MARTHA\",\n        \"nro_cuit\": \"4252271\",\n        \"tipo_comprobante\": {\n            \"id\": 1,\n            \"nombre\": \"Factura\"\n        },\n        \"sub_tipo\": \"B\",\n        \"nro_terminal\": 91,\n        \"neto\": 7065,\n        \"iva\": 0,\n        \"gravado\": {\n            \"id\": 1,\n            \"descripcion\": \"Excento\",\n            \"porcentaje\": \"0.00\"\n        },\n        \"total_facturado\": 7065,\n        \"honorarios_medicos\": 0,\n        \"honorarios_solicitantes\": 0,\n        \"uso_de_materiales\": 0,\n        \"retencion_cedir\": 0,\n        \"retencion_impositiva\": 0,\n        \"sala_recuperacion\": 0,\n        \"honorarios_anestesistas\": 0,\n        \"retencion_anestesia\": 0,\n        \"total_medicamentos\": 0,\n        \"total_material_especifico\": 0\n    },\n    {\n        \"id\": 20870,\n        \"numero\": 509,\n        \"responsable\": \"Cedir\",\n        \"fecha_emision\": \"2019-10-21\",\n        \"nombre_cliente\": \"VINEIS, ALICIA MARTHA\",\n        \"nro_cuit\": \"4252271\",\n        \"tipo_comprobante\": {\n            \"id\": 4,\n            \"nombre\": \"Nota De Credito\"\n        },\n        \"sub_tipo\": \"B\",\n        \"nro_terminal\": 91,\n        \"neto\": -7065,\n        \"iva\": 0,\n        \"gravado\": {\n            \"id\": 1,\n            \"descripcion\": \"Excento\",\n            \"porcentaje\": \"0.00\"\n        },\n        \"total_facturado\": -7065,\n        \"honorarios_medicos\": 0,\n        \"honorarios_solicitantes\": 0,\n        \"uso_de_materiales\": 0,\n        \"retencion_cedir\": 0,\n        \"retencion_impositiva\": 0,\n        \"sala_recuperacion\": 0,\n        \"honorarios_anestesistas\": 0,\n        \"retencion_anestesia\": 0,\n        \"total_medicamentos\": 0,\n        \"total_material_especifico\": 0\n    },\n    {\n        \"id\": 20871,\n        \"numero\": 510,\n        \"responsable\": \"Cedir\",\n        \"fecha_emision\": \"2019-10-22\",\n        \"nombre_cliente\": \"FEDERADA SALUD GRUPO1\",\n        \"nro_cuit\": \"30541592608\",\n        \"tipo_comprobante\": {\n            \"id\": 4,\n            \"nombre\": \"Nota De Credito\"\n        },\n        \"sub_tipo\": \"B\",\n        \"nro_terminal\": 91,\n        \"neto\": -264.99,\n        \"iva\": -27.82,\n        \"gravado\": {\n            \"id\": 2,\n            \"descripcion\": \"IVA Inscripto 10.5\",\n            \"porcentaje\": \"10.50\"\n        },\n        \"total_facturado\": -292.81,\n        \"honorarios_medicos\": 0,\n        \"honorarios_solicitantes\": 0,\n        \"uso_de_materiales\": 0,\n        \"retencion_cedir\": 0,\n        \"retencion_impositiva\": 0,\n        \"sala_recuperacion\": 0,\n        \"honorarios_anestesistas\": 0,\n        \"retencion_anestesia\": 0,\n        \"total_medicamentos\": 0,\n        \"total_material_especifico\": 0\n    },\n    {\n        \"id\": 20872,\n        \"numero\": 1310,\n        \"responsable\": \"Cedir\",\n        \"fecha_emision\": \"2019-10-22\",\n        \"nombre_cliente\": \"FRAGUEYRO, STELLA MARIS\",\n        \"nro_cuit\": \"6378518\",\n        \"tipo_comprobante\": {\n            \"id\": 1,\n            \"nombre\": \"Factura\"\n        },\n        \"sub_tipo\": \"B\",\n        \"nro_terminal\": 91,\n        \"neto\": 3000,\n        \"iva\": 630,\n        \"gravado\": {\n            \"id\": 3,\n            \"descripcion\": \"IVA Inscripto 21\",\n            \"porcentaje\": \"21.00\"\n        },\n        \"total_facturado\": 3630,\n        \"honorarios_medicos\": 0,\n        \"honorarios_solicitantes\": 0,\n        \"uso_de_materiales\": 0,\n        \"retencion_cedir\": 0,\n        \"retencion_impositiva\": 0,\n        \"sala_recuperacion\": 0,\n        \"honorarios_anestesistas\": 0,\n        \"retencion_anestesia\": 0,\n        \"total_medicamentos\": 0,\n        \"total_material_especifico\": 0\n    },\n    {\n        \"id\": 20873,\n        \"numero\": 511,\n        \"responsable\": \"Cedir\",\n        \"fecha_emision\": \"2019-10-23\",\n        \"nombre_cliente\": \"FEDERADA SALUD GRUPO1\",\n        \"nro_cuit\": \"30541592608\",\n        \"tipo_comprobante\": {\n            \"id\": 4,\n            \"nombre\": \"Nota De Credito\"\n        },\n        \"sub_tipo\": \"B\",\n        \"nro_terminal\": 91,\n        \"neto\": -3261.15,\n        \"iva\": -342.42,\n        \"gravado\": {\n            \"id\": 2,\n            \"descripcion\": \"IVA Inscripto 10.5\",\n            \"porcentaje\": \"10.50\"\n        },\n        \"total_facturado\": -3603.57,\n        \"honorarios_medicos\": 0,\n        \"honorarios_solicitantes\": 0,\n        \"uso_de_materiales\": 0,\n        \"retencion_cedir\": 0,\n        \"retencion_impositiva\": 0,\n        \"sala_recuperacion\": 0,\n        \"honorarios_anestesistas\": 0,\n        \"retencion_anestesia\": 0,\n        \"total_medicamentos\": 0,\n        \"total_material_especifico\": 0\n    },\n    {\n        \"id\": 20874,\n        \"numero\": 512,\n        \"responsable\": \"Cedir\",\n        \"fecha_emision\": \"2019-10-23\",\n        \"nombre_cliente\": \"FEDERADA SALUD GRUPO1\",\n        \"nro_cuit\": \"30541592608\",\n        \"tipo_comprobante\": {\n            \"id\": 4,\n            \"nombre\": \"Nota De Credito\"\n        },\n        \"sub_tipo\": \"B\",\n        \"nro_terminal\": 91,\n        \"neto\": -3804.69,\n        \"iva\": 0,\n        \"gravado\": {\n            \"id\": 1,\n            \"descripcion\": \"Excento\",\n            \"porcentaje\": \"0.00\"\n        },\n        \"total_facturado\": -3804.69,\n        \"honorarios_medicos\": 0,\n        \"honorarios_solicitantes\": 0,\n        \"uso_de_materiales\": 0,\n        \"retencion_cedir\": 0,\n        \"retencion_impositiva\": 0,\n        \"sala_recuperacion\": 0,\n        \"honorarios_anestesistas\": 0,\n        \"retencion_anestesia\": 0,\n        \"total_medicamentos\": 0,\n        \"total_material_especifico\": 0\n    },\n    {\n        \"id\": 20875,\n        \"numero\": 513,\n        \"responsable\": \"Cedir\",\n        \"fecha_emision\": \"2019-10-23\",\n        \"nombre_cliente\": \"FEDERADA SALUD GRUPO2\",\n        \"nro_cuit\": \"30541592608\",\n        \"tipo_comprobante\": {\n            \"id\": 4,\n            \"nombre\": \"Nota De Credito\"\n        },\n        \"sub_tipo\": \"B\",\n        \"nro_terminal\": 91,\n        \"neto\": -4954.5,\n        \"iva\": 0,\n        \"gravado\": {\n            \"id\": 1,\n            \"descripcion\": \"Excento\",\n            \"porcentaje\": \"0.00\"\n        },\n        \"total_facturado\": -4954.5,\n        \"honorarios_medicos\": 0,\n        \"honorarios_solicitantes\": 0,\n        \"uso_de_materiales\": 0,\n        \"retencion_cedir\": 0,\n        \"retencion_impositiva\": 0,\n        \"sala_recuperacion\": 0,\n        \"honorarios_anestesistas\": 0,\n        \"retencion_anestesia\": 0,\n        \"total_medicamentos\": 0,\n        \"total_material_especifico\": 0\n    },\n    {\n        \"id\": 20876,\n        \"numero\": 565,\n        \"responsable\": \"Cedir\",\n        \"fecha_emision\": \"2019-10-23\",\n        \"nombre_cliente\": \"OMINT\",\n        \"nro_cuit\": \"30550245309\",\n        \"tipo_comprobante\": {\n            \"id\": 4,\n            \"nombre\": \"Nota De Credito\"\n        },\n        \"sub_tipo\": \"A\",\n        \"nro_terminal\": 91,\n        \"neto\": -600,\n        \"iva\": 0,\n        \"gravado\": {\n            \"id\": 1,\n            \"descripcion\": \"Excento\",\n            \"porcentaje\": \"0.00\"\n        },\n        \"total_facturado\": -600,\n        \"honorarios_medicos\": 0,\n        \"honorarios_solicitantes\": 0,\n        \"uso_de_materiales\": 0,\n        \"retencion_cedir\": 0,\n        \"retencion_impositiva\": 0,\n        \"sala_recuperacion\": 0,\n        \"honorarios_anestesistas\": 0,\n        \"retencion_anestesia\": 0,\n        \"total_medicamentos\": 0,\n        \"total_material_especifico\": 0\n    },\n    {\n        \"id\": 20877,\n        \"numero\": 566,\n        \"responsable\": \"Cedir\",\n        \"fecha_emision\": \"2019-10-23\",\n        \"nombre_cliente\": \"ACA SALUD\",\n        \"nro_cuit\": \"30604958640\",\n        \"tipo_comprobante\": {\n            \"id\": 4,\n            \"nombre\": \"Nota De Credito\"\n        },\n        \"sub_tipo\": \"A\",\n        \"nro_terminal\": 91,\n        \"neto\": -5143.94,\n        \"iva\": 0,\n        \"gravado\": {\n            \"id\": 1,\n            \"descripcion\": \"Excento\",\n            \"porcentaje\": \"0.00\"\n        },\n        \"total_facturado\": -5143.94,\n        \"honorarios_medicos\": 0,\n        \"honorarios_solicitantes\": 0,\n        \"uso_de_materiales\": 0,\n        \"retencion_cedir\": 0,\n        \"retencion_impositiva\": 0,\n        \"sala_recuperacion\": 0,\n        \"honorarios_anestesistas\": 0,\n        \"retencion_anestesia\": 0,\n        \"total_medicamentos\": 0,\n        \"total_material_especifico\": 0\n    },\n    {\n        \"id\": 20878,\n        \"numero\": 567,\n        \"responsable\": \"Cedir\",\n        \"fecha_emision\": \"2019-10-23\",\n        \"nombre_cliente\": \"ACA SALUD\",\n        \"nro_cuit\": \"30604958640\",\n        \"tipo_comprobante\": {\n            \"id\": 4,\n            \"nombre\": \"Nota De Credito\"\n        },\n        \"sub_tipo\": \"A\",\n        \"nro_terminal\": 91,\n        \"neto\": -8458.29,\n        \"iva\": -888.12,\n        \"gravado\": {\n            \"id\": 2,\n            \"descripcion\": \"IVA Inscripto 10.5\",\n            \"porcentaje\": \"10.50\"\n        },\n        \"total_facturado\": -9346.41,\n        \"honorarios_medicos\": 0,\n        \"honorarios_solicitantes\": 0,\n        \"uso_de_materiales\": 0,\n        \"retencion_cedir\": 0,\n        \"retencion_impositiva\": 0,\n        \"sala_recuperacion\": 0,\n        \"honorarios_anestesistas\": 0,\n        \"retencion_anestesia\": 0,\n        \"total_medicamentos\": 0,\n        \"total_material_especifico\": 0\n    },\n    {\n        \"id\": 20879,\n        \"numero\": 514,\n        \"responsable\": \"Cedir\",\n        \"fecha_emision\": \"2019-10-23\",\n        \"nombre_cliente\": \"FEDERADA SALUD GRUPO2\",\n        \"nro_cuit\": \"30541592608\",\n        \"tipo_comprobante\": {\n            \"id\": 4,\n            \"nombre\": \"Nota De Credito\"\n        },\n        \"sub_tipo\": \"B\",\n        \"nro_terminal\": 91,\n        \"neto\": -7765.47,\n        \"iva\": -815.37,\n        \"gravado\": {\n            \"id\": 2,\n            \"descripcion\": \"IVA Inscripto 10.5\",\n            \"porcentaje\": \"10.50\"\n        },\n        \"total_facturado\": -8580.84,\n        \"honorarios_medicos\": 0,\n        \"honorarios_solicitantes\": 0,\n        \"uso_de_materiales\": 0,\n        \"retencion_cedir\": 0,\n        \"retencion_impositiva\": 0,\n        \"sala_recuperacion\": 0,\n        \"honorarios_anestesistas\": 0,\n        \"retencion_anestesia\": 0,\n        \"total_medicamentos\": 0,\n        \"total_material_especifico\": 0\n    },\n    {\n        \"id\": 20880,\n        \"numero\": 568,\n        \"responsable\": \"Cedir\",\n        \"fecha_emision\": \"2019-10-23\",\n        \"nombre_cliente\": \"OMINT\",\n        \"nro_cuit\": \"30550245309\",\n        \"tipo_comprobante\": {\n            \"id\": 4,\n            \"nombre\": \"Nota De Credito\"\n        },\n        \"sub_tipo\": \"A\",\n        \"nro_terminal\": 91,\n        \"neto\": -1200,\n        \"iva\": -126,\n        \"gravado\": {\n            \"id\": 2,\n            \"descripcion\": \"IVA Inscripto 10.5\",\n            \"porcentaje\": \"10.50\"\n        },\n        \"total_facturado\": -1326,\n        \"honorarios_medicos\": 0,\n        \"honorarios_solicitantes\": 0,\n        \"uso_de_materiales\": 0,\n        \"retencion_cedir\": 0,\n        \"retencion_impositiva\": 0,\n        \"sala_recuperacion\": 0,\n        \"honorarios_anestesistas\": 0,\n        \"retencion_anestesia\": 0,\n        \"total_medicamentos\": 0,\n        \"total_material_especifico\": 0\n    },\n    {\n        \"id\": 20881,\n        \"numero\": 95,\n        \"responsable\": \"Cedir\",\n        \"fecha_emision\": \"2019-10-23\",\n        \"nombre_cliente\": \"OMINT\",\n        \"nro_cuit\": \"30550245309\",\n        \"tipo_comprobante\": {\n            \"id\": 3,\n            \"nombre\": \"Nota De Debito\"\n        },\n        \"sub_tipo\": \"A\",\n        \"nro_terminal\": 91,\n        \"neto\": 1200,\n        \"iva\": 0,\n        \"gravado\": {\n            \"id\": 1,\n            \"descripcion\": \"Excento\",\n            \"porcentaje\": \"0.00\"\n        },\n        \"total_facturado\": 1200,\n        \"honorarios_medicos\": 0,\n        \"honorarios_solicitantes\": 0,\n        \"uso_de_materiales\": 0,\n        \"retencion_cedir\": 0,\n        \"retencion_impositiva\": 0,\n        \"sala_recuperacion\": 0,\n        \"honorarios_anestesistas\": 0,\n        \"retencion_anestesia\": 0,\n        \"total_medicamentos\": 0,\n        \"total_material_especifico\": 0\n    },\n    {\n        \"id\": 20882,\n        \"numero\": 569,\n        \"responsable\": \"Cedir\",\n        \"fecha_emision\": \"2019-10-23\",\n        \"nombre_cliente\": \"OMINT ( GENESIS - CARTILLA 1 Y 2 )\",\n        \"nro_cuit\": \"30550245309\",\n        \"tipo_comprobante\": {\n            \"id\": 4,\n            \"nombre\": \"Nota De Credito\"\n        },\n        \"sub_tipo\": \"A\",\n        \"nro_terminal\": 91,\n        \"neto\": -766,\n        \"iva\": -80.43,\n        \"gravado\": {\n            \"id\": 2,\n            \"descripcion\": \"IVA Inscripto 10.5\",\n            \"porcentaje\": \"10.50\"\n        },\n        \"total_facturado\": -846.43,\n        \"honorarios_medicos\": 0,\n        \"honorarios_solicitantes\": 0,\n        \"uso_de_materiales\": 0,\n        \"retencion_cedir\": 0,\n        \"retencion_impositiva\": 0,\n        \"sala_recuperacion\": 0,\n        \"honorarios_anestesistas\": 0,\n        \"retencion_anestesia\": 0,\n        \"total_medicamentos\": 0,\n        \"total_material_especifico\": 0\n    },\n    {\n        \"id\": 20884,\n        \"numero\": 1803,\n        \"responsable\": \"Cedir\",\n        \"fecha_emision\": \"2019-10-23\",\n        \"nombre_cliente\": \"OMINT\",\n        \"nro_cuit\": \"30550245309\",\n        \"tipo_comprobante\": {\n            \"id\": 1,\n            \"nombre\": \"Factura\"\n        },\n        \"sub_tipo\": \"A\",\n        \"nro_terminal\": 91,\n        \"neto\": 600,\n        \"iva\": 0,\n        \"gravado\": {\n            \"id\": 1,\n            \"descripcion\": \"Excento\",\n            \"porcentaje\": \"0.00\"\n        },\n        \"total_facturado\": 600,\n        \"honorarios_medicos\": 450,\n        \"honorarios_solicitantes\": 0,\n        \"uso_de_materiales\": 0,\n        \"retencion_cedir\": 0,\n        \"retencion_impositiva\": 150,\n        \"sala_recuperacion\": 0,\n        \"honorarios_anestesistas\": 0,\n        \"retencion_anestesia\": 0,\n        \"total_medicamentos\": 0,\n        \"total_material_especifico\": 0\n    },\n    {\n        \"id\": 20883,\n        \"numero\": 96,\n        \"responsable\": \"Cedir\",\n        \"fecha_emision\": \"2019-10-23\",\n        \"nombre_cliente\": \"OMINT ( GENESIS - CARTILLA 1 Y 2 )\",\n        \"nro_cuit\": \"30550245309\",\n        \"tipo_comprobante\": {\n            \"id\": 3,\n            \"nombre\": \"Nota De Debito\"\n        },\n        \"sub_tipo\": \"A\",\n        \"nro_terminal\": 91,\n        \"neto\": 766,\n        \"iva\": 0,\n        \"gravado\": {\n            \"id\": 1,\n            \"descripcion\": \"Excento\",\n            \"porcentaje\": \"0.00\"\n        },\n        \"total_facturado\": 766,\n        \"honorarios_medicos\": 0,\n        \"honorarios_solicitantes\": 0,\n        \"uso_de_materiales\": 0,\n        \"retencion_cedir\": 0,\n        \"retencion_impositiva\": 0,\n        \"sala_recuperacion\": 0,\n        \"honorarios_anestesistas\": 0,\n        \"retencion_anestesia\": 0,\n        \"total_medicamentos\": 0,\n        \"total_material_especifico\": 0\n    },\n    {\n        \"id\": 20864,\n        \"numero\": 5,\n        \"responsable\": \"Cedir\",\n        \"fecha_emision\": \"2019-10-18\",\n        \"nombre_cliente\": \"OSDE BINARIO\",\n        \"nro_cuit\": \"30546741253\",\n        \"tipo_comprobante\": {\n            \"id\": 5,\n            \"nombre\": \"Factura Electronica\"\n        },\n        \"sub_tipo\": \"A\",\n        \"nro_terminal\": 91,\n        \"neto\": 92661.73,\n        \"iva\": 9729.48,\n        \"gravado\": {\n            \"id\": 2,\n            \"descripcion\": \"IVA Inscripto 10.5\",\n            \"porcentaje\": \"10.50\"\n        },\n        \"total_facturado\": 102391.21,\n        \"honorarios_medicos\": 42470.28,\n        \"honorarios_solicitantes\": 616.84,\n        \"uso_de_materiales\": 3500,\n        \"retencion_cedir\": 8674.76,\n        \"retencion_impositiva\": 23165.44,\n        \"sala_recuperacion\": 4009.23,\n        \"honorarios_anestesistas\": 0,\n        \"retencion_anestesia\": 0,\n        \"total_medicamentos\": 10225.27,\n        \"total_material_especifico\": 0\n    },\n    {\n        \"id\": 20885,\n        \"numero\": 1311,\n        \"responsable\": \"Cedir\",\n        \"fecha_emision\": \"2019-10-23\",\n        \"nombre_cliente\": \"FEDERADA SALUD GRUPO2\",\n        \"nro_cuit\": \"30541592608\",\n        \"tipo_comprobante\": {\n            \"id\": 1,\n            \"nombre\": \"Factura\"\n        },\n        \"sub_tipo\": \"B\",\n        \"nro_terminal\": 91,\n        \"neto\": 327,\n        \"iva\": 0,\n        \"gravado\": {\n            \"id\": 1,\n            \"descripcion\": \"Excento\",\n            \"porcentaje\": \"0.00\"\n        },\n        \"total_facturado\": 327,\n        \"honorarios_medicos\": 245.25,\n        \"honorarios_solicitantes\": 0,\n        \"uso_de_materiales\": 0,\n        \"retencion_cedir\": 0,\n        \"retencion_impositiva\": 81.75,\n        \"sala_recuperacion\": 0,\n        \"honorarios_anestesistas\": 0,\n        \"retencion_anestesia\": 0,\n        \"total_medicamentos\": 0,\n        \"total_material_especifico\": 0\n    }\n]"
-				},
-				{
-					"name": "Una LISTA de lineas de informe.",
-					"originalRequest": {
-						"method": "GET",
-						"header": [
-							{
-								"key": "Authorization",
-								"value": "Token bb4a5ac45c80ff1f71076a6147f8c8eedfc82db8"
-							}
-						],
-						"url": {
-							"raw": "{{baseUrl}}/comprobantes?mes=11&anio=2018",
-							"host": [
-								"{{baseUrl}}"
-							],
-							"path": [
-								"comprobantes"
-							],
-							"query": [
-								{
-									"key": "mes",
-									"value": "11"
-								},
-								{
-									"key": "anio",
-									"value": "2018"
-								}
-							]
-						}
-					},
-					"status": "OK",
-					"code": 200,
-					"_postman_previewlanguage": "json",
-					"header": [
-						{
-							"key": "Content-Type",
-							"value": "application/json"
-						}
-					],
-					"cookie": [],
-					"body": "{\n \"id\": 1,\n \"nombre_cliente\": \"Obra Social de los Trabajadores de la Obra Social de Springfield\",\n \"sub_tipo\": \"A\",\n \"numero\": 1,\n \"nro_terminal\": 17,\n \"total_facturado\": 5,\n \"total_cobrado\": 5,\n \"fecha_emision\": \"2019-08-22\",\n \"tipo_comprobante\": {\n  \"id\": 1,\n  \"nombre\": \"Factura\"\n },\n \"gravado\": {\n  \"id\": 1,\n  \"descripcion\": \"IVA Inscripto 21\",\n  \"porcentaje\": 21\n },\n \"lineas\": {\n  \"id\": 1,\n  \"concepto\": \"varios\",\n  \"sub_total\": 5,\n  \"iva\": 1,\n  \"importe_neto\": 4\n },\n \"responsable\": \"CEDIR\",\n \"nro_cuit\": 3030303030,\n \"neto\": 10,\n \"iva\": 2,\n \"honorarios_medicos\": 1,\n \"honorarios_solicitantes\": 1,\n \"uso_de_materiales\": 1,\n \"retencion_cedir\": 1,\n \"retencion_impositiva\": 1,\n \"sala_recuperacion\": 1,\n \"honorarios_anestesistas\": 1,\n \"retencion_anestesia\": 1,\n \"total_medicamentos\": 1,\n \"total_material_especifico\": 1\n}"
 				}
 			]
 		}
@@ -2955,7 +2464,6 @@
 		{
 			"listen": "prerequest",
 			"script": {
-				"id": "75a9255f-a631-4546-9ce5-db725ef4f551",
 				"type": "text/javascript",
 				"exec": [
 					""
@@ -2965,7 +2473,6 @@
 		{
 			"listen": "test",
 			"script": {
-				"id": "1ad3f348-e039-4e87-8303-93168a01438a",
 				"type": "text/javascript",
 				"exec": [
 					""
@@ -2975,53 +2482,36 @@
 	],
 	"variable": [
 		{
-			"id": "aaad6f72-a1c8-44ea-92da-80c00ce0b66e",
 			"key": "baseUrl",
-			"value": "localhost:8000/api",
-			"type": "string"
+			"value": "localhost:8000/api"
 		},
 		{
-			"id": "20867c7c-98da-455f-8239-15e7cfe0ecd9",
 			"key": "idEstudio",
-			"value": 224741,
-			"type": "number"
+			"value": 224741
 		},
 		{
-			"id": "78d543d9-6c5c-4e38-bf23-a8c6be1f3e6c",
 			"key": "idObraSocial",
-			"value": "5",
-			"type": "string"
+			"value": "5"
 		},
 		{
-			"id": "eb22c0b3-de42-4222-84a5-f381257c4432",
 			"key": "idPresentacion",
-			"value": 16836,
-			"type": "number"
+			"value": 16836
 		},
 		{
-			"id": "8f7175b5-01ae-401e-9c93-73a411484ecd",
 			"key": "idMedico",
-			"value": "1",
-			"type": "string"
+			"value": "1"
 		},
 		{
-			"id": "fa4d5ad3-fcc0-4c90-9288-6241a41995b7",
 			"key": "idPaciente",
-			"value": "1",
-			"type": "string"
+			"value": "1"
 		},
 		{
-			"id": "3d53acec-210e-4b9a-a857-22dd3361fd32",
 			"key": "idAnestesista",
-			"value": "1",
-			"type": "string"
+			"value": "1"
 		},
 		{
-			"id": "b6d6cf12-2e1a-4246-9dca-78fa0d16b484",
 			"key": "idPractica",
-			"value": "1",
-			"type": "string"
+			"value": "1"
 		}
-	],
-	"protocolProfileBehavior": {}
+	]
 }
