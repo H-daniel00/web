@@ -31,9 +31,21 @@ class PresentacionRetrieveSerializer(serializers.ModelSerializer):
     comprobante = ComprobanteSerializer()
     estado = EstadoField()
     estudios = EstudioDePresentacionRetrieveSerializer(many=True)
+    fecha_cobro = serializers.SerializerMethodField()
+    nro_recibo = serializers.SerializerMethodField()
 
     class Meta:
         model = Presentacion
+
+    def get_fecha_cobro(self, obj):
+        if(obj.estado == Presentacion.COBRADO):
+            return PagoPresentacion.objects.get(presentacion=obj).fecha
+        return None
+
+    def get_nro_recibo(self, obj):
+        if(obj.estado == Presentacion.COBRADO):
+            return PagoPresentacion.objects.get(presentacion=obj).nro_recibo
+        return None
 
 class PresentacionImprimirSerializer(serializers.ModelSerializer):
     obra_social = ObraSocialSerializer()
