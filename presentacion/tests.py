@@ -8,7 +8,7 @@ from django.contrib.auth.models import User
 from django.db.models import Q
 from rest_framework import status
 
-from presentacion.models import Presentacion
+from presentacion.models import PagoPresentacion, Presentacion
 from presentacion.obra_social_custom_code.amr_presentacion_digital import AmrRowBase
 from presentacion.obra_social_custom_code.osde_presentacion_digital import OsdeRowBase
 from obra_social.models import ObraSocial
@@ -123,6 +123,25 @@ class TestRetrievePresentacion(TestCase):
             assert presentaciones[i].comprobante.numero == results[i]['comprobante']['numero']
             assert comprobante_actual <= results[i]['comprobante']['numero']
             comprobante_actual = results[i]['comprobante']['numero']
+
+    def test_presentaciones_cobradas_info(self):
+        response = self.client.get('/api/presentacion/2/')
+        assert response.status_code == status.HTTP_200_OK
+
+        results = json.loads(response.content)
+        pago = PagoPresentacion.objects.get(presentacion__id=2)
+
+        assert results['fecha_cobro'] == str(pago.fecha)
+        assert results['nro_recibo'] == str(pago.nro_recibo)
+
+    def test_presentaciones_no_cobradas_tienen_None_en_algunos_campos(self):
+        response = self.client.get('/api/presentacion/1/')
+        assert response.status_code == status.HTTP_200_OK
+
+        results = json.loads(response.content)
+
+        assert results['fecha_cobro'] == None
+        assert results['nro_recibo'] == None
 
 class TestCobrarPresentacion(TestCase):
     fixtures = ['pacientes.json', 'medicos.json', 'practicas.json', 'obras_sociales.json',
