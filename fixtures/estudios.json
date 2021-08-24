@@ -341,6 +341,38 @@
     }
 },
 {
+    "model": "estudio.estudio",
+    "pk": 17,
+    "fields": {
+        "paciente": 1,
+        "practica": 48,
+        "medico": 2,
+        "obra_social": 2,
+        "medico_solicitante": 1,
+        "presentacion": 11,
+        "importe_estudio": "10000.00",
+        "fecha": "2013-11-19",
+        "anestesista": 1,
+        "sucursal": 2
+    }
+},
+{
+    "model": "estudio.estudio",
+    "pk": 18,
+    "fields": {
+        "paciente": 1,
+        "practica": 11,
+        "medico": 2,
+        "obra_social": 2,
+        "medico_solicitante": 1,
+        "presentacion": 11,
+        "importe_estudio": "10000.00",
+        "fecha": "2013-11-19",
+        "anestesista": 1,
+        "sucursal": 2
+    }
+},
+{
     "model": "estudio.medicacion",
     "pk": 1,
     "fields": {
