@@ -240,7 +240,6 @@ class PagoPresentacionSerializer(serializers.ModelSerializer):
             estudio.importe_medicacion_cobrado = e['importe_medicacion_cobrado']
             estudio.importe_cobrado_pension = e['importe_cobrado_pension']
             estudio.importe_cobrado_arancel_anestesia = e['importe_cobrado_arancel_anestesia']
-            estudio.presentacion = presentacion
             estudio.fecha_cobro = fecha_cobro
             estudio.save()
 
@@ -286,8 +285,8 @@ class PagoPresentacionParcialSerializer(PagoPresentacionSerializer):
 
     def validate_estudios(self, value):
         presentacion = Presentacion.objects.get(pk=self.initial_data['presentacion_id'])
-        estudios_data = value + self.initial_data['estudios_impagos']
-        if len(estudios_data) < presentacion.estudios.count():
+        estudios_data = value
+        if len(estudios_data) + len(self.initial_data['estudios_impagos']) < presentacion.estudios.count():
             raise ValidationError("Faltan datos de estudios")
         required_props = ['id', 'importe_cobrado_pension',
                 'importe_cobrado_arancel_anestesia', 'importe_estudio_cobrado', 'importe_medicacion_cobrado']
@@ -333,7 +332,14 @@ class PagoPresentacionParcialSerializer(PagoPresentacionSerializer):
             presentacion.saldo_positivo = validated_data['importe'] # Ya que validate_importe devuelve el saldo
             presentacion.save()
 
-            self.update_estudios(validated_data['estudios_impagos'], presentacion, presentacion_id)
+            for estudio in validated_data['estudios_impagos']:
+                Estudio.objects.filter(id=estudio['id']).update(presentacion=presentacion)
+
+            presentacion_serializer = PresentacionUpdateSerializer(presentacion, data={
+                'estudios': validated_data['estudios_impagos'],
+            }, partial=True)
+            presentacion_serializer.is_valid(raise_exception=True)
+            presentacion_serializer.save()
 
         # Pagamos la presentacion anterior
         del validated_data['estudios_impagos']

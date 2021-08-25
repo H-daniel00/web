@@ -74,7 +74,7 @@
     "model": "presentacion.presentacion",
     "pk": 5,
     "fields": {
-        "obra_social": 5,
+        "obra_social": 2,
         "fecha": "2012-07-06",
         "estado": 0,
         "iva": "21.00",

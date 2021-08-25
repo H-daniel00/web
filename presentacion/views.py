@@ -71,7 +71,7 @@ class PresentacionSucursalFilterBackend(BaseFilterBackend):
         return queryset
 
 class PresentacionViewSet(viewsets.ModelViewSet):
-    queryset = Presentacion.objects.all().order_by('-fecha')
+    queryset = Presentacion.objects.all().order_by('-fecha', '-comprobante')
     serializer_class = PresentacionSerializer
     filter_backends = (
         PresentacionSucursalFilterBackend,
