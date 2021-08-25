@@ -286,6 +286,8 @@ class PagoPresentacionParcialSerializer(PagoPresentacionSerializer):
     def validate_estudios(self, value):
         presentacion = Presentacion.objects.get(pk=self.initial_data['presentacion_id'])
         estudios_data = value
+        if not estudios_data:
+            raise ValidationError("Debe pagarse al menos un estudio")
         if len(estudios_data) + len(self.initial_data['estudios_impagos']) < presentacion.estudios.count():
             raise ValidationError("Faltan datos de estudios")
         required_props = ['id', 'importe_cobrado_pension',
