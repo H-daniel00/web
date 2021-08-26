@@ -281,8 +281,13 @@ class PagoPresentacionParcialSerializer(PagoPresentacionSerializer):
         model = PagoPresentacion
         fields = (
             'presentacion_id', 'estudios', 'estudios_impagos', 'fecha',
-            'retencion_impositiva', 'nro_recibo', 'importe'
+            'retencion_impositiva', 'nro_recibo', 'importe', 'remito'
         )
+
+    def validate_remito(self, value):
+        if not value.isnumeric():
+            raise ValidationError('El numero de remito debe ser numerico')
+        return value
 
     def validate_presentacion_id(self, value):
         presentacion = Presentacion.objects.get(pk=value)
@@ -332,6 +337,7 @@ class PagoPresentacionParcialSerializer(PagoPresentacionSerializer):
         presentacion_id = validated_data['presentacion_id']
         presentacion = Presentacion.objects.get(pk=presentacion_id)
         presentacion.saldo_positivo = Decimal(0)
+        presentacion.remito = validated_data['remito']
         presentacion.save()
 
         # Si hay estudios impagos los agregamos a una nueva presentacion
