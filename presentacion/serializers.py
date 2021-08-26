@@ -276,6 +276,7 @@ class PagoPresentacionSerializer(serializers.ModelSerializer):
 class PagoPresentacionParcialSerializer(PagoPresentacionSerializer):
     estudios_impagos = serializers.ListField()
     importe = serializers.DecimalField(16, 2)
+    remito = serializers.CharField(allow_blank=True)
 
     class Meta:
         model = PagoPresentacion
@@ -285,7 +286,7 @@ class PagoPresentacionParcialSerializer(PagoPresentacionSerializer):
         )
 
     def validate_remito(self, value):
-        if not value.isnumeric():
+        if value and not value.isnumeric():
             raise ValidationError('El numero de remito debe ser numerico')
         return value
 

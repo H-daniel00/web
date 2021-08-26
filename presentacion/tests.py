@@ -179,6 +179,7 @@ class TestCobrarPresentacion(TestCase):
             ],
             "retencion_impositiva": "32.00",
             "nro_recibo": 1,
+            "remito": '',
             "estudios_impagos": [],
             "importe": int(presentacion.total_facturado)
         }
@@ -207,6 +208,7 @@ class TestCobrarPresentacion(TestCase):
             ],
             "retencion_impositiva": "32.00",
             "nro_recibo": 1,
+            "remito": '',
             "estudios_impagos": [],
             "importe": int(presentacion.total_facturado)
         }
@@ -237,6 +239,7 @@ class TestCobrarPresentacion(TestCase):
             ],
             "retencion_impositiva": "32.00",
             "nro_recibo": 1,
+            "remito": '',
             "estudios_impagos": [],
             "importe": int(presentacion.total_facturado)
         }
@@ -272,6 +275,7 @@ class TestCobrarPresentacion(TestCase):
             ],
             "retencion_impositiva": "32.00",
             "nro_recibo": 1,
+            "remito": '',
             "estudios_impagos": [],
             "importe": int(presentacion.total_facturado)
         }
@@ -298,6 +302,7 @@ class TestCobrarPresentacion(TestCase):
             ],
             "retencion_impositiva": "32.00",
             "nro_recibo": 1,
+            "remito": '',
             "estudios_impagos": [],
             "importe": int(presentacion.total_facturado)
         }
@@ -326,6 +331,7 @@ class TestCobrarPresentacion(TestCase):
             ],
             "retencion_impositiva": "32.00",
             "nro_recibo": 1,
+            "remito": '',
             "estudios_impagos": [],
             "importe": int(presentacion.total_facturado)
         }
@@ -345,6 +351,7 @@ class TestCobrarPresentacion(TestCase):
             ],
             "retencion_impositiva": "32.00",
             "nro_recibo": 1,
+            "remito": '',
             "estudios_impagos": [],
             "importe": int(presentacion.total_facturado)
         }
@@ -526,6 +533,7 @@ class TestCobrarPresentacion(TestCase):
             ],
             "retencion_impositiva": "32.00",
             "nro_recibo": 1,
+            "remito": '',
             "estudios_impagos": [],
             "importe": int(presentacion.total_facturado)
         }
@@ -550,6 +558,7 @@ class TestCobrarPresentacion(TestCase):
             "estudios_impagos": self.estudios_data_json([6]),
             "retencion_impositiva": "32.00",
             "nro_recibo": 1,
+            "remito": '',
             "importe": "20",
         }
 
@@ -572,6 +581,7 @@ class TestCobrarPresentacion(TestCase):
             "estudios_impagos": self.estudios_data_json([6]),
             "retencion_impositiva": "32.00",
             "nro_recibo": 1,
+            "remito": '',
             "importe": "3",
         }
 
@@ -600,6 +610,7 @@ class TestCobrarPresentacion(TestCase):
             "retencion_impositiva": "32.00",
             "importe": "20",
             "nro_recibo": 1,
+            "remito": '',
         }
 
         response = self.client.patch('/api/presentacion/5/cobrar/', data=json.dumps(datos),
@@ -632,6 +643,7 @@ class TestCobrarPresentacion(TestCase):
             "retencion_impositiva": "32.00",
             "importe": importe,
             "nro_recibo": 1,
+            "remito": '',
         }
 
         response = self.client.patch('/api/presentacion/5/cobrar/', data=json.dumps(datos),
@@ -661,6 +673,7 @@ class TestCobrarPresentacion(TestCase):
             "estudios_impagos": [],
             "retencion_impositiva": "32.00",
             "nro_recibo": 1,
+            "remito": '',
         }
 
         response = self.client.patch('/api/presentacion/5/cobrar/', data=json.dumps(datos),
@@ -677,6 +690,7 @@ class TestCobrarPresentacion(TestCase):
             "estudios_impagos": [],
             "retencion_impositiva": "32.00",
             "nro_recibo": 1,
+            "remito": '',
         }
 
         response = self.client.patch('/api/presentacion/5/cobrar/', data=json.dumps(datos),
