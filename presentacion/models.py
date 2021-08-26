@@ -30,6 +30,7 @@ class Presentacion(models.Model):
     total_cobrado = models.DecimalField(db_column='total', max_digits=16, decimal_places=2, default=Decimal('0.00'))
     total_facturado = models.DecimalField(db_column='totalFacturado', max_digits=16, decimal_places=2, default=Decimal('0.00'))
     saldo_positivo = models.DecimalField(max_digits=16, decimal_places=2, default=Decimal('0.00'))
+    remito = models.CharField(max_length=128, default='')
 
     class Meta:
         db_table = 'tblFacturacion'
