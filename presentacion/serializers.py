@@ -124,6 +124,16 @@ class PresentacionCreateSerializer(serializers.ModelSerializer):
 class PresentacionUpdateSerializer(serializers.ModelSerializer):
     estudios = serializers.ListField()
 
+    class Meta:
+        model = Presentacion
+        fields = (
+            'id',
+            'periodo',
+            'fecha',
+            'estudios',
+            'remito',
+        )
+
     def to_representation(self, instance):
         return {
             'id': instance.id,
@@ -180,16 +190,6 @@ class PresentacionUpdateSerializer(serializers.ModelSerializer):
 
         instance.save()
         return instance
-
-    class Meta:
-        model = Presentacion
-        fields = (
-            'id',
-            'periodo',
-            'fecha',
-            'estudios',
-            'remito',
-        )
 
 class PresentacionRefacturarSerializer(serializers.ModelSerializer):
     estudios = serializers.ListField()
