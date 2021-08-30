@@ -179,6 +179,7 @@ class TestCobrarPresentacion(TestCase):
             ],
             "retencion_impositiva": "32.00",
             "nro_recibo": 1,
+            "remito": '',
             "estudios_impagos": [],
             "importe": int(presentacion.total_facturado)
         }
@@ -207,6 +208,7 @@ class TestCobrarPresentacion(TestCase):
             ],
             "retencion_impositiva": "32.00",
             "nro_recibo": 1,
+            "remito": '',
             "estudios_impagos": [],
             "importe": int(presentacion.total_facturado)
         }
@@ -237,6 +239,7 @@ class TestCobrarPresentacion(TestCase):
             ],
             "retencion_impositiva": "32.00",
             "nro_recibo": 1,
+            "remito": '',
             "estudios_impagos": [],
             "importe": int(presentacion.total_facturado)
         }
@@ -272,6 +275,7 @@ class TestCobrarPresentacion(TestCase):
             ],
             "retencion_impositiva": "32.00",
             "nro_recibo": 1,
+            "remito": '',
             "estudios_impagos": [],
             "importe": int(presentacion.total_facturado)
         }
@@ -298,6 +302,7 @@ class TestCobrarPresentacion(TestCase):
             ],
             "retencion_impositiva": "32.00",
             "nro_recibo": 1,
+            "remito": '',
             "estudios_impagos": [],
             "importe": int(presentacion.total_facturado)
         }
@@ -326,6 +331,7 @@ class TestCobrarPresentacion(TestCase):
             ],
             "retencion_impositiva": "32.00",
             "nro_recibo": 1,
+            "remito": '',
             "estudios_impagos": [],
             "importe": int(presentacion.total_facturado)
         }
@@ -345,6 +351,7 @@ class TestCobrarPresentacion(TestCase):
             ],
             "retencion_impositiva": "32.00",
             "nro_recibo": 1,
+            "remito": '',
             "estudios_impagos": [],
             "importe": int(presentacion.total_facturado)
         }
@@ -526,6 +533,7 @@ class TestCobrarPresentacion(TestCase):
             ],
             "retencion_impositiva": "32.00",
             "nro_recibo": 1,
+            "remito": '',
             "estudios_impagos": [],
             "importe": int(presentacion.total_facturado)
         }
@@ -550,6 +558,7 @@ class TestCobrarPresentacion(TestCase):
             "estudios_impagos": self.estudios_data_json([6]),
             "retencion_impositiva": "32.00",
             "nro_recibo": 1,
+            "remito": '',
             "importe": "20",
         }
 
@@ -572,6 +581,7 @@ class TestCobrarPresentacion(TestCase):
             "estudios_impagos": self.estudios_data_json([6]),
             "retencion_impositiva": "32.00",
             "nro_recibo": 1,
+            "remito": '',
             "importe": "3",
         }
 
@@ -600,6 +610,7 @@ class TestCobrarPresentacion(TestCase):
             "retencion_impositiva": "32.00",
             "importe": "20",
             "nro_recibo": 1,
+            "remito": '',
         }
 
         response = self.client.patch('/api/presentacion/5/cobrar/', data=json.dumps(datos),
@@ -632,6 +643,7 @@ class TestCobrarPresentacion(TestCase):
             "retencion_impositiva": "32.00",
             "importe": importe,
             "nro_recibo": 1,
+            "remito": '',
         }
 
         response = self.client.patch('/api/presentacion/5/cobrar/', data=json.dumps(datos),
@@ -661,6 +673,7 @@ class TestCobrarPresentacion(TestCase):
             "estudios_impagos": [],
             "retencion_impositiva": "32.00",
             "nro_recibo": 1,
+            "remito": '',
         }
 
         response = self.client.patch('/api/presentacion/5/cobrar/', data=json.dumps(datos),
@@ -677,6 +690,7 @@ class TestCobrarPresentacion(TestCase):
             "estudios_impagos": [],
             "retencion_impositiva": "32.00",
             "nro_recibo": 1,
+            "remito": '',
         }
 
         response = self.client.patch('/api/presentacion/5/cobrar/', data=json.dumps(datos),
@@ -684,6 +698,35 @@ class TestCobrarPresentacion(TestCase):
         assert response.status_code == status.HTTP_200_OK
         presentacion.refresh_from_db()
         assert presentacion.saldo_positivo == Decimal(0)
+
+    def test_cobrar_presentacion_actualiza_remito(self):
+        presentacion = Presentacion.objects.get(pk=7)
+        remito = '123'
+        assert presentacion.estado == Presentacion.PENDIENTE
+        assert presentacion.remito != remito
+
+        datos = {
+            "estudios": [
+                {
+                    "id": 8,
+                    "importe_cobrado_pension": "1.00",
+                    "importe_cobrado_arancel_anestesia": "1.00",
+                    "importe_estudio_cobrado": "1.00",
+                    "importe_medicacion_cobrado": "1.00",
+                },
+            ],
+            "retencion_impositiva": "32.00",
+            "nro_recibo": 1,
+            "remito": remito,
+        }
+        response = self.client.patch('/api/presentacion/7/cobrar/', data=json.dumps(datos),
+                                     content_type='application/json')
+        assert response.status_code == status.HTTP_200_OK
+
+        presentacion.refresh_from_db()
+        assert presentacion.estado == Presentacion.COBRADO
+        assert presentacion.pago != None
+        assert presentacion.remito == remito
 
 class TestEstudiosDePresentacion(TestCase):
     fixtures = ['pacientes.json', 'medicos.json', 'practicas.json', 'obras_sociales.json',
@@ -1203,6 +1246,79 @@ class TestUpdatePresentacion(TestCase):
         response = self.client.patch('/api/presentacion/9/', data=json.dumps(datos),
                                 content_type='application/json')
         assert response.status_code == 400
+
+    def test_update_presentacion_guarda_remito_en_presentaciones_pendientes(self):
+        remito = '1232'
+        presentacion = Presentacion.objects.get(pk=1)
+        assert presentacion.estado == Presentacion.PENDIENTE
+        assert presentacion.remito != remito
+
+        datos = {
+            "estudios": [
+                {
+                    "id": 12,
+                    "nro_de_orden": "FE003450603",
+                    "importe_estudio": 5,
+                    "pension": 1,
+                    "diferencia_paciente": 1,
+                    "arancel_anestesia": 1
+                }
+            ],
+            "remito": remito
+        }
+        response = self.client.patch('/api/presentacion/1/', data=json.dumps(datos),
+                                content_type='application/json')
+        
+        assert response.status_code == status.HTTP_200_OK
+        presentacion.refresh_from_db()
+        assert presentacion.remito == remito
+
+    def test_update_presentacion_no_guarda_remito_en_presentaciones_abiertas(self):
+        presentacion = Presentacion.objects.get(pk=8)
+        assert presentacion.estado == Presentacion.ABIERTO
+        assert not presentacion.remito
+
+        datos = {
+            "estudios": [
+                {
+                    "id": 12,
+                    "nro_de_orden": "FE003450603",
+                    "importe_estudio": 5,
+                    "pension": 1,
+                    "diferencia_paciente": 1,
+                    "arancel_anestesia": 1
+                }
+            ],
+            "remito": '123'
+        }
+        response = self.client.patch('/api/presentacion/1/', data=json.dumps(datos),
+                                content_type='application/json')
+        
+        assert response.status_code == status.HTTP_200_OK
+        presentacion.refresh_from_db()
+        assert not presentacion.remito
+
+    def test_update_presentacion_falla_si_remito_no_es_numerico(self):
+        presentacion = Presentacion.objects.get(pk=1)
+        assert presentacion.estado == Presentacion.PENDIENTE
+
+        datos = {
+            "estudios": [
+                {
+                    "id": 12,
+                    "nro_de_orden": "FE003450603",
+                    "importe_estudio": 5,
+                    "pension": 1,
+                    "diferencia_paciente": 1,
+                    "arancel_anestesia": 1
+                }
+            ],
+            "remito": '1asd2v'
+        }
+        response = self.client.patch('/api/presentacion/1/', data=json.dumps(datos),
+                                content_type='application/json')
+        
+        assert response.status_code == status.HTTP_400_BAD_REQUEST
 
 class TestAbrirPresentacion(TestCase):
     fixtures = ['pacientes.json', 'medicos.json', 'practicas.json', 'obras_sociales.json',

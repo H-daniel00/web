@@ -124,6 +124,16 @@ class PresentacionCreateSerializer(serializers.ModelSerializer):
 class PresentacionUpdateSerializer(serializers.ModelSerializer):
     estudios = serializers.ListField()
 
+    class Meta:
+        model = Presentacion
+        fields = (
+            'id',
+            'periodo',
+            'fecha',
+            'estudios',
+            'remito',
+        )
+
     def to_representation(self, instance):
         return {
             'id': instance.id,
@@ -131,12 +141,16 @@ class PresentacionUpdateSerializer(serializers.ModelSerializer):
             'sucursal': instance.sucursal,
             'periodo': instance.periodo,
             'estado': instance.estado,
+            'remito': instance.remito,
             'fecha': instance.fecha,
         }
 
     def validate(self, data):
         if self.instance.estado == Presentacion.COBRADO:
             raise ValidationError('Las presentaciones cobradas no pueden actualizarse')
+
+        if 'remito' in data and not data['remito'].isnumeric():
+            raise ValidationError('El numero de remito debe ser numerico')
 
         for estudio_data in data['estudios']:
             estudio = Estudio.objects.get(pk=estudio_data['id'])
@@ -171,18 +185,11 @@ class PresentacionUpdateSerializer(serializers.ModelSerializer):
             instance.total_facturado = sum([e.get_importe_total_facturado() for e in estudios])
             instance.periodo = validated_data.get("periodo", instance.periodo)
             instance.fecha = validated_data.get("fecha", instance.fecha)
-            instance.save()
+        else:
+            instance.remito = validated_data.get('remito', instance.remito)
 
+        instance.save()
         return instance
-
-    class Meta:
-        model = Presentacion
-        fields = (
-            'id',
-            'periodo',
-            'fecha',
-            'estudios',
-        )
 
 class PresentacionRefacturarSerializer(serializers.ModelSerializer):
     estudios = serializers.ListField()
@@ -269,13 +276,19 @@ class PagoPresentacionSerializer(serializers.ModelSerializer):
 class PagoPresentacionParcialSerializer(PagoPresentacionSerializer):
     estudios_impagos = serializers.ListField()
     importe = serializers.DecimalField(16, 2)
+    remito = serializers.CharField(allow_blank=True)
 
     class Meta:
         model = PagoPresentacion
         fields = (
             'presentacion_id', 'estudios', 'estudios_impagos', 'fecha',
-            'retencion_impositiva', 'nro_recibo', 'importe'
+            'retencion_impositiva', 'nro_recibo', 'importe', 'remito'
         )
+
+    def validate_remito(self, value):
+        if value and not value.isnumeric():
+            raise ValidationError('El numero de remito debe ser numerico')
+        return value
 
     def validate_presentacion_id(self, value):
         presentacion = Presentacion.objects.get(pk=value)
@@ -325,6 +338,7 @@ class PagoPresentacionParcialSerializer(PagoPresentacionSerializer):
         presentacion_id = validated_data['presentacion_id']
         presentacion = Presentacion.objects.get(pk=presentacion_id)
         presentacion.saldo_positivo = Decimal(0)
+        presentacion.remito = validated_data['remito']
         presentacion.save()
 
         # Si hay estudios impagos los agregamos a una nueva presentacion
