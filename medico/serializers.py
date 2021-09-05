@@ -72,13 +72,13 @@ class ListNuevoPagoMedicoSerializer(serializers.ModelSerializer):
         # Actualmente: importe: 500. cedir: 20%. actuante: 70% solicitante: 10%
         # Como deberia estar:
         # importe: 500. cedir: 20%. neto: 400 actuante: 87.5% solicitante: 12.5%
+        calculador : CalculadorHonorariosPagoMedico = self.context.get('calculador')
         medico: Medico = self.context.get('medico')
-        porcentajes = Porcentajes(estudio)
         # Si es los dos?
         if estudio.medico == medico:
-            return porcentajes.actuante
+            return calculador.porcentajes.actuante
         else:
-            return porcentajes.solicitante
+            return calculador.porcentajes.solicitante
 
 
     def get_gastos_administrativos(self, estudio: Estudio) -> Decimal:

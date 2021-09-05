@@ -16,6 +16,7 @@ class CalculadorHonorarios(object):
     def __init__(self, estudio : Estudio):
         self.estudio = estudio
         self.calcular()
+        self.porcentajes = Porcentajes(self.estudio)
 
     @abstractmethod
     def get_importe(self) -> Decimal:
@@ -44,21 +45,17 @@ class CalculadorHonorarios(object):
 
     @property
     def actuante(self) -> Decimal:
-        porcentajes = Porcentajes(self.estudio) # Creo que se puede guardar en el init
-        # total = Decimal(self.total_honorarios) * (porcentajes.actuante + porcentajes.solicitante) / Decimal('100.00')
-        total = Decimal(self.total_honorarios) * (porcentajes.actuante) / Decimal('100.00')
+        total = Decimal(self.total_honorarios) * (self.porcentajes.actuante) / Decimal('100.00')
         return total
 
     @property
     def solicitante(self) -> Decimal:
-        porcentajes = Porcentajes(self.estudio)
-        total = Decimal(self.total_honorarios) * (porcentajes.solicitante) / Decimal('100.00')
+        total = Decimal(self.total_honorarios) * (self.porcentajes.solicitante) / Decimal('100.00')
         return total
 
     @property
     def cedir(self) -> Decimal:
-        porcentajes = Porcentajes(self.estudio) # Ver si es posible cambiar todo a proporcion (En vez de 32% usar 0.32)
-        return Decimal(self.total_honorarios * porcentajes.cedir) / Decimal('100.00')
+        return Decimal(self.total_honorarios * self.porcentajes.cedir) / Decimal('100.00')
 
     @property
     def uso_de_materiales(self) -> Decimal:
