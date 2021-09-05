@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 from abc import abstractmethod, abstractproperty
 from decimal import Decimal
+import decimal
 from .porcentajes import Porcentajes
 from .descuentos import Descuento, DescuentosVarios, DescuentoColangios, DescuentoStent, DescuentoRadiofrecuencia, \
                        DescuentoPorPolipectomia
@@ -25,7 +26,7 @@ class CalculadorHonorarios(object):
         raise NotImplementedError
 
     def porcentaje_GA(self) -> Decimal:
-        return self.estudio.retencion_impositiva * Decimal('100.00')
+        return self.factor_GA * Decimal('100.00')
 
     def calcular(self):
         '''
@@ -36,11 +37,9 @@ class CalculadorHonorarios(object):
         3) Se asignan los honorarios de cada medico segun los porcentajes que
           apliquen.
         '''
-        porcentaje_GA = self.porcentaje_GA()
-
         importe_estudio = self.get_importe()
         monto_descuentos = self.uso_de_materiales
-        r1 = (Decimal('100.00') - porcentaje_GA) / Decimal('100.00') # Creo que se puede hacer 1 - retencion_impositiva
+        r1 = Decimal('1.00') - self.factor_GA
         self.total_honorarios = importe_estudio * r1 - monto_descuentos
 
     @property
@@ -49,7 +48,6 @@ class CalculadorHonorarios(object):
         # total = Decimal(self.total_honorarios) * (porcentajes.actuante + porcentajes.solicitante) / Decimal('100.00')
         total = Decimal(self.total_honorarios) * (porcentajes.actuante) / Decimal('100.00')
         return total
-
 
     @property
     def solicitante(self) -> Decimal:
@@ -66,6 +64,9 @@ class CalculadorHonorarios(object):
     def uso_de_materiales(self) -> Decimal:
         return self.descuentos.aplicar(self.estudio, self.get_importe())
 
+    @property
+    def factor_GA(self) -> Decimal:
+        return self.estudios.retencion_impositiva
 
 class CalculadorHonorariosInformeContadora(CalculadorHonorarios):
     '''

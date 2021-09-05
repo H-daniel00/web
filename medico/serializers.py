@@ -82,10 +82,8 @@ class ListNuevoPagoMedicoSerializer(serializers.ModelSerializer):
 
 
     def get_gastos_administrativos(self, estudio: Estudio) -> Decimal:
-        # Me parece que este campo esta de mas. El gasto administrativo ya esta en porcentaje
-        # Y no nos estan pidiendo mostrar el importe.
         calculador : CalculadorHonorariosPagoMedico = self.context.get('calculador')
-        return calculador.porcentaje_GA() * calculador.get_importe() / Decimal('100.00')
+        return calculador.porcentaje_GA()
 
     def get_pago(self, estudio: Estudio) -> Decimal:
         # El importe que se le pagara al medico antes de aplicar el iva
