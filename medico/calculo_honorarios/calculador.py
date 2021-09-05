@@ -36,17 +36,16 @@ class CalculadorHonorarios(object):
         3) Se asignan los honorarios de cada medico segun los porcentajes que
           apliquen.
         '''
-        estudio = self.estudio
         porcentaje_GA = self.porcentaje_GA()
 
         importe_estudio = self.get_importe()
         monto_descuentos = self.uso_de_materiales
-        r1 = (Decimal('100.00') - porcentaje_GA) / Decimal('100.00')
+        r1 = (Decimal('100.00') - porcentaje_GA) / Decimal('100.00') # Creo que se puede hacer 1 - retencion_impositiva
         self.total_honorarios = importe_estudio * r1 - monto_descuentos
 
     @property
     def actuante(self) -> Decimal:
-        porcentajes = Porcentajes(self.estudio)
+        porcentajes = Porcentajes(self.estudio) # Creo que se puede guardar en el init
         # total = Decimal(self.total_honorarios) * (porcentajes.actuante + porcentajes.solicitante) / Decimal('100.00')
         total = Decimal(self.total_honorarios) * (porcentajes.actuante) / Decimal('100.00')
         return total
@@ -55,13 +54,12 @@ class CalculadorHonorarios(object):
     @property
     def solicitante(self) -> Decimal:
         porcentajes = Porcentajes(self.estudio)
-        # total = Decimal(self.total_honorarios) * (porcentajes.actuante + porcentajes.solicitante) / Decimal('100.00')
         total = Decimal(self.total_honorarios) * (porcentajes.solicitante) / Decimal('100.00')
         return total
 
     @property
     def cedir(self) -> Decimal:
-        porcentajes = Porcentajes(self.estudio)
+        porcentajes = Porcentajes(self.estudio) # Ver si es posible cambiar todo a proporcion (En vez de 32% usar 0.32)
         return Decimal(self.total_honorarios * porcentajes.cedir) / Decimal('100.00')
 
     @property
@@ -98,7 +96,6 @@ class CalculadorHonorariosPagoMedico(CalculadorHonorarios):
     '''
     def get_importe(self) -> Decimal:
         estudio = self.estudio
-        # TODO: checkear
         if estudio.es_pago_contra_factura:
             return Decimal(estudio.pago_contra_factura)
         else:

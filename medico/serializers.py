@@ -56,17 +56,22 @@ class ListNuevoPagoMedicoSerializer(serializers.ModelSerializer):
                   'medico_solicitante', 'practica', 'retencion_cedir', 'porcentaje_medico', 'gastos_administrativos',
                   'pago_contra_factura', 'pago', 'importe_iva', 'gravado_id', 'total')
 
-    def get_importe_neto(self, estudio: Estudio) -> Decimal:
+    def get_importe_neto(self, estudio: Estudio) -> Decimal: # Es la plata - gasto administrativo y descuentos por tipo de estudio
         calculador : CalculadorHonorariosPagoMedico = self.context.get('calculador')
         # este es el neto?
         return calculador.get_importe() - calculador.cedir
 
-    def get_retencion_cedir(self, estudio: Estudio) -> Decimal:
+    def get_retencion_cedir(self, estudio: Estudio) -> Decimal: # Es la plata que se queda el cedir
         calculador : CalculadorHonorariosPagoMedico = self.context.get('calculador')
         return calculador.cedir
 
     def get_porcentaje_medico(self, estudio: Estudio) -> Decimal:
-        calculador : CalculadorHonorariosPagoMedico = self.context.get('calculador')
+        # El porcentaje del medico que devuelve aca esta 'partido en 3'
+        # Es decir, el 100% es el importe, cuando el 100% deberia ser el neto
+        # al mostrar. Habria que transformarlo al porcentaje del neto.
+        # Actualmente: importe: 500. cedir: 20%. actuante: 70% solicitante: 10%
+        # Como deberia estar:
+        # importe: 500. cedir: 20%. neto: 400 actuante: 87.5% solicitante: 12.5%
         medico: Medico = self.context.get('medico')
         porcentajes = Porcentajes(estudio)
         # Si es los dos?
@@ -77,21 +82,27 @@ class ListNuevoPagoMedicoSerializer(serializers.ModelSerializer):
 
 
     def get_gastos_administrativos(self, estudio: Estudio) -> Decimal:
+        # Me parece que este campo esta de mas. El gasto administrativo ya esta en porcentaje
+        # Y no nos estan pidiendo mostrar el importe.
         calculador : CalculadorHonorariosPagoMedico = self.context.get('calculador')
         return calculador.porcentaje_GA() * calculador.get_importe() / Decimal('100.00')
 
     def get_pago(self, estudio: Estudio) -> Decimal:
+        # El importe que se le pagara al medico antes de aplicar el iva
         calculador : CalculadorHonorariosPagoMedico = self.context.get('calculador')
         medico: Medico = self.context.get('medico')
+        # Si es los dos?
         if estudio.medico == medico:
             return calculador.actuante
         else:
             return calculador.solicitante
 
     def get_total(self, estudio: Estudio) -> Decimal:
+        # El importe que se le pagara al medico (con iva)
         return self.get_pago(estudio) + self.get_importe_iva(estudio)
 
     def get_importe_iva(self, estudio: Estudio) -> Decimal:
+        # El importe del iva de cada estudio
         correspondiente = self.get_pago(estudio)
         # tendria que ser gravado.porcentaje
         if estudio.presentacion.comprobante.gravado.id == ID_GRAVADO_INSCRIPTO_21:
