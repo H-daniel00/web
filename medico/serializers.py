@@ -56,14 +56,15 @@ class ListNuevoPagoMedicoSerializer(serializers.ModelSerializer):
                   'medico_solicitante', 'practica', 'retencion_cedir', 'porcentaje_medico', 'gastos_administrativos',
                   'pago_contra_factura', 'pago', 'importe_iva', 'gravado_id', 'total')
 
-    def get_importe_neto(self, estudio: Estudio) -> Decimal: # Es la plata - gasto administrativo y descuentos por tipo de estudio
+    def get_importe_neto(self, estudio: Estudio) -> Decimal:
+        ''' Es el total del estudio que se reparte entre los medicos '''
         calculador : CalculadorHonorariosPagoMedico = self.context.get('calculador')
-        # este es el neto?
-        return calculador.get_importe() - calculador.cedir
+        return calculador.total_honorarios - calculador.cedir
 
-    def get_retencion_cedir(self, estudio: Estudio) -> Decimal: # Es la plata que se queda el cedir
+    def get_retencion_cedir(self, estudio: Estudio) -> Decimal:
+        ''' Porcentaje de retencion para el cedir '''
         calculador : CalculadorHonorariosPagoMedico = self.context.get('calculador')
-        return calculador.cedir
+        return calculador.porcentajes.cedir
 
     def get_porcentaje_medico(self, estudio: Estudio) -> Decimal:
         # El porcentaje del medico que devuelve aca esta 'partido en 3'
@@ -83,13 +84,13 @@ class ListNuevoPagoMedicoSerializer(serializers.ModelSerializer):
         
         return porcentaje
 
-
     def get_gastos_administrativos(self, estudio: Estudio) -> Decimal:
+        ''' Porcentaje de gastos administrativos ''' 
         calculador : CalculadorHonorariosPagoMedico = self.context.get('calculador')
         return calculador.porcentaje_GA()
 
     def get_pago(self, estudio: Estudio) -> Decimal:
-        # El importe que se le pagara al medico antes de aplicar el iva
+        ''' El importe que se le pagara al medico antes de aplicar el iva '''
         calculador : CalculadorHonorariosPagoMedico = self.context.get('calculador')
         medico: Medico = self.context.get('medico')
 
@@ -101,11 +102,11 @@ class ListNuevoPagoMedicoSerializer(serializers.ModelSerializer):
             return calculador.solicitante
 
     def get_total(self, estudio: Estudio) -> Decimal:
-        # El importe que se le pagara al medico (con iva)
+        ''' El importe que se le pagara al medico (con iva) '''
         return self.get_pago(estudio) + self.get_importe_iva(estudio)
 
     def get_importe_iva(self, estudio: Estudio) -> Decimal:
-        # El importe del iva de cada estudio
+        ''' El importe del iva de cada estudio '''
         correspondiente = self.get_pago(estudio)
         # tendria que ser gravado.porcentaje
         if estudio.presentacion.comprobante.gravado.id == ID_GRAVADO_INSCRIPTO_21:
