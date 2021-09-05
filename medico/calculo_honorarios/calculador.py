@@ -45,13 +45,11 @@ class CalculadorHonorarios(object):
 
     @property
     def actuante(self) -> Decimal:
-        total = Decimal(self.total_honorarios) * (self.porcentajes.actuante) / Decimal('100.00')
-        return total
+        return Decimal(self.total_honorarios) * (self.porcentajes.actuante) / Decimal('100.00')
 
     @property
     def solicitante(self) -> Decimal:
-        total = Decimal(self.total_honorarios) * (self.porcentajes.solicitante) / Decimal('100.00')
-        return total
+        return Decimal(self.total_honorarios) * (self.porcentajes.solicitante) / Decimal('100.00')
 
     @property
     def cedir(self) -> Decimal:
