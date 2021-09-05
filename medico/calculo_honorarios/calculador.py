@@ -52,6 +52,10 @@ class CalculadorHonorarios(object):
         return Decimal(self.total_honorarios) * (self.porcentajes.solicitante) / Decimal('100.00')
 
     @property
+    def honorarios_medicos(self) -> Decimal:
+        return Decimal(self.total_honorarios) * (self.porcentajes.solicitante + self.porcentajes.actuante) / Decimal('100.00')
+
+    @property
     def cedir(self) -> Decimal:
         return Decimal(self.total_honorarios * self.porcentajes.cedir) / Decimal('100.00')
 

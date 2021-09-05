@@ -122,6 +122,15 @@ class Estudio(models.Model):
         else:
             return Decimal("0.25")
 
+    def es_actuante(self, medico):
+        return self.medico == medico
+
+    def es_solicitante(self, medico):
+        return self.medico_solicitante == medico
+
+    def es_actuante_y_solicitante(self, medico):
+        return self.es_actuante(medico) and self.es_solicitante(medico)
+
     def get_importe_total_facturado(self):
         return Decimal(self.importe_estudio).quantize(Decimal('.01'), ROUND_UP) - \
                Decimal(self.diferencia_paciente).quantize(Decimal('.01'), ROUND_UP) + \
